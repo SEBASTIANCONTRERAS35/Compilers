@@ -23,6 +23,9 @@ int operador_count = 0;
 Token constantes_enteras[MAX_TOKENS];
 int constante_entera_count = 0;
 
+Token constantes_reales[MAX_TOKENS];
+int constante_real_count = 0;
+
 int existe_token(const char* palabra, Token* lista, int count) {
     for (int i = 0; i < count; i++) {
         if (strcmp(lista[i].palabra, palabra) == 0) {
@@ -79,10 +82,17 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
     printf("[CLASE 3 - OPERADOR ARITMÉTICO]: %s\n", yytext);
 }
 
+([+-]?[0-9]*\x27[0-9]+)|([+-]?[0-9]+[rR]) {
+    agregar_token(yytext, constantes_reales, &constante_real_count);
+    printf("[CLASE 8 - REAL]: %s\n", yytext);
+}
+
 [+-]?([1-9][0-9]*|0)[pPgG]? {
     agregar_token(yytext, constantes_enteras, &constante_entera_count);
     printf("[CLASE 7 - CONSTANTE ENTERA]: %s\n", yytext);
 }
+
+
 
 . {
     printf("[Otra cosa]: %s\n", yytext);
@@ -96,8 +106,9 @@ int main() {
     imprimir_tabla("TABLA DE PALABRAS RESERVADAS", tokens, token_count);
     imprimir_tabla("TABLA DE SÍMBOLOS ESPECIALES", simbolos, simbolo_count);
     imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
-    imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);07
+    imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);
     imprimir_tabla("TABLA DE CONSTANTES ENTERAS", constantes_enteras, constante_entera_count);
+        imprimir_tabla("TABLA DE CONSTANTES REALES", constantes_reales, constante_real_count);
     return 0;
 }
 
