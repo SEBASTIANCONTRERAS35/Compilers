@@ -58,7 +58,7 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
 
 %%
 
-[ \t\n]+  { /* Ignorar espacios, tabuladores y saltos de línea */ }
+[ \t\n]+  {  }
 
 "Bool"|"Cade"|"Continuar"|"Devo"|"Ent"|"Fals"|"Flota"|"Global" {
     agregar_token(yytext, tokens, &token_count);
@@ -97,7 +97,7 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
 
 
 
-. {
+[^ \t\n]+ {
     agregar_token(yytext, errores_lex, &error_count);
     printf("[ERROR LÉXICO]: %s\n", yytext);
 }
