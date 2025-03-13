@@ -9,40 +9,62 @@ typedef struct {
 } Token;
 
 Token tokens[MAX_TOKENS]; 
-int token_count = 0;      
+int token_count = 0;
 
-int existe_token(const char* palabra) {
-    for (int i = 0; i < token_count; i++) {
-        if (strcmp(tokens[i].palabra, palabra) == 0) {
-            return 1;  
+Token simbolos[MAX_TOKENS];
+int simbolo_count = 0;
+
+Token identificadores[MAX_TOKENS];
+int identificador_count = 0;
+
+
+int existe_token(const char* palabra, Token* lista, int count) {
+    for (int i = 0; i < count; i++) {
+        if (strcmp(lista[i].palabra, palabra) == 0) {
+            return 1;
         }
     }
-    return 0;  
+    return 0;
 }
 
-void agregar_token(const char* palabra) {
-    if (!existe_token(palabra) && token_count < MAX_TOKENS) {
-        strcpy(tokens[token_count].palabra, palabra);
-        token_count++;
+void agregar_token(const char* palabra, Token* lista, int* count) {
+    if (!existe_token(palabra, lista, *count) && *count < MAX_TOKENS) {
+        strcpy(lista[*count].palabra, palabra);
+        (*count)++;
     }
 }
 
-void imprimir_tabla() {
-    printf("\n===== TABLA DE PALABRAS RESERVADAS ENCONTRADAS =====\n");
-    printf("| %-5s | %-15s |\n", "ID", "Palabra");
-    printf("|---------------------------|\n");
-    for (int i = 0; i < token_count; i++) {
-        printf("| %-5d | %-15s |\n", i, tokens[i].palabra);
+void imprimir_tabla(const char* titulo, Token* lista, int count) {
+    printf("\n===== %s =====\n", titulo);
+    printf("| %-5s | %-15s |\n", "ID", "Valor");
+    printf("|-----------------------|\n");
+    for (int i = 0; i < count; i++) {
+        printf("| %-5d | %-15s |\n", i, lista[i].palabra);
     }
-    printf("====================================================\n");
+    printf("=======================\n");
 }
 %}
 
 %%
 
 "Bool"|"Cade"|"Continuar"|"Devo"|"Ent"|"Fals"|"Flota"|"Global" {
-    agregar_token(yytext);
+    agregar_token(yytext, tokens, &token_count);
     printf("[CLASE 0 - PALABRA RESERVADA]: %s\n", yytext);
+}
+
+"<"  { agregar_token("<", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: < ( \n"); }
+">"  { agregar_token(">", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: > ) \n"); }
+"<<" { agregar_token("<<", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: << [ \n"); }
+">>" { agregar_token(">>", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: >> ] \n"); }
+"#"  { agregar_token("#", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: # { \n"); }
+"#! " { agregar_token("#!", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: #! } \n"); }
+"*"  { agregar_token("*", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: * ; \n"); }
+"|"  { agregar_token("|", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: | , \n"); }
+"•"  { agregar_token("•", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: • . \n"); }
+
+@([A-Za-zÑñÁÉÍÓÚÜáéíóúü][A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_ {
+    agregar_token(yytext, identificadores, &identificador_count);
+    printf("[CLASE 2 - IDENTIFICADOR]: %s\n", yytext);
 }
 
 . {
@@ -53,8 +75,11 @@ void imprimir_tabla() {
 
 int main() {
     printf("Analizador Léxico iniciado. (Ctrl+D para terminar)\n");
-    yylex();  
-    imprimir_tabla();  
+    yylex();
+    imprimir_tabla("TABLA DE PALABRAS RESERVADAS", tokens, token_count);
+    imprimir_tabla("TABLA DE SÍMBOLOS ESPECIALES", simbolos, simbolo_count);
+   imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
+
     return 0;
 }
 
