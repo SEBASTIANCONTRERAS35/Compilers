@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_TOKENS 100  
+#define MAX_TOKENS 200  
 
 typedef struct {
     char palabra[50];
