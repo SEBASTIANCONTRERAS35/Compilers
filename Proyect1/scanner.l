@@ -26,6 +26,9 @@ int constante_entera_count = 0;
 Token constantes_reales[MAX_TOKENS];
 int constante_real_count = 0;
 
+Token errores_lex[MAX_TOKENS];
+int error_count = 0;
+
 int existe_token(const char* palabra, Token* lista, int count) {
     for (int i = 0; i < count; i++) {
         if (strcmp(lista[i].palabra, palabra) == 0) {
@@ -95,7 +98,8 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
 
 
 . {
-    printf("[Otra cosa]: %s\n", yytext);
+    agregar_token(yytext, errores_lex, &error_count);
+    printf("[ERROR LÉXICO]: %s\n", yytext);
 }
 
 %%
@@ -108,7 +112,9 @@ int main() {
     imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
     imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);
     imprimir_tabla("TABLA DE CONSTANTES ENTERAS", constantes_enteras, constante_entera_count);
-        imprimir_tabla("TABLA DE CONSTANTES REALES", constantes_reales, constante_real_count);
+   imprimir_tabla("TABLA DE CONSTANTES REALES", constantes_reales, constante_real_count);
+   imprimir_tabla("TABLA DE ERRORES LÉXICOS", errores_lex, error_count);
+
     return 0;
 }
 
