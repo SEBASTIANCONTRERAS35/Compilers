@@ -124,9 +124,7 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
     printf("[CLASE 6 - CONSTANTE CADENA]: %s\n", yytext);
 }
 
-. {
-    printf("[Otra cosa]: %s\n", yytext);
-}
+
 
 %%
 
