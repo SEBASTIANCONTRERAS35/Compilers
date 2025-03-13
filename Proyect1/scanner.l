@@ -17,6 +17,8 @@ int simbolo_count = 0;
 Token identificadores[MAX_TOKENS];
 int identificador_count = 0;
 
+Token operadores[MAX_TOKENS];
+int operador_count = 0;
 
 int existe_token(const char* palabra, Token* lista, int count) {
     for (int i = 0; i < count; i++) {
@@ -47,6 +49,8 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
 
 %%
 
+[ \t\n]+  { /* Ignorar espacios, tabuladores y saltos de línea */ }
+
 "Bool"|"Cade"|"Continuar"|"Devo"|"Ent"|"Fals"|"Flota"|"Global" {
     agregar_token(yytext, tokens, &token_count);
     printf("[CLASE 0 - PALABRA RESERVADA]: %s\n", yytext);
@@ -67,6 +71,11 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
     printf("[CLASE 2 - IDENTIFICADOR]: %s\n", yytext);
 }
 
+"sum"|"rest"|"mult"|"div"|"mod"|"inc"|"dec"|"exp"|"dive" {
+    agregar_token(yytext, operadores, &operador_count);
+    printf("[CLASE 3 - OPERADOR ARITMÉTICO]: %s\n", yytext);
+}
+
 . {
     printf("[Otra cosa]: %s\n", yytext);
 }
@@ -78,8 +87,8 @@ int main() {
     yylex();
     imprimir_tabla("TABLA DE PALABRAS RESERVADAS", tokens, token_count);
     imprimir_tabla("TABLA DE SÍMBOLOS ESPECIALES", simbolos, simbolo_count);
-   imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
-
+    imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
+    imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);
     return 0;
 }
 
