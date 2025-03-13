@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_TOKENS 100  
+#define MAX_TOKENS 300  
 
 typedef struct {
     char palabra[50];
@@ -28,6 +28,14 @@ int constante_real_count = 0;
 
 Token errores_lex[MAX_TOKENS];
 int error_count = 0;
+Token operadores_rela[MAX_TOKENS];
+int operador_rela_count=0;
+
+Token operadores_asig[MAX_TOKENS];
+int operador_asig_count=0;
+
+Token constante_cadena[MAX_TOKENS];
+int constante_cadena_count=0;
 
 int existe_token(const char* palabra, Token* lista, int count) {
     for (int i = 0; i < count; i++) {
@@ -101,6 +109,24 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
     agregar_token(yytext, errores_lex, &error_count);
     printf("[ERROR LÉXICO]: %s\n", yytext);
 }
+"h"|"m"|"e"|"c"|"he"|"me" {
+    agregar_token(yytext,operadores_rela, &operador_rela_count);
+    printf("[CLASE 4  - OPERADOR RELACIONAL]: %s\n", yytext);
+}
+
+"->"|"+->"|"-->"|"*->"|"/->"|"%->"|">>"|"<<"|"^->"|"&->" {
+    agregar_token(yytext,operadores_asig, &operador_asig_count);
+    printf("[CLASE 5  - OPERADOR DE ASIGNACION]: %s\n", yytext);
+}
+
+--([^-\n]*)-- {
+    agregar_token(yytext, constante_cadena, &constante_cadena_count);
+    printf("[CLASE 6 - CONSTANTE CADENA]: %s\n", yytext);
+}
+
+. {
+    printf("[Otra cosa]: %s\n", yytext);
+}
 
 %%
 
@@ -115,6 +141,7 @@ int main() {
    imprimir_tabla("TABLA DE CONSTANTES REALES", constantes_reales, constante_real_count);
    imprimir_tabla("TABLA DE ERRORES LÉXICOS", errores_lex, error_count);
 
+    imprimir_tabla("TABLA DE OPERADORES RELACIONALES", operadores_rela, operador_rela_count);
     return 0;
 }
 
