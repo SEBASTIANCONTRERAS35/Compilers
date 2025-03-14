@@ -577,11 +577,28 @@ char *yytext;
 #define MAX_TOKENS 300
 
 typedef struct {
+    int pos;
+    char nombre[50];
+    int tipo; /* Por defecto -1 */
+} Simbolo;
+
+Simbolo tabla_simbolos[MAX_TOKENS];
+int simbolos_count = 0;
+
+typedef struct {
     char palabra[50];
 } Token;
+typedef struct {
+    int pos;
+    char dato[100];
+} Literal;
 
 Token tokens[MAX_TOKENS]; 
 int token_count = 0;
+
+Literal tabla_literales[MAX_TOKENS];
+int literales_count = 0;
+
 
 Token simbolos[MAX_TOKENS];
 int simbolo_count = 0;
@@ -610,6 +627,25 @@ int operador_asig_count = 0;
 Token constante_cadena[MAX_TOKENS];
 int constante_cadena_count = 0;
 
+FILE *archivo_salida = NULL;
+
+
+int existe_literal(const char* dato) {
+    for (int i = 0; i < literales_count; i++) {
+        if (strcmp(tabla_literales[i].dato, dato) == 0) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void agregar_literal(const char* dato) {
+    if (!existe_literal(dato) && literales_count < MAX_TOKENS) {
+        tabla_literales[literales_count].pos = literales_count;
+        strcpy(tabla_literales[literales_count].dato, dato);
+        literales_count++;
+    }
+}
 int existe_token(const char* palabra, Token* lista, int count) {
     for (int i = 0; i < count; i++) {
         if (strcmp(lista[i].palabra, palabra) == 0) {
@@ -617,6 +653,22 @@ int existe_token(const char* palabra, Token* lista, int count) {
         }
     }
     return 0;
+}
+int existe_simbolo(const char* nombre) {
+    for (int i = 0; i < simbolos_count; i++) {
+        if (strcmp(tabla_simbolos[i].nombre, nombre) == 0) {
+            return 1; // Ya existe
+        }
+    }
+    return 0;
+}
+void agregar_simbolo(const char* nombre) {
+    if (!existe_simbolo(nombre) && simbolos_count < MAX_TOKENS) {
+        tabla_simbolos[simbolos_count].pos = simbolos_count;
+        strcpy(tabla_simbolos[simbolos_count].nombre, nombre);
+        tabla_simbolos[simbolos_count].tipo = -1;
+        simbolos_count++;
+    }
 }
 
 void agregar_token(const char* palabra, Token* lista, int* count) {
@@ -626,17 +678,39 @@ void agregar_token(const char* palabra, Token* lista, int* count) {
     }
 }
 
-void imprimir_tabla(const char* titulo, Token* lista, int count) {
-    printf("\n===== %s =====\n", titulo);
-    printf("| %-5s | %-15s |\n", "ID", "Valor");
-    printf("|-----------------------|\n");
-    for (int i = 0; i < count; i++) {
-        printf("| %-5d | %-15s |\n", i, lista[i].palabra);
+
+void imprimir_tabla_literales() {
+    fprintf(archivo_salida, "\n===== TABLA DE LITERALES (Cadenas y Reales) =====\n");
+    fprintf(archivo_salida, "| %-5s | %-15s |\n", "Pos", "Valor");
+    fprintf(archivo_salida, "|-----------------------|\n");
+    for (int i = 0; i < literales_count; i++) {
+        fprintf(archivo_salida, "| %-5d | %-15s |\n", tabla_literales[i].pos, tabla_literales[i].dato);
     }
-    printf("=======================\n");
+    fprintf(archivo_salida, "=======================\n");
 }
-#line 638 "scanner.c"
-#line 639 "scanner.c"
+void imprimir_tabla_simbolos() {
+    fprintf(archivo_salida, "\n===== TABLA DE SÍMBOLOS (IDENTIFICADORES) =====\n");
+    fprintf(archivo_salida, "| %-5s | %-15s | %-5s |\n", "Pos", "Nombre", "Tipo");
+    fprintf(archivo_salida, "|--------------------------------|\n");
+    for (int i = 0; i < simbolos_count; i++) {
+        fprintf(archivo_salida, "| %-5d | %-15s | %-5d |\n",
+               tabla_simbolos[i].pos,
+               tabla_simbolos[i].nombre,
+               tabla_simbolos[i].tipo);
+    }
+    fprintf(archivo_salida, "================================\n");
+}
+void imprimir_tabla(const char* titulo, Token* lista, int count) {
+    fprintf(archivo_salida, "\n===== %s =====\n", titulo);
+    fprintf(archivo_salida, "| %-5s | %-15s |\n", "ID", "Valor");
+    fprintf(archivo_salida, "|-----------------------|\n");
+    for (int i = 0; i < count; i++) {
+        fprintf(archivo_salida, "| %-5d | %-15s |\n", i, lista[i].palabra);
+    }
+    fprintf(archivo_salida, "=======================\n");
+}
+#line 712 "scanner.c"
+#line 713 "scanner.c"
 
 #define INITIAL 0
 
@@ -853,9 +927,9 @@ YY_DECL
 		}
 
 	{
-#line 68 "scanner.l"
+#line 142 "scanner.l"
 
-#line 858 "scanner.c"
+#line 932 "scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -915,12 +989,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 69 "scanner.l"
+#line 143 "scanner.l"
 { /* no acción */ }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 71 "scanner.l"
+#line 145 "scanner.l"
 {
     agregar_token(yytext, tokens, &token_count);
     printf("[CLASE 0 - PALABRA RESERVADA]: %s\n", yytext);
@@ -928,60 +1002,60 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 76 "scanner.l"
+#line 150 "scanner.l"
 { agregar_token("<", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: < ( \n"); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 77 "scanner.l"
+#line 151 "scanner.l"
 { agregar_token(">", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: > ) \n"); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 78 "scanner.l"
+#line 152 "scanner.l"
 { agregar_token("<<", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESP]: << [ \n"); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 79 "scanner.l"
+#line 153 "scanner.l"
 { agregar_token(">>", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESP]: >> ] \n"); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 80 "scanner.l"
+#line 154 "scanner.l"
 { agregar_token("#", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: # { \n"); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 81 "scanner.l"
+#line 155 "scanner.l"
 { agregar_token("#!", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESP]: #! } \n"); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 82 "scanner.l"
+#line 156 "scanner.l"
 { agregar_token("*", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: * ; \n"); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 83 "scanner.l"
+#line 157 "scanner.l"
 { agregar_token("|", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: | , \n"); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 84 "scanner.l"
+#line 158 "scanner.l"
 { agregar_token("•", simbolos, &simbolo_count);  printf("[CLASE 1 - SÍMBOLO ESP]: • . \n"); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 86 "scanner.l"
+#line 160 "scanner.l"
 {
-    agregar_token(yytext, identificadores, &identificador_count);
+        agregar_simbolo(yytext);
     printf("[CLASE 2 - IDENTIFICADOR]: %s\n", yytext);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 91 "scanner.l"
+#line 165 "scanner.l"
 {
     agregar_token(yytext, operadores, &operador_count);
     printf("[CLASE 3 - OPERADOR ARITMÉTICO]: %s\n", yytext);
@@ -989,7 +1063,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 96 "scanner.l"
+#line 170 "scanner.l"
 {
     agregar_token(yytext, operadores_rela, &operador_rela_count);
     printf("[CLASE 4 - OPERADOR RELACIONAL]: %s\n", yytext);
@@ -997,7 +1071,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 101 "scanner.l"
+#line 175 "scanner.l"
 {
     agregar_token(yytext, operadores_asig, &operador_asig_count);
     printf("[CLASE 5 - OPERADOR DE ASIGNACION]: %s\n", yytext);
@@ -1005,38 +1079,41 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 106 "scanner.l"
+#line 180 "scanner.l"
 {
+        agregar_literal(yytext);
     agregar_token(yytext, constante_cadena, &constante_cadena_count);
     printf("[CLASE 6 - CONSTANTE CADENA]: %s\n", yytext);
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 111 "scanner.l"
+#line 186 "scanner.l"
 {
+        agregar_literal(yytext);
     agregar_token(yytext, constantes_reales, &constante_real_count);
     printf("[CLASE 8 - REAL]: %s\n", yytext);
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 116 "scanner.l"
+#line 192 "scanner.l"
 {
+        agregar_literal(yytext);
     agregar_token(yytext, constantes_enteras, &constante_entera_count);
     printf("[CLASE 7 - CONSTANTE ENTERA]: %s\n", yytext);
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 121 "scanner.l"
+#line 198 "scanner.l"
 {
     printf("[COMENTARIO]: %s\n", yytext);
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 125 "scanner.l"
+#line 202 "scanner.l"
 {
     agregar_token(yytext, errores_lex, &error_count);
     printf("[ERROR LÉXICO]: %s\n", yytext);
@@ -1044,10 +1121,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 130 "scanner.l"
+#line 207 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1050 "scanner.c"
+#line 1127 "scanner.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2052,16 +2129,23 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 130 "scanner.l"
+#line 207 "scanner.l"
 
 
 int main() {
-    printf("Analizador Léxico iniciado. (Ctrl+D para terminar)\n");
-    yylex();
+     archivo_salida = fopen("salida.txt", "w");
+    if (!archivo_salida) {
+        printf("No se pudo abrir 'salida.txt' para escribir.\n");
+        return 1;
+    }
 
+  
+    printf("Analizador Léxico iniciado...)\n");
+    yylex();
+    imprimir_tabla_simbolos();
+    imprimir_tabla_literales();
     imprimir_tabla("TABLA DE PALABRAS RESERVADAS", tokens, token_count);
     imprimir_tabla("TABLA DE SÍMBOLOS ESPECIALES", simbolos, simbolo_count);
-    imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
     imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);
     imprimir_tabla("TABLA DE OPERADORES RELACIONALES", operadores_rela, operador_rela_count);
     imprimir_tabla("TABLA DE OPERADORES DE ASIGNACION", operadores_asig, operador_asig_count);
@@ -2070,9 +2154,14 @@ int main() {
     imprimir_tabla("TABLA DE CONSTANTES REALES", constantes_reales, constante_real_count);
     imprimir_tabla("TABLA DE ERRORES LÉXICOS", errores_lex, error_count);
 
+
+
+    fclose(archivo_salida);
+    printf("Tablas escritas en 'salida.txt'\n");
     return 0;
 }
 
 int yywrap() {
     return 1;
-}
+} 
+

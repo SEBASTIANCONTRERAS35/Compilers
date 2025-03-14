@@ -1,0 +1,69 @@
+
+===== TABLA DE SÍMBOLOS (IDENTIFICADORES) =====
+| Pos   | Nombre          | Tipo  |
+|--------------------------------|
+================================
+
+===== TABLA DE LITERALES (Cadenas y Reales) =====
+| Pos   | Valor           |
+|-----------------------|
+| 0     | 123'45          |
+| 1     | --Cadena con guiones-- |
+| 2     | -10p            |
+| 3     | 45r             |
+=======================
+
+===== TABLA DE PALABRAS RESERVADAS =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | Bool            |
+=======================
+
+===== TABLA DE SÍMBOLOS ESPECIALES =====
+| ID    | Valor           |
+|-----------------------|
+=======================
+
+===== TABLA DE OPERADORES ARITMÉTICOS =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | rest            |
+=======================
+
+===== TABLA DE OPERADORES RELACIONALES =====
+| ID    | Valor           |
+|-----------------------|
+=======================
+
+===== TABLA DE OPERADORES DE ASIGNACION =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | ->              |
+=======================
+
+===== TABLA DE CONSTANTES CADENA =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | --Cadena con guiones-- |
+=======================
+
+===== TABLA DE CONSTANTES ENTERAS =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | -10p            |
+=======================
+
+===== TABLA DE CONSTANTES REALES =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | 123'45          |
+| 1     | 45r             |
+=======================
+
+===== TABLA DE ERRORES LÉXICOS =====
+| ID    | Valor           |
+|-----------------------|
+| 0     | @var_1_         |
+| 1     | "hola"          |
+| 2     | @id_2           |
+=======================
