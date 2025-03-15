@@ -40,7 +40,7 @@ Bool @myVar_ sum 45p --Hello World-- Flota
 🔍 Lexer Output Example
 	•	tokens.txt
 
-===== TABLA DE TOKENS =====
+### TABLA DE TOKENS
 | Clase | Posición   |
 |------------------|
 | 0     | 0          |
@@ -53,7 +53,7 @@ Bool @myVar_ sum 45p --Hello World-- Flota
 
 	•	simbolos.txt
 
-===== TABLA DE SÍMBOLOS (IDENT) =====
+### TABLA DE SÍMBOLOS (IDENT)
 | Pos   | Nombre          | Tipo  |
 |--------------------------------|
 | 0     | @myVar_         | -1    |
@@ -61,7 +61,7 @@ Bool @myVar_ sum 45p --Hello World-- Flota
 
 	•	literales.txt
 
-===== TABLA DE LITERALES =====
+### TABLA DE LITERALES
 | Pos   | Valor           |
 |-----------------------|
 | 0     | 45p             |
