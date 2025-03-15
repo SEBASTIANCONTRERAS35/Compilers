@@ -1,142 +1,76 @@
-Here’s a complete and concise GitHub-ready README for your Lexer Project:
+# Lexical Analyzer
 
-⸻
+This project implements a lexical analyzer (scanner) created using Flex (Fast Lexical Analyzer Generator). The analyzer reads an input text file and generates three tables as output:
 
-Lexer Analyzer (Flex) 🚀
+- Tokens (`tokens.txt`)
+- Symbols (Identifiers) (`simbolos.txt`)
+- Literals (strings and numeric constants): `literales.txt`
 
-This is a lexical analyzer (lexer) built using Flex, designed to identify and classify tokens from a given input source. It generates structured output across three separate files:
-	•	✅ Tokens Table (tokens.txt)
-	•	✅ Symbols (Identifiers) Table (simbolos.txt)
-	•	✅ Literals Table (literales.txt)
+## 📂 Output Files
+The analyzer produces three output files in Markdown format for easy viewing:
 
-📖 Project Overview
+- **tokens.txt**: Contains a list of tokens found during lexical analysis, along with their token class and their position in the respective predefined tables.
+- **simbolos.txt**: Lists identifiers (symbols) detected, their positions, and assigned types (default type is -1).
+- **literales.txt**: Contains literals found (strings and numeric literals), along with their positions.
 
-This project categorizes tokens according to predefined lexical classes. Identifiers and literals are dynamically stored, while reserved words, symbols, and operators have predefined positions in dedicated tables.
+## 📋 Usage
 
-⸻
+1. **Compile** the lexical analyzer:
 
-📌 Token Classes
-
-Class	Token Type
-0	Reserved Words
-1	Special Symbols
-2	Identifiers
-3	Arithmetic Operators
-4	Relational Operators
-5	Assignment Operators
-6	String Literals
-7	Integer Literals
-8	Real Literals
-9	Lexical Errors
-
-
-
-⸻
-
-📝 Example Input
-
-Bool @myVar_ sum 45p --Hello World-- Flota
-
-🔍 Lexer Output Example
-	•	tokens.txt
-
-### TABLA DE TOKENS
-| Clase | Posición   |
-|------------------|
-| 0     | 0          |
-| 2     | 0          |
-| 3     | 0          |
-| 7     | 0          |
-| 6     | 0          |
-| 0     | 6          |
-==========================
-
-	•	simbolos.txt
-
-### TABLA DE SÍMBOLOS (IDENT)
-| Pos   | Nombre          | Tipo  |
-|--------------------------------|
-| 0     | @myVar_         | -1    |
-================================
-
-	•	literales.txt
-
-### TABLA DE LITERALES
-| Pos   | Valor           |
-|-----------------------|
-| 0     | 45p             |
-| 1     | --Hello World-- |
-=======================
-
-
-
-⸻
-
-🚩 Getting Started
-
-🔧 Installation
-
-Ensure you have Flex installed. For Linux/macOS:
-
-sudo apt-get install flex  # Ubuntu/Debian
-brew install flex          # macOS (Homebrew)
-
-🚀 Compilation & Execution
-	1.	Clone this repository:
-
-git clone <your-github-repo-url>
-cd lexer-project
-
-	2.	Compile the lexer:
-
+```bash
 flex scanner.l
-gcc lex.yy.c -o lexer
+cc lex.yy.c -o scanner
+```
 
-	3.	Run the lexer:
+2. Run the generated executable:
 
-./lexer < input.txt
+```bash
+./a.out < input.txt
+```
 
-The outputs will be stored in:
-	•	✅ tokens.txt
-	•	✅ simbolos.txt
-	•	✅ literales.txt
+3. After running, you will find three Markdown files generated:
 
-⸻
+- `tokens.txt`
+- `simbolos.txt`
+- `literales.txt`
 
-🧰 Project Structure
+## ✅ Supported Tokens
 
-lexer-project/
-├── scanner.l
-├── input.txt
-├── tokens.txt
-├── simbolos.txt
-└── literales.txt
+The analyzer recognizes the following token classes:
 
+| Class | Description                  |
+|-------|----------------------------|
+| 0     | Reserved keywords          |
+| 1     | Special symbols            |
+| 2     | Identifiers                |
+| 3     | Arithmetic operators       |
+| 4     | Relational operators  |
+| 5     | Assignment operators  |
+| 6     | String literals       |
+| 7     | Integer literals      |
+| 8     | Real literals         |
+| 9     | Lexical errors        |
 
+## ⚙️ How to Compile
 
-⸻
+Make sure you have **Flex** installed:
 
-📦 Technologies
-	•	C
-	•	Flex (Fast Lexical Analyzer)
+```bash
+flex scanner.l
+gcc lex.yy.c -o scanner
+```
 
-⸻
+## 📁 Repository Structure
 
-📝 Contributing
+- `scanner.l`: Main Flex file containing the lexical rules and token definitions.
+- `input.txt`: Example input file.
+- Output Markdown files (`tokens.txt`, `simbolos.txt`, `literales.txt`) after execution.
 
-Contributions, improvements, and suggestions are welcome!
-	1.	Fork this repository 🍴
-	2.	Create your feature branch (git checkout -b feature/new-feature)
-	3.	Commit your changes (git commit -am 'Add some feature')
-	4.	Push to the branch (git push origin feature/new-feature)
-	5.	Open a Pull Request 🎉
+## 🔗 Requirements
 
-⸻
+- Flex (Fast Lexical Analyzer Generator)
+- C Compiler (gcc, clang, etc.)
 
-📄 License
+## 📌 License
 
-This project is licensed under the MIT License.
-
-⸻
-
-Made with ❤️ by Your Sebastian Contreras
+This project is open-source and freely available under the MIT license.
