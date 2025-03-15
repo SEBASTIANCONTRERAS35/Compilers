@@ -1,101 +1,142 @@
-# Lexical Analyzer using Flex
+Here’s a complete and concise GitHub-ready README for your Lexer Project:
 
-## Objective
-This project implements a lexical analyzer using `lex/flex` to recognize different lexical components defined for the course. The analyzer will read an input file and identify tokens according to predefined lexical rules.
+⸻
 
-## Features
-The lexical analyzer recognizes the following classes of lexical components:
+Lexer Analyzer (Flex) 🚀
 
-| Class | Description |
-|-------|-------------|
-| 0 | Reserved words (see table) |
-| 1 | Special symbols (see table) |
-| 2 | Identifiers (must start with `@`, followed by letters, numbers, and `_`. It supports accented vowels and `ñ`, `Ñ`.) |
-| 3 | Arithmetic operators (see table) |
-| 4 | Relational operators (see table) |
-| 5 | Assignment operators (see table) |
-| 6 | String constants (enclosed in `--` and can contain any character) |
-| 7 | Integer constants (cannot start with `0` if they have more than one digit, can have a `+` or `-` sign, and may include `p` or `g` as suffixes) |
-| 8 | Real constants (fractional part is separated by `'` apostrophe, e.g., `12'2`, `242'87`. Alternatively, suffixes `r` or `R` can be used) |
+This is a lexical analyzer (lexer) built using Flex, designed to identify and classify tokens from a given input source. It generates structured output across three separate files:
+	•	✅ Tokens Table (tokens.txt)
+	•	✅ Symbols (Identifiers) Table (simbolos.txt)
+	•	✅ Literals Table (literales.txt)
 
-## How It Works
-- The lexical analyzer reads an input file containing source code.
-- It identifies tokens based on regular expressions defined in the `lex/flex` file.
-- Tokens are classified into different categories and stored in symbol and literal tables.
-- Errors are detected and logged for debugging.
-- Comments enclosed in `[ ]` are ignored by the analyzer.
+📖 Project Overview
 
-## Token Representation
-Each recognized token is represented by a structure containing:
-- `class`: The lexical class number.
-- `value`: The position within its corresponding table (for reserved words, symbols, operators) or the actual numerical value (for integer constants).
+This project categorizes tokens according to predefined lexical classes. Identifiers and literals are dynamically stored, while reserved words, symbols, and operators have predefined positions in dedicated tables.
 
-## Implementation Details
-- The lexical analyzer creates a **symbol table** to store identifiers.
-- **Literal tables** are used for string and floating-point constants.
-- The analyzer continues processing even if errors are found, ensuring full lexical recognition.
+⸻
 
-## How to Run the Program
-### Prerequisites
-Make sure you have `flex` and `gcc` installed on your system. For macOS and Linux, you can install them with:
-```sh
-sudo apt install flex gcc    # For Debian-based systems
-brew install flex           # For macOS (with Homebrew)
-```
+📌 Token Classes
 
-### Compilation and Execution
-To compile and run the lexical analyzer, follow these steps:
-```sh
-make      # Generates the executable
-./scanner.out input.txt  # Runs the scanner with an input file
-```
-Alternatively, if you want to manually compile:
-```sh
-flex -o scanner.c scanner.l
-gcc -o scanner.out scanner.c -lfl
-./scanner.out input.txt
-```
+Class	Token Type
+0	Reserved Words
+1	Special Symbols
+2	Identifiers
+3	Arithmetic Operators
+4	Relational Operators
+5	Assignment Operators
+6	String Literals
+7	Integer Literals
+8	Real Literals
+9	Lexical Errors
 
-### Expected Output
-The program will display the recognized tokens along with their class and value.
 
-### Example
-#### Input File (`input.txt`)
-```c
-int x = 5;
-float y = 3.14;
-if (x > 0) {
-   printf("Positive");
-}
-```
-#### Output
-```
-PALABRA RESERVADA: int
-IDENTIFICADOR: x
-OPERADOR: =
-NÚMERO ENTERO: 5
-SÍMBOLO ESPECIAL: ;
-PALABRA RESERVADA: float
-IDENTIFICADOR: y
-OPERADOR: =
-NÚMERO REAL: 3.14
-SÍMBOLO ESPECIAL: ;
-PALABRA RESERVADA: if
-SÍMBOLO ESPECIAL: (
-IDENTIFICADOR: x
-OPERADOR RELACIONAL: >
-NÚMERO ENTERO: 0
-SÍMBOLO ESPECIAL: )
-...
-```
 
-## Error Handling
-- If an unrecognized symbol is found, the program will display an error message and continue processing.
-- If a string is not properly enclosed within `--`, it will be flagged as an error.
-- If a number does not conform to the integer or real constant rules, it will also generate an error.
+⸻
 
-## Contributors
-- List team members here
+📝 Example Input
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Bool @myVar_ sum 45p --Hello World-- Flota
+
+🔍 Lexer Output Example
+	•	tokens.txt
+
+===== TABLA DE TOKENS =====
+| Clase | Posición   |
+|------------------|
+| 0     | 0          |
+| 2     | 0          |
+| 3     | 0          |
+| 7     | 0          |
+| 6     | 0          |
+| 0     | 6          |
+==========================
+
+	•	simbolos.txt
+
+===== TABLA DE SÍMBOLOS (IDENT) =====
+| Pos   | Nombre          | Tipo  |
+|--------------------------------|
+| 0     | @myVar_         | -1    |
+================================
+
+	•	literales.txt
+
+===== TABLA DE LITERALES =====
+| Pos   | Valor           |
+|-----------------------|
+| 0     | 45p             |
+| 1     | --Hello World-- |
+=======================
+
+
+
+⸻
+
+🚩 Getting Started
+
+🔧 Installation
+
+Ensure you have Flex installed. For Linux/macOS:
+
+sudo apt-get install flex  # Ubuntu/Debian
+brew install flex          # macOS (Homebrew)
+
+🚀 Compilation & Execution
+	1.	Clone this repository:
+
+git clone <your-github-repo-url>
+cd lexer-project
+
+	2.	Compile the lexer:
+
+flex scanner.l
+gcc lex.yy.c -o lexer
+
+	3.	Run the lexer:
+
+./lexer < input.txt
+
+The outputs will be stored in:
+	•	✅ tokens.txt
+	•	✅ simbolos.txt
+	•	✅ literales.txt
+
+⸻
+
+🧰 Project Structure
+
+lexer-project/
+├── scanner.l
+├── input.txt
+├── tokens.txt
+├── simbolos.txt
+└── literales.txt
+
+
+
+⸻
+
+📦 Technologies
+	•	C
+	•	Flex (Fast Lexical Analyzer)
+
+⸻
+
+📝 Contributing
+
+Contributions, improvements, and suggestions are welcome!
+	1.	Fork this repository 🍴
+	2.	Create your feature branch (git checkout -b feature/new-feature)
+	3.	Commit your changes (git commit -am 'Add some feature')
+	4.	Push to the branch (git push origin feature/new-feature)
+	5.	Open a Pull Request 🎉
+
+⸻
+
+📄 License
+
+This project is licensed under the MIT License.
+
+⸻
+
+Made with ❤️ by Your Sebastian Contreras
