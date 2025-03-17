@@ -562,31 +562,55 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "scanner.l"
 #line 2 "scanner.l"
+/* 
+   -----------------------------------------------------------------------
+   INSTRUCCIONES DE CABECERA
+   -----------------------------------------------------------------------
+   Este bloque se utiliza para incluir bibliotecas de C y declaraciones 
+   globales. También definimos estructuras para la tabla de símbolos, 
+   tabla de literales y la tabla de tokens. 
+*/
+
 #include <stdio.h>
 #include <string.h>
 
 #define MAX_TOKENS 300
 
-/* Estructura para la tabla de símbolos (identificadores) */
+/* Estructura para la tabla de símbolos (identificadores).
+   Cada identificador tiene:
+   - pos: índice en la tabla
+   - nombre: el texto del identificador
+   - tipo: por defecto -1, ya que no se define en esta etapa. 
+*/
 typedef struct {
     int pos;
     char nombre[50];
-    int tipo; // -1 por defecto
+    int tipo; 
 } Simbolo;
 
-/* Estructura para la tabla de literales (cadenas y reales) */
+/* Estructura para la tabla de literales (cadenas y constantes numéricas).
+   Cada literal tiene:
+   - pos: índice en la tabla
+   - dato: el texto de la cadena o número */
 typedef struct {
     int pos;
     char dato[100];
 } Literal;
 
-/* Estructura para la tabla de tokens */
+/* Estructura para la tabla de tokens.
+   Cada token tiene:
+   - clase: el código de la clase (0=reservada, 1=símbolo, 2=ident, etc.)
+   - posicion: el índice dentro de su tabla (o -1 si no aplica) */
 typedef struct {
-    int clase;      // Código de la clase
-    int posicion;   // Posición en su tabla (o -1)
+    int clase;      
+    int posicion;   
 } TokenInfo;
 
-/* Tablas principales */
+/* Declaración de tablas globales:
+   - tabla_simbolos (identificadores)
+   - tabla_literales (cadenas, números)
+   - tabla_tokens (lista de todos los tokens capturados) 
+*/
 Simbolo tabla_simbolos[MAX_TOKENS];
 int simbolos_count = 0;
 
@@ -596,77 +620,101 @@ int literales_count = 0;
 TokenInfo tabla_tokens[MAX_TOKENS];
 int token_count = 0;
 
-/* Archivo de salida */
+/* Declaración de los archivos de salida */
 FILE *archivo_tokens = NULL;
 FILE *archivo_simbolos = NULL;
 FILE *archivo_literales = NULL;
 
-/* Tablas predefinidas para asignar posición fija */
+/* 
+   Tablas predefinidas con las palabras reservadas, símbolos especiales,
+   operadores aritméticos, operadores relacionales y operadores de asignación.
+   Cada una tiene una posición fija en dichas tablas.
+*/
+
+/* Palabras reservadas (clase 0) */
 const char *palabras_reservadas[] = {
     "Bool", "Cade", "Continuar", "Devo", "Ent", "Fals", "Flota", "Global",
     "Haz", "Mientras", "Nulo", "Para", "Parar", "Si", "Sino", "Ver"
 };
 const int total_palabras_reservadas = 16;
 
+/* Símbolos especiales (clase 1) */
 const char *simbolos_especiales[] = {
     "<", ">", "<<", ">>", "#", "#!", "*", "|", "•"
 };
 const int total_simbolos_especiales = 9;
 
+/* Operadores aritméticos (clase 3) */
 const char *operadores_aritmeticos[] = {
     "sum", "rest", "mult", "div", "mod", "inc", "dec", "exp", "dive"
 };
 const int total_operadores_aritmeticos = 9;
 
+/* Operadores relacionales (clase 4) */
 const char *operadores_relacionales[] = {
     "h", "m", "e", "c", "he", "me"
 };
 const int total_operadores_relacionales = 6;
 
+/* Operadores de asignación (clase 5) */
 const char *operadores_asignacion[] = {
     "->", "+->", "-->", "*->", "/->", "%->", ">>", "<<", "^->", "&->"
 };
 const int total_operadores_asignacion = 10;
 
-/* ----------------------------------------------------------------
-   Funciones de apoyo
-   ---------------------------------------------------------------- */
+/* 
+   -----------------------------------------------------------------------
+   DECLARACIÓN DE FUNCIONES
+   -----------------------------------------------------------------------
+   Funciones para buscar y asignar posiciones, así como para imprimir
+   las tablas resultantes.
+*/
 
-/* Devuelve la posición fija en la tabla predefinida; -1 si no existe */
+/* 
+   buscar_posicion:
+   Busca el valor 'valor' en la tabla[] de cadenas, devolviendo el índice
+   si lo encuentra, o -1 en caso contrario.
+*/
 int buscar_posicion(const char *valor, const char *tabla[], int total) {
     for (int i = 0; i < total; i++) {
         if (strcmp(tabla[i], valor) == 0) {
             return i;
         }
     }
-    return -1; // no encontrado
+    return -1; 
 }
 
-/* Inserta / busca un identificador en la tabla de símbolos */
+/* 
+   obtener_posicion_simbolo:
+   Busca el identificador 'nombre' en la tabla de símbolos (tabla_simbolos).
+   Si existe, devuelve su índice. Si no, lo inserta y devuelve el nuevo índice.
+*/
 int obtener_posicion_simbolo(const char* nombre) {
     for (int i = 0; i < simbolos_count; i++) {
         if (strcmp(tabla_simbolos[i].nombre, nombre) == 0) {
-            return i; // ya existe
+            return i; 
         }
     }
-    // si no existe, lo insertamos
     if (simbolos_count < MAX_TOKENS) {
         tabla_simbolos[simbolos_count].pos = simbolos_count;
         strcpy(tabla_simbolos[simbolos_count].nombre, nombre);
-        tabla_simbolos[simbolos_count].tipo = -1; // sin tipo
+        tabla_simbolos[simbolos_count].tipo = -1;
         return simbolos_count++;
     }
     return -1; 
 }
 
-/* Inserta / busca un literal en la tabla de literales */
+/* 
+   obtener_posicion_literal:
+   Busca el literal 'dato' en la tabla de literales. 
+   Si existe, devuelve su índice; si no, lo inserta.
+*/
 int obtener_posicion_literal(const char* dato) {
     for (int i = 0; i < literales_count; i++) {
         if (strcmp(tabla_literales[i].dato, dato) == 0) {
             return i; 
         }
     }
-    // si no existe, lo insertamos
     if (literales_count < MAX_TOKENS) {
         tabla_literales[literales_count].pos = literales_count;
         strcpy(tabla_literales[literales_count].dato, dato);
@@ -676,55 +724,70 @@ int obtener_posicion_literal(const char* dato) {
 }
 
 /* 
-   Agrega un token a la tabla de tokens.
-   - `valor`: la cadena real (yytext)
-   - `clase`: clase del token (0=pal res, 1=simbolo, 2=ident, etc.)
+   agregar_token:
+   Determina la posición 'pos' del valor 'valor' según su clase. 
+   Si es una palabra reservada (clase=0), operador aritmético (clase=3), etc.,
+   lo busca en las tablas predefinidas. 
+   Si es identificador (clase=2), se guarda en tabla_simbolos.
+   Si es literal (cadena, entero o real) se guarda en tabla_literales.
+   Si es error (clase=9), pos=-1. 
+   Luego, inserta el token en la lista tabla_tokens, con su clase y posición.
 */
 void agregar_token(const char *valor, int clase) {
-    // Para la mayoría de clases, usamos la posición fija con buscar_posicion
     int pos = -1;
-
     switch (clase) {
-        case 0: // Palabras reservadas
+        case 0: 
             pos = buscar_posicion(valor, palabras_reservadas, total_palabras_reservadas);
             break;
-        case 1: // Símbolos especiales
+        case 1: 
             pos = buscar_posicion(valor, simbolos_especiales, total_simbolos_especiales);
             break;
-        case 3: // Operadores aritméticos
+        case 3: 
             pos = buscar_posicion(valor, operadores_aritmeticos, total_operadores_aritmeticos);
             break;
-        case 4: // Operadores relacionales
+        case 4: 
             pos = buscar_posicion(valor, operadores_relacionales, total_operadores_relacionales);
             break;
-        case 5: // Operadores asignación
+        case 5: 
             pos = buscar_posicion(valor, operadores_asignacion, total_operadores_asignacion);
             break;
-        case 2: { // Identificador => tabla_simbolos
+        case 2: {
             pos = obtener_posicion_simbolo(valor);
         } break;
-        case 6: // Cadena => tabla_literales
-        case 7: // Entera => tabla_literales
-        case 8: // Real => tabla_literales
-        {
+        case 6: 
+        case 7: 
+        case 8: {
             pos = obtener_posicion_literal(valor);
         } break;
         case 9: 
             pos = -1; 
             break;
     }
-
     
-    if (clase!=9 && pos==-1) {
+    /* Si no se encontró pos en tablas predefinidas (y no es error),
+       no lo insertamos en la tabla de tokens. */
+    if (clase != 9 && pos == -1) {
         return;
     }
 
+    /* Insertar en la tabla de tokens. */
     if (token_count < MAX_TOKENS) {
         tabla_tokens[token_count].clase = clase;
         tabla_tokens[token_count].posicion = pos;
         token_count++;
     }
 }
+
+/* 
+   -----------------------------------------------------------------------
+   FUNCIONES PARA IMPRIMIR LAS TABLAS
+   -----------------------------------------------------------------------
+   Cada función escribe el resultado en el archivo *fp correspondiente.
+*/
+
+/* imprimir_tabla_tokens:
+   Muestra la lista de tokens, con su clase y su posición (en la tabla predefinida, 
+   de símbolos o de literales) */
 
 
 
@@ -739,6 +802,8 @@ void imprimir_tabla_tokens(FILE *fp) {
     }
     fprintf(fp, "==========================\n");
 }
+/* imprimir_tabla_simbolos:
+   Muestra la tabla de identificadores con pos, nombre y tipo. */
 
 void imprimir_tabla_simbolos(FILE *fp) {
     fprintf(fp, "\n===== TABLA DE SÍMBOLOS (IDENT) =====\n");
@@ -752,6 +817,8 @@ void imprimir_tabla_simbolos(FILE *fp) {
     }
     fprintf(fp, "================================\n");
 }
+/* imprimir_tabla_literales:
+   Muestra las cadenas, enteros, reales detectados y su posición. */
 
 void imprimir_tabla_literales(FILE *fp) {
     fprintf(fp, "\n===== TABLA DE LITERALES =====\n");
@@ -764,8 +831,8 @@ void imprimir_tabla_literales(FILE *fp) {
     }
     fprintf(fp, "=======================\n");
 }
-#line 767 "scanner.c"
-#line 768 "scanner.c"
+#line 834 "scanner.c"
+#line 835 "scanner.c"
 
 #define INITIAL 0
 
@@ -982,9 +1049,12 @@ YY_DECL
 		}
 
 	{
-#line 206 "scanner.l"
+#line 273 "scanner.l"
 
-#line 987 "scanner.c"
+
+
+
+#line 1057 "scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1044,12 +1114,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 207 "scanner.l"
+#line 277 "scanner.l"
 {  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 209 "scanner.l"
+#line 281 "scanner.l"
 {
     agregar_token(yytext, 0);
     printf("[CLASE 0 - Pal.Res]: %s\n", yytext);
@@ -1057,7 +1127,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 214 "scanner.l"
+#line 286 "scanner.l"
 {
     agregar_token(yytext, 1);
     printf("[CLASE 1 - Símb.Esp]: %s\n", yytext);
@@ -1065,7 +1135,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 219 "scanner.l"
+#line 291 "scanner.l"
 {
     agregar_token(yytext, 2);
     printf("[CLASE 2 - Identif]: %s\n", yytext);
@@ -1073,7 +1143,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 224 "scanner.l"
+#line 296 "scanner.l"
 {
     agregar_token(yytext, 3);
     printf("[CLASE 3 - Op.Aritm]: %s\n", yytext);
@@ -1081,7 +1151,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 229 "scanner.l"
+#line 301 "scanner.l"
 {
     agregar_token(yytext, 4);
     printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
@@ -1089,7 +1159,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 234 "scanner.l"
+#line 306 "scanner.l"
 {
     agregar_token(yytext, 5);
     printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
@@ -1097,7 +1167,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 239 "scanner.l"
+#line 311 "scanner.l"
 {
     agregar_token(yytext, 6);
     printf("[CLASE 6 - Cadena]: %s\n", yytext);
@@ -1105,7 +1175,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 244 "scanner.l"
+#line 316 "scanner.l"
 {
     agregar_token(yytext, 8);
     printf("[CLASE 8 - Real]: %s\n", yytext);
@@ -1113,7 +1183,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 249 "scanner.l"
+#line 321 "scanner.l"
 {
     agregar_token(yytext, 7);
     printf("[CLASE 7 - Entera]: %s\n", yytext);
@@ -1121,25 +1191,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 254 "scanner.l"
+#line 326 "scanner.l"
 {
     printf("[Comentario] %s\n", yytext);
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 258 "scanner.l"
+#line 330 "scanner.l"
 {
-    agregar_token(yytext, 9);
-    printf("[CLASE 9 - Error]: %s\n", yytext);
+    printf("[ Error Lexico]: %s\n", yytext);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 263 "scanner.l"
+#line 334 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1142 "scanner.c"
+#line 1211 "scanner.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2144,9 +2213,11 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 263 "scanner.l"
+#line 334 "scanner.l"
 
 int main() {
+        /* Archivos de salida */
+
     FILE *archivoTokens = fopen("tokens.txt", "w");
     if (!archivoTokens) {
         printf("No se pudo abrir tokens.txt\n");
@@ -2168,10 +2239,12 @@ int main() {
     printf("Analizador Léxico iniciado...\n");
     yylex();
 
-    /* Imprimir en los 3 archivos */
+    /* Imprimimos cada tabla en su respectivo archivo */
     imprimir_tabla_tokens(archivoTokens);
     imprimir_tabla_simbolos(archivoSimbolos);
     imprimir_tabla_literales(archivoLiterales);
+    
+    /* Cerramos los archivos */
 
     fclose(archivoTokens);
     fclose(archivoSimbolos);
