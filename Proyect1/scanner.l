@@ -323,7 +323,7 @@ void imprimir_tabla_literales(FILE *fp) {
     printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
 }
 
-"->"|"+->"|"-->"|"*->"|"/->"|"%->"|"\^->"|"&->" {
+"->"|"+->"|"-->"|"*->"|"/->"|"%->"|"<<->"|">>->"|"\^->"|"&->" {
     agregar_token(yytext, 5);
     printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
 }
