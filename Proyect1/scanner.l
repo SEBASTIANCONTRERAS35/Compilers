@@ -115,7 +115,7 @@ const int total_operadores_relacionales = 6;
 
 /* Operadores de asignación (clase 5) */
 const char *operadores_asignacion[] = {
-    "->", "+->", "-->", "*->", "/->", "%->", ">>", "<<", "^->", "&->"
+    "->", "+->", "-->", "*->", "/->", "%->", ">>->", "<<->", "^->", "&->"
 };
 const int total_operadores_asignacion = 10;
 
