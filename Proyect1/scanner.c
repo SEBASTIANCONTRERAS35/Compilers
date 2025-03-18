@@ -562,7 +562,27 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "scanner.l"
 #line 2 "scanner.l"
-/* 
+/*
+ Descripción del Programa
+
+El presente programa es un Analizador Léxico desarrollado utilizando la herramienta Flex (Fast Lexical Analyzer Generator). El objetivo principal del analizador léxico es identificar y clasificar correctamente los componentes básicos de un lenguaje específico a partir de un código fuente.
+
+El analizador reconoce diferentes categorías de tokens como palabras reservadas, identificadores, símbolos especiales, operadores aritméticos, relacionales y de asignación, así como constantes numéricas (enteras y reales) y cadenas literales. Además, ignora comentarios y maneja errores léxicos, mostrando información útil sobre estos últimos en la salida estándar.
+
+El programa estructura la información obtenida en tres tablas:
+	•	Tabla de Tokens: Contiene los tokens reconocidos con su clasificación y posición respectiva.
+	•	Tabla de Símbolos: Almacena los identificadores encontrados en el código.
+	•	Tabla de Literales: Guarda cadenas y constantes numéricas detectadas.
+
+Cada una de estas tablas se exporta en archivos separados (tokens.txt, simbolos.txt y literales.txt) para facilitar posteriores etapas de análisis sintáctico y semántico.
+
+⸻
+
+Autores del Programa:
+	•	Yaretzi Calzontzi Hernández
+	•	Emilio Sebastián Contreras Colmenero
+
+
    -----------------------------------------------------------------------
    INSTRUCCIONES DE CABECERA
    -----------------------------------------------------------------------
@@ -831,8 +851,8 @@ void imprimir_tabla_literales(FILE *fp) {
     }
     fprintf(fp, "=======================\n");
 }
-#line 834 "scanner.c"
-#line 835 "scanner.c"
+#line 854 "scanner.c"
+#line 855 "scanner.c"
 
 #define INITIAL 0
 
@@ -1049,12 +1069,12 @@ YY_DECL
 		}
 
 	{
-#line 273 "scanner.l"
+#line 293 "scanner.l"
 
 
 
 
-#line 1057 "scanner.c"
+#line 1077 "scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1114,12 +1134,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 277 "scanner.l"
+#line 297 "scanner.l"
 {  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 281 "scanner.l"
+#line 301 "scanner.l"
 {
     agregar_token(yytext, 0);
     printf("[CLASE 0 - Pal.Res]: %s\n", yytext);
@@ -1127,7 +1147,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 286 "scanner.l"
+#line 306 "scanner.l"
 {
     agregar_token(yytext, 1);
     printf("[CLASE 1 - Símb.Esp]: %s\n", yytext);
@@ -1135,7 +1155,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 291 "scanner.l"
+#line 311 "scanner.l"
 {
     agregar_token(yytext, 2);
     printf("[CLASE 2 - Identif]: %s\n", yytext);
@@ -1143,7 +1163,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 296 "scanner.l"
+#line 316 "scanner.l"
 {
     agregar_token(yytext, 3);
     printf("[CLASE 3 - Op.Aritm]: %s\n", yytext);
@@ -1151,7 +1171,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 301 "scanner.l"
+#line 321 "scanner.l"
 {
     agregar_token(yytext, 4);
     printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
@@ -1159,7 +1179,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 306 "scanner.l"
+#line 326 "scanner.l"
 {
     agregar_token(yytext, 5);
     printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
@@ -1167,7 +1187,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 311 "scanner.l"
+#line 331 "scanner.l"
 {
     agregar_token(yytext, 6);
     printf("[CLASE 6 - Cadena]: %s\n", yytext);
@@ -1175,7 +1195,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 316 "scanner.l"
+#line 336 "scanner.l"
 {
     agregar_token(yytext, 8);
     printf("[CLASE 8 - Real]: %s\n", yytext);
@@ -1183,7 +1203,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 321 "scanner.l"
+#line 341 "scanner.l"
 {
     agregar_token(yytext, 7);
     printf("[CLASE 7 - Entera]: %s\n", yytext);
@@ -1191,24 +1211,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 326 "scanner.l"
+#line 346 "scanner.l"
 {
     printf("[Comentario] %s\n", yytext);
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 330 "scanner.l"
+#line 350 "scanner.l"
 {
     printf("[ Error Lexico]: %s\n", yytext);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 334 "scanner.l"
+#line 354 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1211 "scanner.c"
+#line 1231 "scanner.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2213,7 +2233,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 334 "scanner.l"
+#line 354 "scanner.l"
 
 int main() {
         /* Archivos de salida */

@@ -1,5 +1,25 @@
 %{
-/* 
+/*
+ Descripción del Programa
+
+El presente programa es un Analizador Léxico desarrollado utilizando la herramienta Flex (Fast Lexical Analyzer Generator). El objetivo principal del analizador léxico es identificar y clasificar correctamente los componentes básicos de un lenguaje específico a partir de un código fuente.
+
+El analizador reconoce diferentes categorías de tokens como palabras reservadas, identificadores, símbolos especiales, operadores aritméticos, relacionales y de asignación, así como constantes numéricas (enteras y reales) y cadenas literales. Además, ignora comentarios y maneja errores léxicos, mostrando información útil sobre estos últimos en la salida estándar.
+
+El programa estructura la información obtenida en tres tablas:
+	•	Tabla de Tokens: Contiene los tokens reconocidos con su clasificación y posición respectiva.
+	•	Tabla de Símbolos: Almacena los identificadores encontrados en el código.
+	•	Tabla de Literales: Guarda cadenas y constantes numéricas detectadas.
+
+Cada una de estas tablas se exporta en archivos separados (tokens.txt, simbolos.txt y literales.txt) para facilitar posteriores etapas de análisis sintáctico y semántico.
+
+⸻
+
+Autores del Programa:
+	•	Yaretzi Calzontzi Hernández
+	•	Emilio Sebastián Contreras Colmenero
+
+
    -----------------------------------------------------------------------
    INSTRUCCIONES DE CABECERA
    -----------------------------------------------------------------------
