@@ -1,0 +1,4 @@
+@X1_ Ent sum -> 20p +-> 3r
+@var_1 Flota rest /-> -4
+--"esto es una cadena literal"--
+[Este es un comentario]

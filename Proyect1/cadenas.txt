@@ -1,0 +1,6 @@
+
+===== TABLA DE CADENAS =====
+| Pos   | Valor           |
+|-----------------------|
+| 0     | --"esto es una cadena literal"-- |
+=======================
