@@ -361,23 +361,23 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[135] =
+static const flex_int16_t yy_accept[132] =
     {   0,
         0,    0,   14,   12,    1,    3,   12,   12,   12,    3,
        12,   12,   12,   10,   10,    3,    3,   12,   12,   12,
        12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
        12,   12,    6,   12,    6,    6,   12,    6,   12,   12,
-        3,   12,   12,    1,   12,   12,   12,    9,   12,   12,
+        3,   12,   12,    1,    3,   12,   12,    9,   12,   12,
        12,   10,   10,   12,    7,   12,   12,   10,    9,   10,
         3,    3,   12,    4,   12,   12,   12,   12,   12,   12,
        12,   12,   12,   12,   12,   12,    2,   12,   12,    0,
        11,   12,   12,   12,   12,    6,   12,   12,   12,   12,
-       12,   12,    3,   12,    0,   12,    7,   12,   12,   12,
+       12,   12,    0,   12,    7,   12,   12,   12,   12,   12,
 
-       12,   12,   12,    2,   12,   12,   12,   12,   12,   12,
-       12,   11,    5,    5,   12,   12,    3,    0,    8,   12,
-       12,   12,   12,    2,    8,   12,   12,   12,   12,   12,
-       12,   12,   12,    0
+       12,    2,   12,   12,   12,   12,   12,   12,   12,   11,
+        5,    5,   12,   12,    0,    8,   12,   12,   12,   12,
+        2,    8,   12,   12,   12,   12,   12,   12,   12,   12,
+        0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -385,167 +385,189 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    4,    5,    1,    6,    1,    7,    8,    9,    1,
-        1,   10,   11,    1,   12,    1,   13,   14,   15,   15,
-       15,   15,   15,   15,   15,   15,   15,    1,    1,   16,
-        1,   17,    1,   18,   19,   20,   21,   22,   23,   24,
-       25,   26,   19,   19,   19,   19,   27,   28,   19,   29,
-       19,   30,   31,   19,   19,   32,   19,   19,   19,   19,
-       33,    1,   34,   35,   36,    1,   37,   38,   39,   40,
+        1,    2,    4,    1,    5,    1,    6,    7,    8,    1,
+        1,    9,   10,    1,   11,    1,   12,   13,   14,   14,
+       14,   14,   14,   14,   14,   14,   14,    1,    1,   15,
+        1,   16,    1,   17,   18,   19,   20,   21,   22,   23,
+       24,   25,   18,   18,   18,   18,   26,   27,   18,   28,
+       18,   29,   30,   18,   18,   31,   18,   18,   18,   18,
+       32,    1,   33,   34,   35,    1,   36,   37,   38,   39,
 
-       41,   19,   42,   43,   44,   19,   19,   45,   46,   47,
-       48,   49,   19,   50,   51,   52,   53,   54,   19,   55,
-       19,   56,    1,   57,    1,    1,    1,   58,   19,    1,
-        1,    1,    1,    1,    1,    1,   19,    1,    1,    1,
-       19,    1,    1,    1,   19,    1,   19,    1,    1,    1,
-        1,    1,    1,   19,    1,   19,    1,    1,    1,    1,
-       19,   59,    1,    1,    1,    1,    1,    1,   19,    1,
-        1,    1,   19,    1,    1,    1,   19,    1,   19,    1,
-        1,    1,    1,    1,    1,   19,    1,   19,    1,    1,
-        1,    1,    1,    1,   19,    1,    1,    1,    1,    1,
+       40,   18,   41,   42,   43,   18,   18,   44,   45,   46,
+       47,   48,   18,   49,   50,   51,   52,   53,   18,   54,
+       18,   55,    1,   56,    1,    1,    1,    1,   18,    1,
+        1,    1,    1,    1,    1,    1,   18,    1,    1,    1,
+       18,    1,    1,    1,   18,    1,   18,    1,    1,    1,
+        1,    1,    1,   18,    1,   18,    1,    1,    1,    1,
+       18,    1,    1,    1,    1,    1,    1,    1,   18,    1,
+        1,    1,   18,    1,    1,   57,   18,    1,   18,    1,
+        1,    1,    1,    1,    1,   18,    1,   18,    1,    1,
+        1,    1,    1,   58,   18,    1,    1,    1,    1,    1,
 
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,   60,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[61] =
+static const YY_CHAR yy_meta[59] =
     {   0,
-        1,    2,    3,    2,    1,    1,    1,    1,    1,    1,
+        1,    2,    3,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1
+        1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[141] =
+static const flex_int16_t yy_base[138] =
     {   0,
-        0,    0,  302,    0,   59,  296,  288,  287,   50,  286,
-       57,   61,  285,   65,   68,  280,  278,  118,  246,   44,
-      252,  233,   51,  234,  241,  233,  223,  238,  230,  232,
-       82,  260,    0,   58,  216,  229,  222,   60,  227,  214,
-        0,  208,    0,  101,  261,  247,  246,   53,  245,   97,
-      244,  130,  132,  146,    0,  239,  155,    0,    0,  174,
-      243,  242,  224,    0,  205,  212,  204,  196,  197,  203,
-      199,  198,  189,  203,  198,  189,  191,  178,   87,  193,
-      163,  209,  183,  167,  171,    0,  180,  178,  172,  164,
-      168,  154,  303,  182,  200,  199,  188,  193,  192,  163,
+        0,    0,  237,    0,   57,  232,  224,  222,   48,  221,
+       55,   59,  220,   68,  110,  215,  213,  159,  181,   38,
+      187,  180,   35,  181,  186,  178,  168,  183,  171,  173,
+       62,  201,    0,   37,  157,  170,  163,   46,  168,  155,
+        0,  149,    0,   81,    0,  189,  188,   74,  187,   76,
+      186,  210,  252,   89,    0,  185,   93,    0,    0,  294,
+      189,  188,  343,    0,  151,  158,  150,  142,  139,  145,
+      141,  140,  131,  145,  140,  134,  136,  132,   92,  147,
+       97,  163,  140,  124,  125,    0,  134,  123,  117,  107,
+      111,  100,  144,  143,  101,  137,  136,  106,  109,   97,
 
-      166,  154,  154,    0,  150,  146,  158,  148,  145,  154,
-      139,  139,    0,  130,  116,  114,    0,  144,    0,  105,
-      106,  105,   88,   88,  303,   90,   88,   82,   69,   83,
-       72,   55,   50,  303,   86,   84,  284,  286,  288,  290
+      100,    0,   96,   94,  107,   97,   94,  104,   90,  103,
+        0,   95,   82,   81,  120,    0,   86,   92,   91,   75,
+       72,  410,   74,   75,   66,   62,   77,   74,   58,   55,
+      410,   77,   64,  401,  403,  405,  407
     } ;
 
-static const flex_int16_t yy_def[141] =
+static const flex_int16_t yy_def[138] =
     {   0,
-      134,    1,  134,  135,  134,  135,  135,  135,  135,  135,
-      135,  135,  135,  135,  135,  135,  135,  136,  135,  135,
-      135,  135,  135,  135,  135,  135,  135,  135,  135,  135,
-      137,  135,  135,  135,  135,  135,  135,  135,  135,  135,
-      135,  135,  135,  134,  135,  135,  135,  135,  135,  135,
-      135,  135,  135,  138,  135,  135,  135,  135,  135,  135,
-      135,  135,  136,  135,  135,  135,  135,  135,  135,  135,
-      135,  135,  135,  135,  135,  135,  135,  135,  137,  139,
-      137,  135,  135,  135,  135,  135,  135,  135,  135,  135,
-      135,  135,  134,  138,  140,  135,  138,  135,  135,  135,
+      131,    1,  131,  132,  131,  132,  132,  132,  132,  132,
+      132,  132,  132,  132,  132,  132,  132,  133,  132,  132,
+      132,  132,  132,  132,  132,  132,  132,  132,  132,  132,
+      134,  132,  132,  132,  132,  132,  132,  132,  132,  132,
+      132,  132,  132,  131,  132,  132,  132,  132,  132,  132,
+      132,  132,  132,  135,  132,  132,  132,  132,  132,  132,
+      132,  132,  133,  132,  132,  132,  132,  132,  132,  132,
+      132,  132,  132,  132,  132,  132,  132,  132,  134,  136,
+      134,  132,  132,  132,  132,  132,  132,  132,  132,  132,
+      132,  135,  137,  132,  135,  132,  132,  132,  132,  132,
 
-      135,  135,  135,  135,  135,  135,  135,  135,  135,  135,
-      135,  139,  135,  135,  135,  135,  135,  134,  135,  135,
-      135,  135,  135,  135,  134,  135,  135,  135,  135,  135,
-      135,  135,  135,    0,  134,  134,  134,  134,  134,  134
+      132,  132,  132,  132,  132,  132,  132,  132,  132,  136,
+      132,  132,  132,  132,  131,  132,  132,  132,  132,  132,
+      132,  131,  132,  132,  132,  132,  132,  132,  132,  132,
+        0,  131,  131,  131,  131,  131,  131
     } ;
 
-static const flex_int16_t yy_nxt[364] =
+static const flex_int16_t yy_nxt[469] =
     {   0,
-        4,    5,    5,    5,    4,    6,    7,    8,    9,   10,
-       11,   12,   13,   14,   15,   16,   17,   18,    4,   19,
-       20,   21,   22,   23,   24,   25,   26,   27,   28,    4,
-       29,   30,   31,    4,   32,    4,    4,    4,   33,   34,
-       35,    4,   36,   37,    4,   38,    4,    4,    4,   39,
-       40,    4,    4,    4,    4,    4,   41,    4,    4,   42,
-       44,   44,   44,   48,   48,   50,   48,   48,   51,   50,
-       52,   53,   54,   50,   52,   53,   50,   55,   57,   57,
-       66,   60,   60,   80,   63,   80,   43,   70,   80,   58,
-       80,   67,   58,   58,   59,   71,   58,   59,   83,  104,
+        4,    5,    5,    4,    6,    7,    8,    9,   10,   11,
+       12,   13,   14,   15,   16,   17,   18,    4,   19,   20,
+       21,   22,   23,   24,   25,   26,   27,   28,    4,   29,
+       30,   31,    4,   32,    4,    4,    4,   33,   34,   35,
+        4,   36,   37,    4,   38,    4,    4,    4,   39,   40,
+        4,    4,    4,    4,    4,   41,    4,   42,   44,   44,
+       48,   48,   50,   80,   63,   51,   50,   52,   53,   54,
+       70,   52,   53,   66,   55,   50,   83,   43,   71,   84,
+       57,   57,   44,   44,   67,   86,   48,   48,   48,   48,
+       93,   58,   88,   80,   81,   58,   59,   89,   80,   94,
 
-       86,   84,   44,   44,   44,  104,   58,   88,  133,   58,
-       48,   48,   89,   58,   59,   81,   58,   59,   43,  132,
-       81,  131,   43,   43,   43,   43,   43,   43,   43,   43,
-       43,  130,  104,   43,   43,   43,  129,  104,   50,  128,
-       50,  127,  104,   57,   57,   60,   60,   95,  126,   95,
-       43,   43,   43,   64,   58,  125,   58,   96,   58,   59,
-       58,   59,   97,   50,   80,  113,   80,  113,   57,   57,
-      113,   58,  112,   58,   43,   43,   43,   43,   58,   59,
-       58,   59,   50,   95,   59,   95,  104,   60,   60,   95,
-      124,   95,  104,   96,  123,  122,   81,  121,   58,   96,
+       50,   93,   93,  102,   95,   57,   57,  102,   58,  130,
+       94,   94,  129,  128,  127,   58,   59,   50,  102,  126,
+      102,   59,   60,   60,   81,  125,  124,  102,  123,   81,
+      122,  111,  111,   58,  111,  110,  102,   58,   59,  121,
+      102,   59,  120,  119,  118,  102,  102,  117,  102,  102,
+       58,   55,   55,  116,  115,  111,  114,   58,   59,   43,
+      113,  111,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,  111,  111,   43,   43,   43,  112,  111,   55,  110,
+      102,  109,  108,  107,  106,  102,  105,  104,  103,  102,
+       43,   43,   43,   64,  101,  100,   99,   98,   97,   96,
 
-      104,  104,   58,   59,   59,  120,  104,  104,   55,   55,
-      119,  118,  117,  113,  116,   58,  115,  113,  113,  113,
-      114,  113,   58,   59,   43,   55,  112,  104,   43,   43,
-       43,   43,   43,   43,   43,   43,   43,  111,  110,   43,
-       43,   43,  109,  108,  104,  107,  106,  105,  104,  103,
-      102,  101,  100,   99,   98,   55,   43,   43,   43,   64,
-       55,   55,   55,   55,   93,   92,   91,   90,   87,   86,
-       85,   82,   78,   77,   76,   75,   74,   73,   72,   69,
-       43,   43,   43,   43,   79,   79,   94,   94,   80,   80,
-       95,   95,   68,   65,   62,   61,   56,   49,   47,   46,
+       55,   55,   55,   55,   55,   45,   91,   90,   87,   86,
+       85,   82,   78,   77,   43,   43,   43,   50,   76,   75,
+       74,   73,   57,   57,   72,   69,   68,   65,   62,   61,
+       56,   49,   47,   58,   46,   45,  131,   58,   59,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+       58,  131,  131,  131,  131,  131,  131,   58,   59,   50,
+      131,  131,  131,  131,   60,   60,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,   58,  131,  131,  131,   58,
+       59,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,   58,  131,  131,  131,  131,  131,  131,   58,
 
-       45,  134,    3,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134
+       59,   50,  131,  131,  131,  131,   60,   60,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,   58,  131,  131,
+      131,   58,   59,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,   58,  131,  131,  131,  131,  131,
+      131,   58,   59,   43,  131,  131,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,  131,  131,   43,   43,   43,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,   43,   43,   43,   64,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,   43,   43,
+
+       43,   79,   79,   92,   92,   80,   80,   93,   93,    3,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131
     } ;
 
-static const flex_int16_t yy_chk[364] =
+static const flex_int16_t yy_chk[469] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        5,    5,    5,    9,    9,   11,   48,   48,   11,   12,
-       11,   11,   12,   14,   12,   12,   15,   12,   14,   14,
-       20,   15,   15,   31,  136,   31,  135,   23,   79,   14,
-       79,   20,   15,   14,   14,   23,   15,   15,   34,  133,
+        1,    1,    1,    1,    1,    1,    1,    1,    5,    5,
+        9,    9,   11,   31,  133,   11,   12,   11,   11,   12,
+       23,   12,   12,   20,   12,   14,   34,  132,   23,   34,
+       14,   14,   44,   44,   20,   38,   48,   48,   50,   50,
+       54,   14,   38,   79,   31,   14,   14,   38,   81,   54,
 
-       38,   34,   44,   44,   44,  132,   14,   38,  131,   15,
-       50,   50,   38,   14,   14,   31,   15,   15,   18,  130,
-       79,  129,   18,   18,   18,   18,   18,   18,   18,   18,
-       18,  128,  127,   18,   18,   18,  126,  124,   52,  123,
-       53,  122,  121,   52,   52,   53,   53,   54,  120,   54,
-       18,   18,   18,   18,   52,  118,   53,   54,   52,   52,
-       53,   53,   54,   57,   81,  116,   81,  115,   57,   57,
-      114,   52,  112,   53,   18,   18,   18,   18,   52,   52,
-       53,   53,   60,   94,   57,   94,  111,   60,   60,   97,
-      110,   97,  109,   94,  108,  107,   81,  106,   60,   97,
+       57,   92,   95,  130,   54,   57,   57,  129,   14,  128,
+       92,   95,  127,  126,  125,   14,   14,   15,  124,  123,
+      121,   57,   15,   15,   79,  120,  119,  118,  117,   81,
+      115,  114,  113,   15,  112,  110,  109,   15,   15,  108,
+      107,   57,  106,  105,  104,  103,  101,  100,   99,   98,
+       15,   97,   96,   94,   93,   91,   90,   15,   15,   18,
+       89,   88,   18,   18,   18,   18,   18,   18,   18,   18,
+       18,   87,   85,   18,   18,   18,   84,   83,   82,   80,
+       78,   77,   76,   75,   74,   73,   72,   71,   70,   69,
+       18,   18,   18,   18,   68,   67,   66,   65,   62,   61,
 
-      105,  103,   60,   60,   57,  102,  101,  100,   99,   98,
-       96,   95,   92,   91,   90,   60,   89,   88,   87,   85,
-       84,   83,   60,   60,   63,   82,   80,   78,   63,   63,
-       63,   63,   63,   63,   63,   63,   63,   77,   76,   63,
-       63,   63,   75,   74,   73,   72,   71,   70,   69,   68,
-       67,   66,   65,   62,   61,   56,   63,   63,   63,   63,
-       51,   49,   47,   46,   45,   42,   40,   39,   37,   36,
-       35,   32,   30,   29,   28,   27,   26,   25,   24,   22,
-       63,   63,   63,   63,  137,  137,  138,  138,  139,  139,
-      140,  140,   21,   19,   17,   16,   13,   10,    8,    7,
+       56,   51,   49,   47,   46,   42,   40,   39,   37,   36,
+       35,   32,   30,   29,   18,   18,   18,   52,   28,   27,
+       26,   25,   52,   52,   24,   22,   21,   19,   17,   16,
+       13,   10,    8,   52,    7,    6,    3,   52,   52,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+       52,    0,    0,    0,    0,    0,    0,   52,   52,   53,
+        0,    0,    0,    0,   53,   53,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,   53,    0,    0,    0,   53,
+       53,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,   53,    0,    0,    0,    0,    0,    0,   53,
 
-        6,    3,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
-      134,  134,  134
+       53,   60,    0,    0,    0,    0,   60,   60,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,   60,    0,    0,
+        0,   60,   60,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,   60,    0,    0,    0,    0,    0,
+        0,   60,   60,   63,    0,    0,   63,   63,   63,   63,
+       63,   63,   63,   63,   63,    0,    0,   63,   63,   63,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,   63,   63,   63,   63,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,   63,   63,
+
+       63,  134,  134,  135,  135,  136,  136,  137,  137,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131,  131,  131,
+      131,  131,  131,  131,  131,  131,  131,  131
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -570,7 +592,28 @@ TABLA DE EQUIVALENCIAS LÉXICAS (Átomos)
 Asigna un símbolo terminal (átomo) a cada tipo de token.
 Útil para alimentar el análisis sintáctico posteriormente.
 */
-#line 11 "scanner.l"
+/*
+ * scanner.l – Analizador Léxico y Sintáctico Descendente Recursivo
+ * 
+ * Este archivo combina:
+ * 1) El analizador léxico (Flex) para tokenizar el lenguaje definido en el Anexo A.
+ * 2) Un parser LL(1) embebido en C que consume los átomos generados.
+ *
+ * El analizador léxico identifica:
+ * - Palabras reservadas (clase 0) y genera sus átomos.
+ * - Símbolos especiales (clase 1).
+ * - Identificadores (clase 2).
+ * - Operadores aritméticos (clase 3).
+ * - Operadores relacionales (clase 4).
+ * - Operadores de asignación (clase 5).
+ * - Literales (cadenas, enteros, reales).
+ * - Comentarios y errores léxicos.
+ *
+ * El parser embebido recorre la cadena de átomos y verifica la sintaxis según la gramática LL(1).
+ * Incluye funciones para cada no-terminal y muestra mensajes de depuración (DEBUG).
+ */
+/* === INCLUSIÓN DE CABECERAS Y DEFINICIONES GLOBALES === */
+#line 33 "scanner.l"
 #define YY_NO_MAIN 1
 /*
 Descripción del Programa
@@ -607,12 +650,7 @@ tabla de literales y la tabla de tokens.
 
 #define MAX_TOKENS 300
 
-/* Estructura para la tabla de símbolos (identificadores).
-Cada identificador tiene:
-- pos: índice en la tabla
-- nombre: el texto del identificador
-- tipo: por defecto -1, ya que no se define en esta etapa. 
-*/
+/* === DEFINICIÓN DE ESTRUCTURAS PARA TABLAS DE SÍMBOLOS Y LITERALES === */
 
 typedef struct {
 int pos;
@@ -620,14 +658,86 @@ char nombre[50];
 int tipo; 
 } Simbolo;
 
+/* === MAPEADO DE CLASES Y POSICIONES A ÁTOMOS LÉXICOS === */
+
 const char* obtener_atomo(int clase, int posicion) {
 switch (clase) {
-    case 0: return "n"; // Palabras reservadas tipo dato
-    case 1: return "s"; // Símbolos especiales
+    case 0: {
+        switch (posicion) {
+            case 0: return "b";  // Bool
+            case 1: return "c";  // Cade
+            case 2: return "t";  // Continuar
+            case 3: return "d";  // Devo
+            case 4: return "n";  // Ent
+            case 5: return "q";  // Fals
+            case 6: return "f";  // Flota
+            case 7: return "g";  // Global
+            case 8: return "h";  // Haz
+            case 9: return "w";  // Mientras
+            case 10: return "u"; // Nulo
+            case 11: return "o"; // Para
+            case 12: return "p"; // Parar
+            case 13: return "i"; // Si
+            case 14: return "l"; // Sino
+            case 15: return "m"; // Ver
+            default: return "?";
+        }
+    }
+ case 1: {
+    switch (posicion) {
+        case 0: return "(";  // <
+        case 1: return ")";  // >
+        case 2: return "[";  // <<
+        case 3: return "]";  // >>
+        case 4: return "{";  // #
+        case 5: return "}";  // #!
+        case 6: return ";";  // *
+        case 7: return ",";  // |
+        case 8: return ".";  // °
+        default: return "?";
+    }
+}
     case 2: return "a"; // Identificador
-    case 3: return "+"; // Operador aritmético (simbolizar suma, etc.)
-    case 4: return "?"; // Operador relacional (puedes refinar si lo deseas)
-    case 5: return "="; // Asignación
+    case 3: {
+        switch (posicion) {
+            case 0: return "+"; // sum
+            case 1: return "-"; // rest
+            case 2: return "*"; // mult
+            case 3: return "/"; // div
+            case 4: return "%"; // mod
+            case 5: return "~"; // inc
+            case 6: return "k"; // dec
+            case 7: return "^"; // exp
+            case 8: return "&"; // dive
+            default: return "?";
+        }
+    }
+    case 4: {
+        switch (posicion) {
+            case 0: return ">"; // h
+            case 1: return "<"; // m
+            case 2: return "i"; // e
+            case 3: return "!"; // c
+            case 4: return "x"; // he
+            case 5: return "y"; // me
+            default: return "?";
+        }
+    }
+    case 5: {
+        switch (posicion) {
+            case 0: return "="; // ->
+            case 1: return "#"; // +->
+            case 2: return "ñ"; // -->
+            case 3: return "$"; // *->
+            case 4: return "v"; // /->
+            case 5: return "?"; // %->
+            case 6: return ":"; // >>->
+            case 7: return "\""; // <<->
+            case 8: return "^"; // ^->
+            case 9: return "&"; // &->
+            default: return "?";
+        }
+    }
     case 6: return "s"; // Cadena
     case 7: return "e"; // Entero
     case 8: return "r"; // Real
@@ -635,6 +745,7 @@ switch (clase) {
     default: return "?";
 }
 }
+/* === DEFINICIÓN DE ESTRUCTURAS PARA TABLAS DE SÍMBOLOS Y LITERALES === */
 /* Tablas separadas para literales: cadenas, reales y enteros */
 typedef struct {
 int pos;
@@ -699,7 +810,7 @@ const int total_palabras_reservadas = 16;
 
 /* Símbolos especiales (clase 1) */
 const char *simbolos_especiales[] = {
-"<", ">", "<<", ">>", "#", "#!", "*", "|", "•"
+"<", ">", "<<", ">>", "#", "#!", "*", "|", "°"
 };
 const int total_simbolos_especiales = 9;
 
@@ -735,19 +846,19 @@ Busca el valor 'valor' en la tabla[] de cadenas, devolviendo el índice
 si lo encuentra, o -1 en caso contrario.
 */
 int buscar_posicion(const char *valor, const char *tabla[], int total) {
-for (int i = 0; i < total; i++) {
-    if (strcmp(tabla[i], valor) == 0) {
-        return i;
+    for (int i = 0; i < total; i++) {
+        char limpio[50];
+        strcpy(limpio, valor);
+        limpio[strcspn(limpio, "\n")] = 0;
+        if (strcmp(tabla[i], limpio) == 0) {
+            return i;
+        }
     }
-}
-return -1; 
+    return -1;
 }
 
-/* 
-obtener_posicion_simbolo:
-Busca el identificador 'nombre' en la tabla de símbolos (tabla_simbolos).
-Si existe, devuelve su índice. Si no, lo inserta y devuelve el nuevo índice.
-*/
+/* === FUNCIONES AUXILIARES: GESTIÓN DE TABLAS DE SÍMBOLOS Y LITERALES === */
+
 int obtener_posicion_simbolo(const char* nombre) {
 for (int i = 0; i < simbolos_count; i++) {
     if (strcmp(tabla_simbolos[i].nombre, nombre) == 0) {
@@ -763,11 +874,6 @@ if (simbolos_count < MAX_TOKENS) {
 return -1; 
 }
 
-
-/*
-obtener_posicion_literal_cadena:
-Busca la cadena literal 'dato' en la tabla de cadenas. Si existe, devuelve índice. Si no, la inserta.
-*/
 int obtener_posicion_literal_cadena(const char* dato) {
 for (int i = 0; i < cadena_literales_count; i++) {
     if (strcmp(cadena_literales[i].dato, dato) == 0) {
@@ -782,10 +888,6 @@ if (cadena_literales_count < MAX_TOKENS) {
 return -1;
 }
 
-/*
-obtener_posicion_literal_real:
-Busca el literal real 'dato' en la tabla de reales. Si existe, devuelve índice. Si no, lo inserta.
-*/
 int obtener_posicion_literal_real(const char* dato) {
 double valor = atof(dato);
 for (int i = 0; i < real_literales_count; i++) {
@@ -801,10 +903,6 @@ if (real_literales_count < MAX_TOKENS) {
 return -1;
 }
 
-/*
-obtener_posicion_literal_entero:
-Busca el literal entero 'dato' en la tabla de enteros. Si existe, devuelve índice. Si no, lo inserta.
-*/
 int obtener_posicion_literal_entero(const char* dato) {
 long valor = strtol(dato, NULL, 10);
 for (int i = 0; i < entero_literales_count; i++) {
@@ -820,71 +918,62 @@ if (entero_literales_count < MAX_TOKENS) {
 return -1;
 }
 
-/* 
-agregar_token:
-Determina la posición 'pos' del valor 'valor' según su clase. 
-Si es una palabra reservada (clase=0), operador aritmético (clase=3), etc.,
-lo busca en las tablas predefinidas. 
-Si es identificador (clase=2), se guarda en tabla_simbolos.
-Si es literal (cadena, entero o real) se guarda en tabla_literales.
-Si es error (clase=9), pos=-1. 
-Luego, inserta el token en la lista tabla_tokens, con su clase y posición.
-*/
-void agregar_token(const char *valor, int clase) {
-int pos = -1;
-switch (clase) {
-    case 0: 
-        pos = buscar_posicion(valor, palabras_reservadas, total_palabras_reservadas);
-        break;
-    case 1: 
-        pos = buscar_posicion(valor, simbolos_especiales, total_simbolos_especiales);
-        break;
-    case 3: 
-        pos = buscar_posicion(valor, operadores_aritmeticos, total_operadores_aritmeticos);
-        break;
-    case 4: 
-        pos = buscar_posicion(valor, operadores_relacionales, total_operadores_relacionales);
-        break;
-    case 5: 
-        pos = buscar_posicion(valor, operadores_asignacion, total_operadores_asignacion);
-        break;
-    case 2: {
-        pos = obtener_posicion_simbolo(valor);
-    } break;
-    case 6: { // Cadena
-        pos = obtener_posicion_literal_cadena(valor);
-    } break;
-    case 7: { // Entero
-        pos = obtener_posicion_literal_entero(valor);
-    } break;
-    case 8: { // Real
-        pos = obtener_posicion_literal_real(valor);
-    } break;
-    case 9: 
-        pos = -1; 
-        break;
-}
+/* === AGREGAR TOKENS A LA TABLA Y EMITIR ÁTOMOS === */
 
-/* Si no se encontró pos en tablas predefinidas (y no es error),
-    no lo insertamos en la tabla de tokens. */
-if (clase != 9 && pos == -1) {
-    return;
-}
-
-/* Insertar en la tabla de tokens. */
-if (token_count < MAX_TOKENS) {
-    tabla_tokens[token_count].clase = clase;
-    tabla_tokens[token_count].posicion = pos;
-    token_count++;
-    /* Imprimir el átomo correspondiente y escribirlo en atomos.txt */
-    const char* atomo = obtener_atomo(clase, pos);
-    printf("Átomo: %s\n", atomo);
-    FILE* archivo_atomos = fopen("atomos.txt", "a");
-    if (archivo_atomos) {
-        fprintf(archivo_atomos, "%s\n", atomo);
-        fclose(archivo_atomos);
+void agregar_token(const char *valor, int clase, int posicion) {
+    int pos = -1;
+    if (posicion != -1) {
+        pos = posicion;
+    } else {
+        switch (clase) {
+            case 1:
+                pos = buscar_posicion(valor, simbolos_especiales, total_simbolos_especiales);
+                break;
+            case 3:
+                pos = buscar_posicion(valor, operadores_aritmeticos, total_operadores_aritmeticos);
+                break;
+            case 4:
+                pos = buscar_posicion(valor, operadores_relacionales, total_operadores_relacionales);
+                break;
+            case 5:
+                pos = buscar_posicion(valor, operadores_asignacion, total_operadores_asignacion);
+                break;
+            case 2:
+                pos = obtener_posicion_simbolo(valor);
+                break;
+            case 6:
+                pos = obtener_posicion_literal_cadena(valor);
+                break;
+            case 7:
+                pos = obtener_posicion_literal_entero(valor);
+                break;
+            case 8:
+                pos = obtener_posicion_literal_real(valor);
+                break;
+            case 9:
+                pos = -1;
+                break;
+        }
     }
-}
+
+    if (clase != 9 && pos == -1) {
+        return;
+    }
+
+    if (token_count < MAX_TOKENS) {
+        tabla_tokens[token_count].clase = clase;
+        tabla_tokens[token_count].posicion = pos;
+        token_count++;
+
+        const char* atomo = obtener_atomo(clase, pos);
+        printf("Átomo: %s\n", atomo);
+
+        FILE* archivo_atomos = fopen("atomos.txt", "a");
+        if (archivo_atomos) {
+            fprintf(archivo_atomos, "%s\n", atomo);
+            fclose(archivo_atomos);
+        }
+    }
 }
 
 /* 
@@ -894,11 +983,7 @@ FUNCIONES PARA IMPRIMIR LAS TABLAS
 Cada función escribe el resultado en el archivo *fp correspondiente.
 */
 
-/* imprimir_tabla_tokens:
-Muestra la lista de tokens, con su clase y su posición (en la tabla predefinida, 
-de símbolos o de literales) */
-
-
+/* === FUNCIONES PARA IMPRIMIR TABLAS DE RESULTADOS EN ARCHIVOS === */
 
 void imprimir_tabla_tokens(FILE *fp) {
 fprintf(fp, "\n===== TABLA DE TOKENS =====\n");
@@ -994,8 +1079,9 @@ for (int i = 0; i < real_literales_count; i++) {
 }
 fprintf(fp, "=======================\n");
 }
-#line 997 "lex.yy.c"
-#line 998 "lex.yy.c"
+#line 1082 "lex.yy.c"
+/* === REGLAS DE FLEX: DE DEFINICIONES LÉXICAS A TOKENS === */
+#line 1084 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1212,12 +1298,12 @@ YY_DECL
 		}
 
 	{
-#line 436 "scanner.l"
+#line 502 "scanner.l"
 
 
 
 
-#line 1220 "lex.yy.c"
+#line 1306 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1244,13 +1330,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 135 )
+				if ( yy_current_state >= 132 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 303 );
+		while ( yy_base[yy_current_state] != 410 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -1277,101 +1363,102 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 440 "scanner.l"
+#line 506 "scanner.l"
 {  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 444 "scanner.l"
+#line 510 "scanner.l"
 {
-agregar_token(yytext, 0);
-printf("[CLASE 0 - Pal.Res]: %s\n", yytext);
+    int pos = buscar_posicion(yytext, palabras_reservadas, total_palabras_reservadas);
+    agregar_token(yytext, 0, pos);
+    printf("[CLASE 0 - Pal.Res]: %s (pos: %d)\n", yytext, pos);
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 449 "scanner.l"
+#line 516 "scanner.l"
 {
-agregar_token(yytext, 1);
+agregar_token(yytext, 1, -1);
 printf("[CLASE 1 - Símb.Esp]: %s\n", yytext);
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 454 "scanner.l"
+#line 521 "scanner.l"
 {
-agregar_token(yytext, 2);
+agregar_token(yytext, 2, -1);
 printf("[CLASE 2 - Identif]: %s\n", yytext);
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 459 "scanner.l"
+#line 526 "scanner.l"
 {
-agregar_token(yytext, 3);
+agregar_token(yytext, 3, -1);
 printf("[CLASE 3 - Op.Aritm]: %s\n", yytext);
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 464 "scanner.l"
+#line 531 "scanner.l"
 {
-agregar_token(yytext, 4);
+agregar_token(yytext, 4, -1);
 printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 469 "scanner.l"
+#line 536 "scanner.l"
 {
-agregar_token(yytext, 5);
+agregar_token(yytext, 5, -1);
 printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 474 "scanner.l"
+#line 541 "scanner.l"
 {
-agregar_token(yytext, 6);
+agregar_token(yytext, 6, -1);
 printf("[CLASE 6 - Cadena]: %s\n", yytext);
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 479 "scanner.l"
+#line 546 "scanner.l"
 {
-agregar_token(yytext, 8);
+agregar_token(yytext, 8, -1);
 printf("[CLASE 8 - Real]: %s\n", yytext);
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 484 "scanner.l"
+#line 551 "scanner.l"
 {
-agregar_token(yytext, 7);
+agregar_token(yytext, 7, -1);
 printf("[CLASE 7 - Entera]: %s\n", yytext);
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 489 "scanner.l"
+#line 556 "scanner.l"
 {
 printf("[Comentario] %s\n", yytext);
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 493 "scanner.l"
+#line 560 "scanner.l"
 {
 printf("[ Error Lexico]: %s\n", yytext);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 497 "scanner.l"
+#line 564 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1374 "lex.yy.c"
+#line 1461 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1668,7 +1755,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 135 )
+			if ( yy_current_state >= 132 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1696,11 +1783,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 135 )
+		if ( yy_current_state >= 132 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 134);
+	yy_is_jam = (yy_current_state == 131);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2376,7 +2463,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 497 "scanner.l"
+#line 564 "scanner.l"
+
+/* === FIN DE LAS REGLAS LÉXICAS / INICIO DEL PARSER EMBEBIDO === */
 
 /* Forward declarations for parser atomos variables */
 extern char* atomos[];
@@ -2385,6 +2474,7 @@ extern int indice_actual;
 
 void cargar_atomos(const char* archivo);
 void Program();
+/* === PUNTO DE ENTRADA: INVOCACIÓN DEL ANALIZADOR LÉXICO Y PARSER SINTÁCTICO === */
 int main(int argc, char *argv[]) {
 if (argc != 2) {
     fprintf(stderr, "Uso: %s archivo_entrada\n", argv[0]);
@@ -2412,7 +2502,11 @@ if (!archivo_tokens || !archivo_simbolos || !archivo_literales || !archivo_caden
 }
 
 printf("Analizador Léxico iniciado...\n");
+printf("🪛 DEBUG: Iniciando análisis léxico...\n");
+printf("🪛 DEBUG: Ejecutando yylex()...\n");
+fclose(fopen("atomos.txt", "w"));  // Limpia atomos.txt
 yylex();
+printf("🪛 DEBUG: Finalizó yylex(). Tokens generados: %d\n", token_count);
 
 imprimir_tabla_tokens(archivo_tokens);
 imprimir_tabla_simbolos(archivo_simbolos);
@@ -2435,8 +2529,11 @@ fclose(entrada);
 printf("Tablas escritas en archivos tokens.txt, simbolos.txt, literales.txt, cadenas.txt, enteros.txt y reales.txt\n");
 
 // Ahora, cargar los átomos y ejecutar el "parser" embebido:
+printf("🪛 DEBUG: Cargando átomos desde atomos.txt...\n");
     cargar_atomos("atomos.txt");
+printf("🪛 DEBUG: Iniciando análisis sintáctico con Program()\n");
     Program();
+printf("🪛 DEBUG: Terminó Program(). Atomos consumidos: %d de %d\n", indice_actual, total_atomos);
     if (indice_actual == total_atomos) {
         printf("✅ Análisis sintáctico exitoso. Todos los átomos fueron consumidos.\n");
     } else {
@@ -2477,8 +2574,69 @@ int match(const char* esperado) {
 }
 
 
+
+// --- INICIO: Gramática para <Arg>, <listArg> y <listaDec> ---
+int Tipo();
+int Decl();
+int Arg();
+int listArg();
+int listaDec();
+/* === PARSER: Arg === */
+int Arg() {
+    printf("↪ Analizando <Arg>\n");
+    // <Arg> → <Tipo> a <listArg>
+    if (indice_actual < total_atomos &&
+       (strcmp(atomos[indice_actual], "b") == 0 ||
+        strcmp(atomos[indice_actual], "c") == 0 ||
+        strcmp(atomos[indice_actual], "n") == 0 ||
+        strcmp(atomos[indice_actual], "f") == 0)) {
+        Tipo();
+        match("a");
+        listArg();
+    } else {
+        // ε
+        printf("ε (vacío) en <Arg>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <Arg>\n");
+    return 1;
+}
+
+/* === PARSER: listArg === */
+int listArg() {
+    printf("↪ Analizando <listArg>\n");
+    // <listArg> → , <Arg> | ε
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
+        match(",");
+        Arg();
+    } else {
+        printf("ε (vacío) en <listArg>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <listArg>\n");
+    return 1;
+}
+
+/* === PARSER: listaDec === */
+int listaDec() {
+    printf("↪ Analizando <listaDec>\n");
+    // <listaDec> → <Decl> <listaDec> | ε
+    if (indice_actual < total_atomos &&
+       (strcmp(atomos[indice_actual], "b") == 0 ||
+        strcmp(atomos[indice_actual], "c") == 0 ||
+        strcmp(atomos[indice_actual], "n") == 0 ||
+        strcmp(atomos[indice_actual], "f") == 0)) {
+        Decl();
+        listaDec();
+    } else {
+        printf("ε (vacío) en <listaDec>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <listaDec>\n");
+    return 1;
+}
+// --- FIN: Gramática para <Arg>, <listArg> y <listaDec> ---
+
 int DecGlob();
 
+/* === PARSER: ListDecGlob === */
 int ListDecGlob() {
     printf("↪ Analizando <ListDecGlob>\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "g") == 0) {
@@ -2487,18 +2645,31 @@ int ListDecGlob() {
     } else {
         printf("ε (vacío) en <ListDecGlob>\n");
     }
+    printf("🪛 DEBUG: Fin análisis <ListDecGlob>\n");
     return 1;
 }
 
+/* === PARSER: Tipo === */
 int Tipo() {
     printf("↪ Analizando <Tipo>\n");
-    if (match("b") || match("c") || match("n") || match("f")) {
-        return 1;
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "b") == 0) {
+        match("b");
+    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "c") == 0) {
+        match("c");
+    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "n") == 0) {
+        match("n");
+    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "f") == 0) {
+        match("f");
+    } else {
+        printf("❌ Error: Se esperaba un tipo (b|c|n|f) y se encontró '%s'\n", 
+               (indice_actual < total_atomos ? atomos[indice_actual] : "EOF"));
+        exit(1);
     }
-    printf("❌ Error: Se esperaba un tipo (b|c|n|f)\n");
-    exit(1);
+    printf("🪛 DEBUG: Fin análisis <Tipo>\n");
+    return 1;
 }
 
+/* === PARSER: list === */
 int list() {
     printf("↪ Analizando <list>\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
@@ -2508,22 +2679,27 @@ int list() {
     } else {
         printf("ε (vacío) en <list>\n");
     }
+    printf("🪛 DEBUG: Fin análisis <list>\n");
     return 1;
 }
 
+/* === PARSER: Decl === */
 int Decl() {
     printf("↪ Analizando <Decl>\n");
     Tipo();
     match("a");
     list();
-    match("*");
+    match(";");  // changed to expect the terminator atom ';'
+    printf("🪛 DEBUG: Fin análisis <Decl>\n");
     return 1;
 }
 
+/* === PARSER: DecGlob === */
 int DecGlob() {
     printf("↪ Analizando <DecGlob>\n");
     match("g");
     Decl();
+    printf("🪛 DEBUG: Fin análisis <DecGlob>\n");
     return 1;
 }
 
@@ -2531,6 +2707,7 @@ int DecGlob() {
 
 int Sent();
 
+/* === PARSER: listaSent === */
 int listaSent() {
     printf("↪ Analizando <listaSent>\n");
     if (indice_actual < total_atomos &&
@@ -2540,31 +2717,57 @@ int listaSent() {
         strcmp(atomos[indice_actual], "o") == 0 ||  // <Para>
         strcmp(atomos[indice_actual], "d") == 0 ||  // <Dev>
         strcmp(atomos[indice_actual], "t") == 0 ||  // Continuar
-        strcmp(atomos[indice_actual], "p") == 0)) { // Parar
+        strcmp(atomos[indice_actual], "p") == 0 ||  // Parar
+        strcmp(atomos[indice_actual], "m") == 0)) { // Ver
         Sent();
         listaSent();
     } else {
         printf("ε (vacío) en <listaSent>\n");
     }
+    printf("🪛 DEBUG: Fin análisis <listaSent>\n");
     return 1;
 }
 
 int Asig();
 
+// Reemplazo: Sent reconoce múltiples tipos de sentencia según la gramática
+int HazM();
+int Si();
+int Para();
+int Dev();
+
+/* === PARSER: Sent === */
 int Sent() {
     printf("↪ Analizando <Sent>\n");
     if (strcmp(atomos[indice_actual], "a") == 0) {
-        Asig();  // Sentencia de asignación
+        Asig();
+    } else if (strcmp(atomos[indice_actual], "h") == 0) {
+        HazM();
+    } else if (strcmp(atomos[indice_actual], "i") == 0) {
+        Si();
+    } else if (strcmp(atomos[indice_actual], "o") == 0) {
+        Para();
+    } else if (strcmp(atomos[indice_actual], "d") == 0) {
+        Dev();
+    } else if (strcmp(atomos[indice_actual], "t") == 0 || strcmp(atomos[indice_actual], "p") == 0) {
+        match(atomos[indice_actual]); // Continuar o Parar
+        match(".");
+    } else if (strcmp(atomos[indice_actual], "m") == 0) {
+        // Ver statement
+        match("m");
+        match(".");
     } else {
-        printf("❌ Error: sentencia no reconocida aún en <Sent>\n");
+        printf("❌ Error: sentencia no reconocida en <Sent>\n");
         exit(1);
     }
+    printf("🪛 DEBUG: Fin análisis <Sent>\n");
     return 1;
 }
 
 int ExprGral();
 int E();
 
+/* === PARSER: Asig === */
 int Asig() {
     printf("↪ Analizando <Asig>\n");
     match("a"); // Identificador
@@ -2587,30 +2790,357 @@ int Asig() {
         }
     }
     match("."); // Fin de la sentencia
+    printf("🪛 DEBUG: Fin análisis <Asig>\n");
     return 1;
 }
 
 // --- FIN: Gramática para listaSent y Sent ---
 
+/* === PARSER: Func === */
 int Func() {
-    printf("↪ Analizando <Func> (dummy)\n");
+    printf("↪ Analizando <Func>\n");
+    if (indice_actual >= total_atomos) {
+        printf("❌ Error: no hay más átomos para analizar <Func>\n");
+        exit(1);
+    }
+
+    // Tipo de retorno
+    Tipo();
+
+    // Identificador del nombre de la función
+    match("a");
+
+    // Paréntesis de parámetros
+    match("(");
+    Arg();      // Parse <Arg> and <listArg>
+    match(")");
+
+    // Inicio del bloque de instrucciones
+    match("[");
+    
+    // Declaraciones locales antes de sentencias
+    listaDec();
+
+    // Lista de sentencias dentro de la función
+    listaSent();
+
+    // Fin del bloque
+    match("]");
+
+    printf("🪛 DEBUG: Fin análisis <Func>\n");
     return 1;
 }
 
+/* === PARSER: otraFunc === */
 int otraFunc() {
-    printf("↪ Analizando <otraFunc> (dummy)\n");
+    printf("↪ Analizando <otraFunc>\n");
+    if (indice_actual < total_atomos &&
+        (strcmp(atomos[indice_actual], "b") == 0 ||
+         strcmp(atomos[indice_actual], "c") == 0 ||
+         strcmp(atomos[indice_actual], "n") == 0 ||
+         strcmp(atomos[indice_actual], "f") == 0)) {
+        Func();
+        otraFunc();
+    } else {
+        printf("ε (vacío) en <otraFunc>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <otraFunc>\n");
     return 1;
 }
 
+/* === PARSER: Program === */
 void Program() {
     printf("↪ Analizando <Program>\n");
     ListDecGlob();
     Func();
     otraFunc();
+    printf("🪛 DEBUG: Fin análisis <Program>\n");
 }
 
 // --- Fin sintáctico ---
 
 int yywrap() {
-return 1;
+    return 1;
+}
+
+/* === PARSER: EXPRESIONES ARITMÉTICAS (E, T, F) === */
+
+int E();
+int T();
+int F();
+int Eprima();
+int Tprima();
+
+int ExprGral() {
+    printf("↪ Analizando <ExprGral>\n");
+    if (strcmp(atomos[indice_actual], "s") == 0 ||
+        strcmp(atomos[indice_actual], "q") == 0 ||
+        strcmp(atomos[indice_actual], "m") == 0 ||
+        strcmp(atomos[indice_actual], "u") == 0) {
+        match(atomos[indice_actual]);
+    } else {
+        E(); // expresión aritmética
+    }
+    printf("🪛 DEBUG: Fin análisis <ExprGral>\n");
+    return 1;
+}
+
+int E() {
+    printf("↪ Analizando E → T E'\n");
+    T();
+    Eprima();
+    printf("🪛 DEBUG: Fin análisis <E>\n");
+    return 1;
+}
+
+int Eprima() {
+    printf("↪ Analizando E'\n");
+    if (strcmp(atomos[indice_actual], "+") == 0) {
+        match("+");
+        T();
+        Eprima();
+    } else if (strcmp(atomos[indice_actual], "-") == 0) {
+        match("-");
+        T();
+        Eprima();
+    } else {
+        printf("ε (vacío) en E'\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <E'>\n");
+    return 1;
+}
+
+int T() {
+    printf("↪ Analizando T → F T'\n");
+    F();
+    Tprima();
+    printf("🪛 DEBUG: Fin análisis <T>\n");
+    return 1;
+}
+
+int Tprima() {
+    printf("↪ Analizando T'\n");
+    if (strcmp(atomos[indice_actual], "*") == 0) {
+        match("*");
+        F();
+        Tprima();
+    } else if (strcmp(atomos[indice_actual], "/") == 0) {
+        match("/");
+        F();
+        Tprima();
+    } else if (strcmp(atomos[indice_actual], "%") == 0) {
+        match("%");
+        F();
+        Tprima();
+    } else if (strcmp(atomos[indice_actual], "~") == 0) {
+        match("~");
+        F();
+        Tprima();
+    } else if (strcmp(atomos[indice_actual], "k") == 0) {
+        match("k");
+        F();
+        Tprima();
+    } else {
+        printf("ε (vacío) en T'\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <T'>\n");
+    return 1;
+}
+
+// Forward declarations for new parser functions for <LlamaFunc>, <listP>, <Param>
+int LlamaFunc();
+int listP();
+int Param();
+
+int F() {
+    printf("↪ Analizando F\n");
+    if (strcmp(atomos[indice_actual], "(") == 0) {
+        match("(");
+        E();
+        match(")");
+    } else if (strcmp(atomos[indice_actual], "a") == 0) {
+        match("a");
+    } else if (strcmp(atomos[indice_actual], "n") == 0) {
+        match("n");
+    } else if (strcmp(atomos[indice_actual], "r") == 0) {
+        match("r");
+    } else if (strcmp(atomos[indice_actual], "e") == 0) {
+        match("e");
+    } else if (strcmp(atomos[indice_actual], "{") == 0) {
+        LlamaFunc();
+    } else {
+        printf("❌ Error: no se reconoce F\n");
+        exit(1);
+    }
+    printf("🪛 DEBUG: Fin análisis <F>\n");
+    return 1;
+}
+
+// --- FIN: Gramática para ExprGral y expresiones aritméticas ---
+
+/* === PARSER: LlamaFunc, listP, Param === */
+
+int LlamaFunc() {
+    printf("↪ Analizando <LlamaFunc>\n");
+    match("{");        // '{'  (lexema '#')
+    match("a");        // identificador de la función
+    match("(");        // '(' (lexema '<')
+    listP();           // lista de parámetros
+    match(")");        // ')' (lexema '>')
+    match("}");        // '}' (lexema '#!')
+    printf("🪛 DEBUG: Fin análisis <LlamaFunc>\n");
+    return 1;
+}
+
+int listP() {
+    printf("↪ Analizando <listP>\n");
+    // <listP> → ExprGral <Param> | ε
+    if (indice_actual < total_atomos &&
+       (strcmp(atomos[indice_actual], "s") == 0 ||
+        strcmp(atomos[indice_actual], "q") == 0 ||
+        strcmp(atomos[indice_actual], "m") == 0 ||
+        strcmp(atomos[indice_actual], "u") == 0 ||
+        strcmp(atomos[indice_actual], "(") == 0 ||
+        strcmp(atomos[indice_actual], "a") == 0 ||
+        strcmp(atomos[indice_actual], "n") == 0 ||
+        strcmp(atomos[indice_actual], "r") == 0)) {
+        ExprGral();
+        Param();
+    } else {
+        printf("ε (vacío) en <listP>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <listP>\n");
+    return 1;
+}
+
+int Param() {
+    printf("↪ Analizando <Param>\n");
+    // <Param> → , ExprGral <Param> | ε
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
+        match(",");
+        ExprGral();
+        Param();
+    } else {
+        printf("ε (vacío) en <Param>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <Param>\n");
+    return 1;
+}
+// --- FIN: Gramática para <LlamaFunc>, <listP>, <Param> ---
+/* === PARSER: STRUCTURAS DE CONTROL (HazM, expRel, opRel, Si, Sino, Para, Dev, valRet) === */
+
+int expRel();
+int opRel();
+
+int HazM() {
+    printf("↪ Analizando <HazM>\n");
+    match("h");          // 'Haz'
+    match("[");
+    listaSent();         // lista de sentencias
+    match("]");
+    match("w");          // 'Mientras'
+    match("(");
+    expRel();            // condición relacional
+    match(")");
+    printf("🪛 DEBUG: Fin análisis <HazM>\n");
+    return 1;
+}
+
+int expRel() {
+    printf("↪ Analizando <expRel>\n");
+    E();
+    opRel();
+    E();
+    printf("🪛 DEBUG: Fin análisis <expRel>\n");
+    return 1;
+}
+
+int opRel() {
+    printf("↪ Analizando <opRel>\n");
+    if (strcmp(atomos[indice_actual], ">") == 0 ||
+        strcmp(atomos[indice_actual], "<") == 0 ||
+        strcmp(atomos[indice_actual], "¡") == 0 ||
+        strcmp(atomos[indice_actual], "!") == 0 ||
+        strcmp(atomos[indice_actual], "x") == 0 ||
+        strcmp(atomos[indice_actual], "y") == 0) {
+        match(atomos[indice_actual]);
+    } else {
+        printf("❌ Error: operador relacional inválido\n");
+        exit(1);
+    }
+    printf("🪛 DEBUG: Fin análisis <opRel>\n");
+    return 1;
+}
+
+int Sino();
+
+int Si() {
+    printf("↪ Analizando <Si>\n");
+    match("i");        // 'Si'
+    match("(");
+    expRel();          // <expRel>
+    match(")");
+    match("[");
+    listaSent();       // <listaSent>
+    match("]");
+    Sino();            // <Sino>
+    printf("🪛 DEBUG: Fin análisis <Si>\n");
+    return 1;
+}
+
+int Sino() {
+    printf("↪ Analizando <Sino>\n");
+    if (strcmp(atomos[indice_actual], "l") == 0) {
+        match("l");    // 'Sino'
+        match("[");
+        listaSent();
+        match("]");
+    } else {
+        printf("ε (vacío) en <Sino>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <Sino>\n");
+    return 1;
+}
+int valRet();
+
+int Para() {
+    printf("↪ Analizando <Para>\n");
+    match("o");        // 'Para'
+    match("(");
+    E();               // expresión aritmética
+    match(")");
+    match("[");
+    listaSent();       // cuerpo del bucle
+    match("]");
+    printf("🪛 DEBUG: Fin análisis <Para>\n");
+    return 1;
+}
+
+int Dev() {
+    printf("↪ Analizando <Dev>\n");
+    match("d");        // 'Devo'
+    match("(");
+    valRet();          // valor de retorno o vacío
+    match(")");
+    match(".");
+    printf("🪛 DEBUG: Fin análisis <Dev>\n");
+    return 1;
+}
+
+int valRet() {
+    printf("↪ Analizando <valRet>\n");
+    if (strcmp(atomos[indice_actual], "s") == 0 ||
+        strcmp(atomos[indice_actual], "q") == 0 ||
+        strcmp(atomos[indice_actual], "m") == 0 ||
+        strcmp(atomos[indice_actual], "u") == 0 ||
+        strcmp(atomos[indice_actual], "(") == 0 ||
+        strcmp(atomos[indice_actual], "a") == 0 ||
+        strcmp(atomos[indice_actual], "n") == 0 ||
+        strcmp(atomos[indice_actual], "r") == 0) {
+        ExprGral();    // valor de retorno
+    } else {
+        printf("ε (vacío) en <valRet>\n");
+    }
+    printf("🪛 DEBUG: Fin análisis <valRet>\n");
+    return 1;
 }

@@ -2,18 +2,23 @@
 ===== TABLA DE LITERALES (Cadenas) =====
 | Pos   | Valor           |
 |-----------------------|
-| 0     | --"esto es una cadena literal"-- |
+| 0     | --¡Hola, mundo!-- |
+| 1     | --Repetición-- |
 =======================
 
 ===== TABLA DE LITERALES (Enteros) =====
 | Pos   | Valor           |
 |-----------------------|
-| 0     | 20              |
-| 1     | -4              |
+| 0     | 1               |
+| 1     | 2025            |
+| 2     | 10              |
+| 3     | 100             |
+| 4     | 3               |
 =======================
 
 ===== TABLA DE LITERALES (Reales) =====
 | Pos   | Valor           |
 |-----------------------|
-| 0     | 3               |
+| 0     | 0               |
+| 1     | 2               |
 =======================

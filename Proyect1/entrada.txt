@@ -1,4 +1,50 @@
-@X1_ Ent sum -> 20p +-> 3r
-@var_1 Flota rest /-> -4
---"esto es una cadena literal"--
-[Este es un comentario]
+Global Bool @flag_ | @continuar_ *
+Global Cade @saludo_ *
+Global Ent @año_ *
+Global Flota @delta_ | @Raíz_ *
+
+Ent @sum_ < Ent @x_ | Ent @y_ > <<
+    Ent @temp_ *
+    @temp_ -> @x_ sum @y_ °
+    Devo < @temp_ > °
+>>
+
+Ent @factorial_ < Ent @n_ > <<
+    Ent @res_ *
+    @res_ -> 1 °
+    Haz <<
+        @res_ -> @res_ mult @n_ °
+        @n_ -> @n_ rest 1 °
+    >> Mientras < @n_ h 1 >
+    Devo < @res_ > °
+>>
+
+Ent @main_ < > <<
+   
+    @flag_ -> Fals °
+    @saludo_ -> --¡Hola, mundo!-- °
+    @año_ -> 2025 °
+    @delta_ -> 0'5 °
+    @Raíz_ -> 2r °
+  
+    @año_ -> # @sum_ < @año_ | 10 > #! °
+    @año_ -> # @factorial_ < @n_ | @año_ > #! °
+
+    Si < @año_ m 100 > <<
+        Ver °
+    >> Sino <<
+        Ver °
+    >>
+  
+    Para < 3 > <<
+        @saludo_ -> --Repetición-- °
+        Continuar °
+        Parar °
+    >>
+  
+    Haz <<
+        @delta_ -> @delta_ sum 0'1 °
+    >> Mientras < @delta_ h 1 >
+    
+    Devo < @año_ > °
+>>
