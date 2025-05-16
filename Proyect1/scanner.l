@@ -1040,16 +1040,18 @@ void Cuerpo();
 void F();
 // <listaSent> → Sent listaSent | ε
 void listaSent() {
-    fprintf(archivo_cs, "listaSent: FIRST = {a, h, i, o, d, t, p, ε}\n");
+    fprintf(archivo_cs, "listaSent -> Sent listaSent: SELECT = {a, h, i, o, d, t, p, m}\n");
+    fprintf(archivo_cs, "listaSent -> ε: SELECT = {]}\n");
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
-       if (strcmp(la, "a") == 0 || strcmp(la, "h") == 0 || strcmp(la, "i") == 0 ||
-    strcmp(la, "o") == 0 || strcmp(la, "d") == 0 || strcmp(la, "t") == 0 ||
-    strcmp(la, "p") == 0 || strcmp(la, "m") == 0) { 
+        // todos los posibles primeros de Sent
+        if (strcmp(la, "a") == 0 || strcmp(la, "h") == 0 || strcmp(la, "i") == 0 ||
+            strcmp(la, "o") == 0 || strcmp(la, "d") == 0 || strcmp(la, "t") == 0 ||
+            strcmp(la, "p") == 0 || strcmp(la, "m") == 0) {
             Sent();
             listaSent();
         }
-        // else: ε (no hacer nada)
+        // else ε (no hacer nada)
     }
 }
 
@@ -1210,22 +1212,33 @@ void E() {
 
 // <F> → F' a | ( E ) | { LlamaFunc } | m
 void F() {
+    // <F> → a F' | e | r | s | ( E ) | { LlamaFunc } | m
+    fprintf(archivo_cs, "F -> a F': SELECT = {a}\n");
+    fprintf(archivo_cs, "F -> e:    SELECT = {e}\n");
+    fprintf(archivo_cs, "F -> r:    SELECT = {r}\n");
+    fprintf(archivo_cs, "F -> s:    SELECT = {s}\n");
+    fprintf(archivo_cs, "F -> (E):  SELECT = {(}\n");
+    fprintf(archivo_cs, "F -> {L}:  SELECT = {{\n");  // la { que inicia LlamaFunc
+    fprintf(archivo_cs, "F -> m:    SELECT = {m}\n");
+
     if (indice_actual < total_atomos) {
-        char *la = atomos[indice_actual];
-        if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
-            strcmp(la, "r") == 0 || strcmp(la, "s") == 0) {
+        const char *la = atomos[indice_actual];
+        if (strcmp(la, "a")==0 || strcmp(la, "e")==0 ||
+            strcmp(la, "r")==0 || strcmp(la, "s")==0) {
             match(la);
-            Fp(); // posible j o z
-        } else if (strcmp(la, "(") == 0) {
-            match("(");
-            E();
-            match(")");
-        } else if (strcmp(la, "{") == 0) {
-            LlamaFunc(); // llamada a función
-        } else if (strcmp(la, "m") == 0) {
+            Fp();      // maneja j o z (postfijo)
+        }
+        else if (strcmp(la, "(")==0) {
+            match("("); E(); match(")");
+        }
+        else if (strcmp(la, "{")==0) {
+            LlamaFunc();
+        }
+        else if (strcmp(la, "m")==0) {
             match("m");
-        } else {
-            errorSintactico("F (a|e|r|s|m|(E)|{a(...)} )");
+        }
+        else {
+            errorSintactico("F");
             indice_actual++;
         }
     }
@@ -1250,21 +1263,18 @@ void opRel() {
     }
 }
 
-// <G> → ( <E> ) | a | e | r | s | z | j | ε
 void G() {
+    // <G> → z | j | ε
+    fprintf(archivo_cs, "G -> z: SELECT = {z}\n");
+    fprintf(archivo_cs, "G -> j: SELECT = {j}\n");
     if (indice_actual < total_atomos) {
-        char *la = atomos[indice_actual];
-        if (strcmp(la, "(") == 0) {
-            match("(");
-            E();
-            match(")");
-        } else if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
-                   strcmp(la, "r") == 0 || strcmp(la, "s") == 0) {
-            match(la);
-        } else if (strcmp(la, "z") == 0 || strcmp(la, "j") == 0) {
-            match(la); // z o j
+        const char *la = atomos[indice_actual];
+        if (strcmp(la, "z") == 0) {
+            match("z");
+        } else if (strcmp(la, "j") == 0) {
+            match("j");
         }
-        // else ε (no hacer nada)
+        // else: ε (no hacer nada)
     }
 }
 
@@ -1374,7 +1384,8 @@ int yywrap(void) {
 
 // <Ep> → + T Ep | - T Ep | ε
 void Ep() {
-    fprintf(archivo_cs, "Ep: FIRST = {'+', '-', ε}\n");
+    fprintf(archivo_cs, "Ep -> + T Ep | - T Ep: SELECT = {'+','-'}\n");
+    fprintf(archivo_cs, "Ep -> ε: SELECT = FOLLOW(E)\n");
     fprintf(archivo_cs, "T: FIRST = {s, q, m, u, '('}\n");
     fprintf(archivo_cs, "F: FIRST = {s, q, m, u, '(', '{'}\n");
     fprintf(archivo_cs, "Fp: FIRST = {'j', 'z', ε}\n");
@@ -1427,7 +1438,8 @@ void Expr() {
 
 // <Sino> → l [ listaSent ] | ε
 void Sino() {
-    fprintf(archivo_cs, "Sino: FIRST = {l, ε}\n");
+    fprintf(archivo_cs, "Sino -> l [ listaSent ]: SELECT = {l}\n");
+    fprintf(archivo_cs, "Sino -> ε: SELECT = {a, h, i, o, d, t, p, ]}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "l") == 0) {
         match("l");
         match("[");
