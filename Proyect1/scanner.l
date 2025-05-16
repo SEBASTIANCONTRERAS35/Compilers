@@ -28,10 +28,7 @@ Asigna un símbolo terminal (átomo) a cada tipo de token.
  * Incluye funciones para cada no-terminal y muestra mensajes de depuración (DEBUG).
  */
 
-/* === INCLUSIÓN DE CABECERAS Y DEFINICIONES GLOBALES === */
-%{
-#define YY_NO_MAIN 1
-/*
+
 Descripción del Programa
 
 El presente programa implementa un Analizador Léxico y Sintáctico Descendente Recursivo, diseñado para procesar programas escritos en un lenguaje específico definido por una gramática LL(1) (ver Anexo A). Su propósito es verificar, en una misma ejecución, tanto la validez léxica como la validez sintáctica del código fuente de entrada.
@@ -67,6 +64,11 @@ Este bloque se utiliza para incluir bibliotecas de C y declaraciones
 globales. También definimos estructuras para la tabla de símbolos, 
 tabla de literales y la tabla de tokens. 
 */
+
+/* === INCLUSIÓN DE CABECERAS Y DEFINICIONES GLOBALES === */
+%{
+#define YY_NO_MAIN 1
+/*
 
 #include <stdio.h>
 #include <string.h>
