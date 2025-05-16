@@ -9,88 +9,10 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 6
-#define YY_FLEX_SUBMINOR_VERSION 3
+#define YY_FLEX_SUBMINOR_VERSION 4
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
-
-    #define yy_create_buffer yy_create_buffer
-
-    #define yy_delete_buffer yy_delete_buffer
-
-    #define yy_scan_buffer yy_scan_buffer
-
-    #define yy_scan_string yy_scan_string
-
-    #define yy_scan_bytes yy_scan_bytes
-
-    #define yy_init_buffer yy_init_buffer
-
-    #define yy_flush_buffer yy_flush_buffer
-
-    #define yy_load_buffer_state yy_load_buffer_state
-
-    #define yy_switch_to_buffer yy_switch_to_buffer
-
-    #define yypush_buffer_state yypush_buffer_state
-
-    #define yypop_buffer_state yypop_buffer_state
-
-    #define yyensure_buffer_stack yyensure_buffer_stack
-
-    #define yylex yylex
-
-    #define yyrestart yyrestart
-
-    #define yylex_init yylex_init
-
-    #define yylex_init_extra yylex_init_extra
-
-    #define yylex_destroy yylex_destroy
-
-    #define yyget_debug yyget_debug
-
-    #define yyset_debug yyset_debug
-
-    #define yyget_extra yyget_extra
-
-    #define yyset_extra yyset_extra
-
-    #define yyget_in yyget_in
-
-    #define yyset_in yyset_in
-
-    #define yyget_out yyget_out
-
-    #define yyset_out yyset_out
-
-    #define yyget_leng yyget_leng
-
-    #define yyget_text yyget_text
-
-    #define yyget_lineno yyget_lineno
-
-    #define yyset_lineno yyset_lineno
-
-    #define yywrap yywrap
-
-    #define yyalloc yyalloc
-
-    #define yyrealloc yyrealloc
-
-    #define yyfree yyfree
-
-    #define yytext yytext
-
-    #define yyleng yyleng
-
-    #define yyin yyin
-
-    #define yyout yyout
-
-    #define yy_flex_debug yy_flex_debug
-
-    #define yylineno yylineno
 
 /* First, we deal with  platform-specific or compiler-specific issues. */
 
@@ -125,6 +47,7 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
+typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -162,9 +85,15 @@ typedef unsigned int flex_uint32_t;
 #define UINT32_MAX             (4294967295U)
 #endif
 
+#ifndef SIZE_MAX
+#define SIZE_MAX               (~(size_t)0)
+#endif
+
 #endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
+
+/* begin standard C++ headers. */
 
 /* TODO: this is always defined, so inline it */
 #define yyconst const
@@ -197,7 +126,7 @@ typedef unsigned int flex_uint32_t;
 /* Action number for EOF rule of a given start state. */
 #define YY_STATE_EOF(state) (YY_END_OF_BUFFER + state + 1)
 /* Special action meaning "start processing a new file". */
-#define YY_NEW_FILE yyrestart(yyin  )
+#define YY_NEW_FILE yyrestart( yyin  )
 #define YY_END_OF_BUFFER_CHAR 0
 
 /* Size of default input buffer. */
@@ -227,7 +156,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 typedef size_t yy_size_t;
 #endif
 
-extern int yyleng;
+extern yy_size_t yyleng;
 
 extern FILE *yyin, *yyout;
 
@@ -270,7 +199,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -339,8 +268,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = NULL; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when yytext is formed. */
 static char yy_hold_char;
-static int yy_n_chars;		/* number of characters read into yy_ch_buf */
-int yyleng;
+static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
+yy_size_t yyleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = NULL;
@@ -363,11 +292,11 @@ void yypop_buffer_state ( void );
 static void yyensure_buffer_stack ( void );
 static void yy_load_buffer_state ( void );
 static void yy_init_buffer ( YY_BUFFER_STATE b, FILE *file  );
-#define YY_FLUSH_BUFFER yy_flush_buffer(YY_CURRENT_BUFFER )
+#define YY_FLUSH_BUFFER yy_flush_buffer( YY_CURRENT_BUFFER )
 
 YY_BUFFER_STATE yy_scan_buffer ( char *base, yy_size_t size  );
 YY_BUFFER_STATE yy_scan_string ( const char *yy_str  );
-YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, int len  );
+YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, yy_size_t len  );
 
 void *yyalloc ( yy_size_t  );
 void *yyrealloc ( void *, yy_size_t  );
@@ -379,7 +308,7 @@ void yyfree ( void *  );
 	if ( ! YY_CURRENT_BUFFER ){ \
         yyensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            yy_create_buffer(yyin,YY_BUF_SIZE ); \
+            yy_create_buffer( yyin, YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_is_interactive = is_interactive; \
 	}
@@ -388,7 +317,7 @@ void yyfree ( void *  );
 	if ( ! YY_CURRENT_BUFFER ){\
         yyensure_buffer_stack (); \
 		YY_CURRENT_BUFFER_LVALUE =    \
-            yy_create_buffer(yyin,YY_BUF_SIZE ); \
+            yy_create_buffer( yyin, YY_BUF_SIZE ); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_at_bol = at_bol; \
 	}
@@ -420,12 +349,12 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yyleng = (int) (yy_cp - yy_bp); \
+	yyleng = (yy_size_t) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 18
-#define YY_END_OF_BUFFER 19
+#define YY_NUM_RULES 13
+#define YY_END_OF_BUFFER 14
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -433,19 +362,23 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[94] =
+static const flex_int16_t yy_accept[135] =
     {   0,
-        0,    0,   19,   17,    1,    1,    7,   17,   17,    9,
-       17,   17,   17,    3,    4,   17,   17,   17,   17,   17,
-       17,   17,   17,   14,   17,   14,   14,   17,   14,   17,
-       17,   10,   17,    1,    0,    0,    0,    0,    0,    0,
-       15,    0,    5,    6,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,   14,    0,    0,
-        0,    0,    0,    0,    8,    0,    0,   15,    0,   12,
-        0,    0,    0,    0,    2,    0,    0,    0,   13,   13,
-        0,    0,   11,   16,    0,    0,    0,    0,    0,    0,
-        0,    0,    0
+        0,    0,   14,   12,    1,    3,   12,   12,   12,    3,
+       12,   12,   12,   10,   10,    3,    3,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,   12,   12,   12,
+       12,   12,    6,   12,    6,    6,   12,    6,   12,   12,
+        3,   12,   12,    1,   12,   12,   12,    9,   12,   12,
+       12,   10,   10,   12,    7,   12,   12,   10,    9,   10,
+        3,    3,   12,    4,   12,   12,   12,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,    2,   12,   12,    0,
+       11,   12,   12,   12,   12,    6,   12,   12,   12,   12,
+       12,   12,    3,   12,    0,   12,    7,   12,   12,   12,
 
+       12,   12,   12,    2,   12,   12,   12,   12,   12,   12,
+       12,   11,    5,    5,   12,   12,    3,    0,    8,   12,
+       12,   12,   12,    2,    8,   12,   12,   12,   12,   12,
+       12,   12,   12,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -453,118 +386,167 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    4,    5,    1,    6,    1,    7,    8,    1,    1,
-        1,    9,   10,    1,   11,    1,   12,   13,   13,   13,
-       13,   13,   13,   13,   13,   13,   13,    1,    1,   14,
-        1,   15,    1,   16,   17,   18,   19,   20,   21,   22,
-       23,   17,   17,   17,   17,   17,   17,   17,   17,   17,
-       17,   17,   17,   17,   17,   17,   17,   17,   17,   17,
-        1,    1,    1,   24,   25,    1,   26,   27,   28,   29,
+        1,    4,    5,    1,    6,    1,    7,    8,    9,    1,
+        1,   10,   11,    1,   12,    1,   13,   14,   15,   15,
+       15,   15,   15,   15,   15,   15,   15,    1,    1,   16,
+        1,   17,    1,   18,   19,   20,   21,   22,   23,   24,
+       25,   26,   19,   19,   19,   19,   27,   28,   19,   29,
+       19,   30,   31,   19,   19,   32,   19,   19,   19,   19,
+       33,    1,   34,   35,   36,    1,   37,   38,   39,   40,
 
-       30,   17,   17,   31,   32,   17,   17,   33,   34,   35,
-       36,   37,   17,   38,   39,   40,   41,   42,   17,   43,
-       17,   17,    1,   44,    1,    1,    1,   45,   17,    1,
-        1,    1,    1,    1,    1,    1,   17,    1,    1,    1,
-       17,    1,    1,    1,   17,    1,   17,    1,    1,    1,
-        1,    1,    1,   17,    1,   17,    1,    1,    1,    1,
-       17,   46,    1,    1,    1,    1,    1,    1,   17,    1,
-        1,    1,   17,    1,    1,    1,   17,    1,   17,    1,
-        1,    1,    1,    1,    1,   17,    1,   17,    1,    1,
-        1,    1,    1,    1,   17,    1,    1,    1,    1,    1,
+       41,   19,   42,   43,   44,   19,   19,   45,   46,   47,
+       48,   49,   19,   50,   51,   52,   53,   54,   19,   55,
+       19,   56,    1,   57,    1,    1,    1,   58,   19,    1,
+        1,    1,    1,    1,    1,    1,   19,    1,    1,    1,
+       19,    1,    1,    1,   19,    1,   19,    1,    1,    1,
+        1,    1,    1,   19,    1,   19,    1,    1,    1,    1,
+       19,   59,    1,    1,    1,    1,    1,    1,   19,    1,
+        1,    1,   19,    1,    1,    1,   19,    1,   19,    1,
+        1,    1,    1,    1,    1,   19,    1,   19,    1,    1,
+        1,    1,    1,    1,   19,    1,    1,    1,    1,    1,
 
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,   47,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,   60,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[48] =
+static const YY_CHAR yy_meta[61] =
     {   0,
-        1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    3,    1,    1,    1,    4,    4,    4,    4,
-        4,    4,    4,    1,    3,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    1,    1,    1,    1
+        1,    2,    3,    2,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[97] =
+static const flex_int16_t yy_base[141] =
     {   0,
-        0,    0,  142,  143,   46,   49,  136,  129,  128,  127,
-      126,   43,  125,  121,  119,    0,   97,   29,  102,   96,
-       30,   97,  118,  143,   27,   85,   97,   91,   30,   95,
-       83,  143,   78,   65,  118,  106,  105,  104,  103,   59,
-      143,  102,  143,  143,   91,   79,   85,   78,   70,   71,
-       77,   73,   72,   92,   78,   63,   67,  143,   75,   73,
-       68,   61,   65,   52,  143,   86,   85,   84,   69,  143,
-       60,   62,   51,   54,  143,   50,   48,   60,  143,   56,
-       45,   44,  143,  143,   51,   56,   55,   41,   40,   31,
-       38,   24,  143,   57,   74,   76
+        0,    0,  302,    0,   59,  296,  288,  287,   50,  286,
+       57,   61,  285,   65,   68,  280,  278,  118,  246,   44,
+      252,  233,   51,  234,  241,  233,  223,  238,  230,  232,
+       82,  260,    0,   58,  216,  229,  222,   60,  227,  214,
+        0,  208,    0,  101,  261,  247,  246,   53,  245,   97,
+      244,  130,  132,  146,    0,  239,  155,    0,    0,  174,
+      243,  242,  224,    0,  205,  212,  204,  196,  197,  203,
+      199,  198,  189,  203,  198,  189,  191,  178,   87,  193,
+      163,  209,  183,  167,  171,    0,  180,  178,  172,  164,
+      168,  154,  303,  182,  200,  199,  188,  193,  192,  163,
 
+      166,  154,  154,    0,  150,  146,  158,  148,  145,  154,
+      139,  139,    0,  130,  116,  114,    0,  144,    0,  105,
+      106,  105,   88,   88,  303,   90,   88,   82,   69,   83,
+       72,   55,   50,  303,   86,   84,  284,  286,  288,  290
     } ;
 
-static const flex_int16_t yy_def[97] =
+static const flex_int16_t yy_def[141] =
     {   0,
-       93,    1,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   94,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   95,
-       93,   93,   93,   93,   96,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   95,   93,   95,   96,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,    0,   93,   93,   93
+      134,    1,  134,  135,  134,  135,  135,  135,  135,  135,
+      135,  135,  135,  135,  135,  135,  135,  136,  135,  135,
+      135,  135,  135,  135,  135,  135,  135,  135,  135,  135,
+      137,  135,  135,  135,  135,  135,  135,  135,  135,  135,
+      135,  135,  135,  134,  135,  135,  135,  135,  135,  135,
+      135,  135,  135,  138,  135,  135,  135,  135,  135,  135,
+      135,  135,  136,  135,  135,  135,  135,  135,  135,  135,
+      135,  135,  135,  135,  135,  135,  135,  135,  137,  139,
+      137,  135,  135,  135,  135,  135,  135,  135,  135,  135,
+      135,  135,  134,  138,  140,  135,  138,  135,  135,  135,
 
+      135,  135,  135,  135,  135,  135,  135,  135,  135,  135,
+      135,  139,  135,  135,  135,  135,  135,  134,  135,  135,
+      135,  135,  135,  135,  134,  135,  135,  135,  135,  135,
+      135,  135,  135,    0,  134,  134,  134,  134,  134,  134
     } ;
 
-static const flex_int16_t yy_nxt[191] =
+static const flex_int16_t yy_nxt[364] =
     {   0,
-        4,    5,    6,    5,    4,    7,    8,    9,   10,   11,
-       12,   13,    4,   14,   15,   16,    4,   17,   18,   19,
-       20,   21,   22,   23,    4,    4,    4,   24,   25,   26,
-       27,   28,    4,   29,    4,    4,    4,   30,   31,    4,
-        4,    4,    4,   32,    4,    4,   33,   34,   34,   34,
-       34,   34,   34,   40,   47,   51,   55,   41,   56,   58,
-       45,   75,   52,   92,   48,   60,   34,   34,   34,   67,
-       61,   91,   75,   68,   66,   90,   66,   66,   69,   69,
-       89,   75,   88,   79,   79,   79,   87,   86,   75,   75,
-       85,   75,   75,   70,   67,   84,   67,   83,   79,   82,
+        4,    5,    5,    5,    4,    6,    7,    8,    9,   10,
+       11,   12,   13,   14,   15,   16,   17,   18,    4,   19,
+       20,   21,   22,   23,   24,   25,   26,   27,   28,    4,
+       29,   30,   31,    4,   32,    4,    4,    4,   33,   34,
+       35,    4,   36,   37,    4,   38,    4,    4,    4,   39,
+       40,    4,    4,    4,    4,    4,   41,    4,    4,   42,
+       44,   44,   44,   48,   48,   50,   48,   48,   51,   50,
+       52,   53,   54,   50,   52,   53,   50,   55,   57,   57,
+       66,   60,   60,   80,   63,   80,   43,   70,   80,   58,
+       80,   67,   58,   58,   59,   71,   58,   59,   83,  104,
 
-       81,   79,   79,   79,   80,   79,   41,   78,   77,   76,
-       75,   74,   73,   72,   71,   70,   41,   41,   41,   41,
-       41,   65,   64,   63,   62,   59,   58,   57,   54,   53,
-       50,   49,   46,   44,   43,   42,   39,   38,   37,   36,
-       35,   93,    3,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93
+       86,   84,   44,   44,   44,  104,   58,   88,  133,   58,
+       48,   48,   89,   58,   59,   81,   58,   59,   43,  132,
+       81,  131,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,  130,  104,   43,   43,   43,  129,  104,   50,  128,
+       50,  127,  104,   57,   57,   60,   60,   95,  126,   95,
+       43,   43,   43,   64,   58,  125,   58,   96,   58,   59,
+       58,   59,   97,   50,   80,  113,   80,  113,   57,   57,
+      113,   58,  112,   58,   43,   43,   43,   43,   58,   59,
+       58,   59,   50,   95,   59,   95,  104,   60,   60,   95,
+      124,   95,  104,   96,  123,  122,   81,  121,   58,   96,
+
+      104,  104,   58,   59,   59,  120,  104,  104,   55,   55,
+      119,  118,  117,  113,  116,   58,  115,  113,  113,  113,
+      114,  113,   58,   59,   43,   55,  112,  104,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,  111,  110,   43,
+       43,   43,  109,  108,  104,  107,  106,  105,  104,  103,
+      102,  101,  100,   99,   98,   55,   43,   43,   43,   64,
+       55,   55,   55,   55,   93,   92,   91,   90,   87,   86,
+       85,   82,   78,   77,   76,   75,   74,   73,   72,   69,
+       43,   43,   43,   43,   79,   79,   94,   94,   80,   80,
+       95,   95,   68,   65,   62,   61,   56,   49,   47,   46,
+
+       45,  134,    3,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134
     } ;
 
-static const flex_int16_t yy_chk[191] =
+static const flex_int16_t yy_chk[364] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    5,    5,    5,
-        6,    6,    6,   12,   18,   21,   25,   12,   25,   29,
-       94,   92,   21,   91,   18,   29,   34,   34,   34,   40,
-       29,   90,   89,   40,   95,   88,   95,   95,   96,   96,
-       87,   86,   85,   82,   81,   80,   78,   77,   76,   74,
-       73,   72,   71,   69,   68,   67,   66,   64,   63,   62,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        5,    5,    5,    9,    9,   11,   48,   48,   11,   12,
+       11,   11,   12,   14,   12,   12,   15,   12,   14,   14,
+       20,   15,   15,   31,  136,   31,  135,   23,   79,   14,
+       79,   20,   15,   14,   14,   23,   15,   15,   34,  133,
 
-       61,   60,   59,   57,   56,   55,   54,   53,   52,   51,
-       50,   49,   48,   47,   46,   45,   42,   39,   38,   37,
-       36,   35,   33,   31,   30,   28,   27,   26,   23,   22,
-       20,   19,   17,   15,   14,   13,   11,   10,    9,    8,
-        7,    3,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93,
-       93,   93,   93,   93,   93,   93,   93,   93,   93,   93
+       38,   34,   44,   44,   44,  132,   14,   38,  131,   15,
+       50,   50,   38,   14,   14,   31,   15,   15,   18,  130,
+       79,  129,   18,   18,   18,   18,   18,   18,   18,   18,
+       18,  128,  127,   18,   18,   18,  126,  124,   52,  123,
+       53,  122,  121,   52,   52,   53,   53,   54,  120,   54,
+       18,   18,   18,   18,   52,  118,   53,   54,   52,   52,
+       53,   53,   54,   57,   81,  116,   81,  115,   57,   57,
+      114,   52,  112,   53,   18,   18,   18,   18,   52,   52,
+       53,   53,   60,   94,   57,   94,  111,   60,   60,   97,
+      110,   97,  109,   94,  108,  107,   81,  106,   60,   97,
+
+      105,  103,   60,   60,   57,  102,  101,  100,   99,   98,
+       96,   95,   92,   91,   90,   60,   89,   88,   87,   85,
+       84,   83,   60,   60,   63,   82,   80,   78,   63,   63,
+       63,   63,   63,   63,   63,   63,   63,   77,   76,   63,
+       63,   63,   75,   74,   73,   72,   71,   70,   69,   68,
+       67,   66,   65,   62,   61,   56,   63,   63,   63,   63,
+       51,   49,   47,   46,   45,   42,   40,   39,   37,   36,
+       35,   32,   30,   29,   28,   27,   26,   25,   24,   22,
+       63,   63,   63,   63,  137,  137,  138,  138,  139,  139,
+      140,  140,   21,   19,   17,   16,   13,   10,    8,    7,
+
+        6,    3,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134,  134,  134,  134,  134,  134,  134,  134,
+      134,  134,  134
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -583,63 +565,297 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "scanner.l"
 #line 2 "scanner.l"
+/*
+ Descripción del Programa
+
+El presente programa es un Analizador Léxico desarrollado utilizando la herramienta Flex (Fast Lexical Analyzer Generator). El objetivo principal del analizador léxico es identificar y clasificar correctamente los componentes básicos de un lenguaje específico a partir de un código fuente.
+
+El analizador reconoce diferentes categorías de tokens como palabras reservadas, identificadores, símbolos especiales, operadores aritméticos, relacionales y de asignación, así como constantes numéricas (enteras y reales) y cadenas literales. Además, ignora comentarios y maneja errores léxicos, mostrando información útil sobre estos últimos en la salida estándar.
+
+El programa estructura la información obtenida en tres tablas:
+	•	Tabla de Tokens: Contiene los tokens reconocidos con su clasificación y posición respectiva.
+	•	Tabla de Símbolos: Almacena los identificadores encontrados en el código.
+	•	Tabla de Literales: Guarda cadenas y constantes numéricas detectadas.
+
+Cada una de estas tablas se exporta en archivos separados (tokens.txt, simbolos.txt y literales.txt) para facilitar posteriores etapas de análisis sintáctico y semántico.
+
+⸻
+
+Autores del Programa:
+	•	Yaretzi Calzontzi Hernández
+	•	Emilio Sebastián Contreras Colmenero
+
+Fecha de elaboracion: 15/03/25
+   -----------------------------------------------------------------------
+   INSTRUCCIONES DE CABECERA
+   -----------------------------------------------------------------------
+   Este bloque se utiliza para incluir bibliotecas de C y declaraciones 
+   globales. También definimos estructuras para la tabla de símbolos, 
+   tabla de literales y la tabla de tokens. 
+*/
+
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_TOKENS 300  
+#define MAX_TOKENS 300
 
+/* Estructura para la tabla de símbolos (identificadores).
+   Cada identificador tiene:
+   - pos: índice en la tabla
+   - nombre: el texto del identificador
+   - tipo: por defecto -1, ya que no se define en esta etapa. 
+*/
 typedef struct {
-    char palabra[50];
-} Token;
+    int pos;
+    char nombre[50];
+    int tipo; 
+} Simbolo;
 
-Token tokens[MAX_TOKENS]; 
+/* Estructura para la tabla de literales (cadenas y constantes numéricas).
+   Cada literal tiene:
+   - pos: índice en la tabla
+   - dato: el texto de la cadena o número */
+typedef struct {
+    int pos;
+    char dato[100];
+} Literal;
+
+/* Estructura para la tabla de tokens.
+   Cada token tiene:
+   - clase: el código de la clase (0=reservada, 1=símbolo, 2=ident, etc.)
+   - posicion: el índice dentro de su tabla (o -1 si no aplica) */
+typedef struct {
+    int clase;      
+    int posicion;   
+} TokenInfo;
+
+/* Declaración de tablas globales:
+   - tabla_simbolos (identificadores)
+   - tabla_literales (cadenas, números)
+   - tabla_tokens (lista de todos los tokens capturados) 
+*/
+Simbolo tabla_simbolos[MAX_TOKENS];
+int simbolos_count = 0;
+
+Literal tabla_literales[MAX_TOKENS];
+int literales_count = 0;
+
+TokenInfo tabla_tokens[MAX_TOKENS];
 int token_count = 0;
 
-Token simbolos[MAX_TOKENS];
-int simbolo_count = 0;
+/* Declaración de los archivos de salida */
+FILE *archivo_tokens = NULL;
+FILE *archivo_simbolos = NULL;
+FILE *archivo_literales = NULL;
 
-Token identificadores[MAX_TOKENS];
-int identificador_count = 0;
+/* 
+   Tablas predefinidas con las palabras reservadas, símbolos especiales,
+   operadores aritméticos, operadores relacionales y operadores de asignación.
+   Cada una tiene una posición fija en dichas tablas.
+*/
 
-Token operadores[MAX_TOKENS];
-int operador_count = 0;
+/* Palabras reservadas (clase 0) */
+const char *palabras_reservadas[] = {
+    "Bool", "Cade", "Continuar", "Devo", "Ent", "Fals", "Flota", "Global",
+    "Haz", "Mientras", "Nulo", "Para", "Parar", "Si", "Sino", "Ver"
+};
+const int total_palabras_reservadas = 16;
 
-Token operadores_rela[MAX_TOKENS];
-int operador_rela_count=0;
+/* Símbolos especiales (clase 1) */
+const char *simbolos_especiales[] = {
+    "<", ">", "<<", ">>", "#", "#!", "*", "|", "•"
+};
+const int total_simbolos_especiales = 9;
 
-Token operadores_asig[MAX_TOKENS];
-int operador_asig_count=0;
+/* Operadores aritméticos (clase 3) */
+const char *operadores_aritmeticos[] = {
+    "sum", "rest", "mult", "div", "mod", "inc", "dec", "exp", "dive"
+};
+const int total_operadores_aritmeticos = 9;
 
-Token constante_cadena[MAX_TOKENS];
-int constante_cadena_count=0;
+/* Operadores relacionales (clase 4) */
+const char *operadores_relacionales[] = {
+    "h", "m", "e", "c", "he", "me"
+};
+const int total_operadores_relacionales = 6;
 
-int existe_token(const char* palabra, Token* lista, int count) {
-    for (int i = 0; i < count; i++) {
-        if (strcmp(lista[i].palabra, palabra) == 0) {
-            return 1;
+/* Operadores de asignación (clase 5) */
+const char *operadores_asignacion[] = {
+    "->", "+->", "-->", "*->", "/->", "%->", ">>->", "<<->", "^->", "&->"
+};
+const int total_operadores_asignacion = 10;
+
+/* 
+   -----------------------------------------------------------------------
+   DECLARACIÓN DE FUNCIONES
+   -----------------------------------------------------------------------
+   Funciones para buscar y asignar posiciones, así como para imprimir
+   las tablas resultantes.
+*/
+
+/* 
+   buscar_posicion:
+   Busca el valor 'valor' en la tabla[] de cadenas, devolviendo el índice
+   si lo encuentra, o -1 en caso contrario.
+*/
+int buscar_posicion(const char *valor, const char *tabla[], int total) {
+    for (int i = 0; i < total; i++) {
+        if (strcmp(tabla[i], valor) == 0) {
+            return i;
         }
     }
-    return 0;
+    return -1; 
 }
 
-void agregar_token(const char* palabra, Token* lista, int* count) {
-    if (!existe_token(palabra, lista, *count) && *count < MAX_TOKENS) {
-        strcpy(lista[*count].palabra, palabra);
-        (*count)++;
+/* 
+   obtener_posicion_simbolo:
+   Busca el identificador 'nombre' en la tabla de símbolos (tabla_simbolos).
+   Si existe, devuelve su índice. Si no, lo inserta y devuelve el nuevo índice.
+*/
+int obtener_posicion_simbolo(const char* nombre) {
+    for (int i = 0; i < simbolos_count; i++) {
+        if (strcmp(tabla_simbolos[i].nombre, nombre) == 0) {
+            return i; 
+        }
+    }
+    if (simbolos_count < MAX_TOKENS) {
+        tabla_simbolos[simbolos_count].pos = simbolos_count;
+        strcpy(tabla_simbolos[simbolos_count].nombre, nombre);
+        tabla_simbolos[simbolos_count].tipo = -1;
+        return simbolos_count++;
+    }
+    return -1; 
+}
+
+/* 
+   obtener_posicion_literal:
+   Busca el literal 'dato' en la tabla de literales. 
+   Si existe, devuelve su índice; si no, lo inserta.
+*/
+int obtener_posicion_literal(const char* dato) {
+    for (int i = 0; i < literales_count; i++) {
+        if (strcmp(tabla_literales[i].dato, dato) == 0) {
+            return i; 
+        }
+    }
+    if (literales_count < MAX_TOKENS) {
+        tabla_literales[literales_count].pos = literales_count;
+        strcpy(tabla_literales[literales_count].dato, dato);
+        return literales_count++;
+    }
+    return -1; 
+}
+
+/* 
+   agregar_token:
+   Determina la posición 'pos' del valor 'valor' según su clase. 
+   Si es una palabra reservada (clase=0), operador aritmético (clase=3), etc.,
+   lo busca en las tablas predefinidas. 
+   Si es identificador (clase=2), se guarda en tabla_simbolos.
+   Si es literal (cadena, entero o real) se guarda en tabla_literales.
+   Si es error (clase=9), pos=-1. 
+   Luego, inserta el token en la lista tabla_tokens, con su clase y posición.
+*/
+void agregar_token(const char *valor, int clase) {
+    int pos = -1;
+    switch (clase) {
+        case 0: 
+            pos = buscar_posicion(valor, palabras_reservadas, total_palabras_reservadas);
+            break;
+        case 1: 
+            pos = buscar_posicion(valor, simbolos_especiales, total_simbolos_especiales);
+            break;
+        case 3: 
+            pos = buscar_posicion(valor, operadores_aritmeticos, total_operadores_aritmeticos);
+            break;
+        case 4: 
+            pos = buscar_posicion(valor, operadores_relacionales, total_operadores_relacionales);
+            break;
+        case 5: 
+            pos = buscar_posicion(valor, operadores_asignacion, total_operadores_asignacion);
+            break;
+        case 2: {
+            pos = obtener_posicion_simbolo(valor);
+        } break;
+        case 6: 
+        case 7: 
+        case 8: {
+            pos = obtener_posicion_literal(valor);
+        } break;
+        case 9: 
+            pos = -1; 
+            break;
+    }
+    
+    /* Si no se encontró pos en tablas predefinidas (y no es error),
+       no lo insertamos en la tabla de tokens. */
+    if (clase != 9 && pos == -1) {
+        return;
+    }
+
+    /* Insertar en la tabla de tokens. */
+    if (token_count < MAX_TOKENS) {
+        tabla_tokens[token_count].clase = clase;
+        tabla_tokens[token_count].posicion = pos;
+        token_count++;
     }
 }
 
-void imprimir_tabla(const char* titulo, Token* lista, int count) {
-    printf("\n===== %s =====\n", titulo);
-    printf("| %-5s | %-15s |\n", "ID", "Valor");
-    printf("|-----------------------|\n");
-    for (int i = 0; i < count; i++) {
-        printf("| %-5d | %-15s |\n", i, lista[i].palabra);
+/* 
+   -----------------------------------------------------------------------
+   FUNCIONES PARA IMPRIMIR LAS TABLAS
+   -----------------------------------------------------------------------
+   Cada función escribe el resultado en el archivo *fp correspondiente.
+*/
+
+/* imprimir_tabla_tokens:
+   Muestra la lista de tokens, con su clase y su posición (en la tabla predefinida, 
+   de símbolos o de literales) */
+
+
+
+void imprimir_tabla_tokens(FILE *fp) {
+    fprintf(fp, "\n===== TABLA DE TOKENS =====\n");
+    fprintf(fp, "| %-5s | %-10s |\n", "Clase", "Posición");
+    fprintf(fp, "|------------------|\n");
+    for (int i = 0; i < token_count; i++) {
+        fprintf(fp, "| %-5d | %-10d |\n",
+                tabla_tokens[i].clase,
+                tabla_tokens[i].posicion);
     }
-    printf("=======================\n");
+    fprintf(fp, "==========================\n");
 }
-#line 641 "scanner.c"
-#line 642 "scanner.c"
+/* imprimir_tabla_simbolos:
+   Muestra la tabla de identificadores con pos, nombre y tipo. */
+
+void imprimir_tabla_simbolos(FILE *fp) {
+    fprintf(fp, "\n===== TABLA DE SÍMBOLOS (IDENT) =====\n");
+    fprintf(fp, "| %-5s | %-15s | %-5s |\n", "Pos", "Nombre", "Tipo");
+    fprintf(fp, "|--------------------------------|\n");
+    for (int i = 0; i < simbolos_count; i++) {
+        fprintf(fp, "| %-5d | %-15s | %-5d |\n",
+            tabla_simbolos[i].pos,
+            tabla_simbolos[i].nombre,
+            tabla_simbolos[i].tipo);
+    }
+    fprintf(fp, "================================\n");
+}
+/* imprimir_tabla_literales:
+   Muestra las cadenas, enteros, reales detectados y su posición. */
+
+void imprimir_tabla_literales(FILE *fp) {
+    fprintf(fp, "\n===== TABLA DE LITERALES =====\n");
+    fprintf(fp, "| %-5s | %-15s |\n", "Pos", "Valor");
+    fprintf(fp, "|-----------------------|\n");
+    for (int i = 0; i < literales_count; i++) {
+        fprintf(fp, "| %-5d | %-15s |\n",
+            tabla_literales[i].pos,
+            tabla_literales[i].dato);
+    }
+    fprintf(fp, "=======================\n");
+}
+#line 857 "scanner.c"
+#line 858 "scanner.c"
 
 #define INITIAL 0
 
@@ -650,7 +866,7 @@ void imprimir_tabla(const char* titulo, Token* lista, int count) {
  */
 #include <unistd.h>
 #endif
-    
+
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
 #endif
@@ -678,7 +894,7 @@ FILE *yyget_out ( void );
 
 void yyset_out  ( FILE * _out_str  );
 
-			int yyget_leng ( void );
+			yy_size_t yyget_leng ( void );
 
 char *yyget_text ( void );
 
@@ -747,7 +963,7 @@ static int input ( void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		yy_size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -849,17 +1065,19 @@ YY_DECL
 		if ( ! YY_CURRENT_BUFFER ) {
 			yyensure_buffer_stack ();
 			YY_CURRENT_BUFFER_LVALUE =
-				yy_create_buffer(yyin,YY_BUF_SIZE );
+				yy_create_buffer( yyin, YY_BUF_SIZE );
 		}
 
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 		}
 
 	{
-#line 59 "scanner.l"
+#line 293 "scanner.l"
 
 
-#line 862 "scanner.c"
+
+
+#line 1080 "scanner.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -886,13 +1104,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 94 )
+				if ( yy_current_state >= 135 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 143 );
+		while ( yy_base[yy_current_state] != 303 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -919,115 +1137,101 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 61 "scanner.l"
-{ /* Ignorar espacios, tabuladores y saltos de línea */ }
+#line 297 "scanner.l"
+{  }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 63 "scanner.l"
+#line 301 "scanner.l"
 {
-    agregar_token(yytext, tokens, &token_count);
-    printf("[CLASE 0 - PALABRA RESERVADA]: %s\n", yytext);
+    agregar_token(yytext, 0);
+    printf("[CLASE 0 - Pal.Res]: %s\n", yytext);
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 68 "scanner.l"
-{ agregar_token("<", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: < ( \n"); }
+#line 306 "scanner.l"
+{
+    agregar_token(yytext, 1);
+    printf("[CLASE 1 - Símb.Esp]: %s\n", yytext);
+}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 69 "scanner.l"
-{ agregar_token(">", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: > ) \n"); }
+#line 311 "scanner.l"
+{
+    agregar_token(yytext, 2);
+    printf("[CLASE 2 - Identif]: %s\n", yytext);
+}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 70 "scanner.l"
-{ agregar_token("<<", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: << [ \n"); }
+#line 316 "scanner.l"
+{
+    agregar_token(yytext, 3);
+    printf("[CLASE 3 - Op.Aritm]: %s\n", yytext);
+}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 71 "scanner.l"
-{ agregar_token(">>", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: >> ] \n"); }
+#line 321 "scanner.l"
+{
+    agregar_token(yytext, 4);
+    printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
+}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 72 "scanner.l"
-{ agregar_token("#", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: # { \n"); }
+#line 326 "scanner.l"
+{
+    agregar_token(yytext, 5);
+    printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
+}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 73 "scanner.l"
-{ agregar_token("#!", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: #! } \n"); }
+#line 331 "scanner.l"
+{
+    agregar_token(yytext, 6);
+    printf("[CLASE 6 - Cadena]: %s\n", yytext);
+}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 74 "scanner.l"
-{ agregar_token("*", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: * ; \n"); }
+#line 336 "scanner.l"
+{
+    agregar_token(yytext, 8);
+    printf("[CLASE 8 - Real]: %s\n", yytext);
+}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 75 "scanner.l"
-{ agregar_token("|", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: | , \n"); }
+#line 341 "scanner.l"
+{
+    agregar_token(yytext, 7);
+    printf("[CLASE 7 - Entera]: %s\n", yytext);
+}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 76 "scanner.l"
-{ agregar_token("•", simbolos, &simbolo_count); printf("[CLASE 1 - SÍMBOLO ESPECIAL]: • . \n"); }
+#line 346 "scanner.l"
+{
+    printf("[Comentario] %s\n", yytext);
+}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 78 "scanner.l"
+#line 350 "scanner.l"
 {
-    agregar_token(yytext, identificadores, &identificador_count);
-    printf("[CLASE 2 - IDENTIFICADOR]: %s\n", yytext);
+    printf("[ Error Lexico]: %s\n", yytext);
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 83 "scanner.l"
-{
-    agregar_token(yytext, operadores, &operador_count);
-    printf("[CLASE 3 - OPERADOR ARITMÉTICO]: %s\n", yytext);
-}
-	YY_BREAK
-case 14:
-YY_RULE_SETUP
-#line 88 "scanner.l"
-{
-    agregar_token(yytext,operadores_rela, &operador_rela_count);
-    printf("[CLASE 4  - OPERADOR RELACIONAL]: %s\n", yytext);
-}
-	YY_BREAK
-case 15:
-YY_RULE_SETUP
-#line 93 "scanner.l"
-{
-    agregar_token(yytext,operadores_asig, &operador_asig_count);
-    printf("[CLASE 5  - OPERADOR DE ASIGNACION]: %s\n", yytext);
-}
-	YY_BREAK
-case 16:
-YY_RULE_SETUP
-#line 98 "scanner.l"
-{
-    agregar_token(yytext, constante_cadena, &constante_cadena_count);
-    printf("[CLASE 6 - CONSTANTE CADENA]: %s\n", yytext);
-}
-	YY_BREAK
-case 17:
-YY_RULE_SETUP
-#line 103 "scanner.l"
-{
-    printf("[Otra cosa]: %s\n", yytext);
-}
-	YY_BREAK
-case 18:
-YY_RULE_SETUP
-#line 107 "scanner.l"
+#line 354 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1030 "scanner.c"
+#line 1234 "scanner.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1105,7 +1309,7 @@ case YY_STATE_EOF(INITIAL):
 				{
 				(yy_did_buffer_switch_on_eof) = 0;
 
-				if ( yywrap( ) )
+				if ( yywrap(  ) )
 					{
 					/* Note: because we've taken care in
 					 * yy_get_next_buffer() to have set up
@@ -1214,7 +1418,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -1228,7 +1432,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1237,7 +1441,8 @@ static int yy_get_next_buffer (void)
 
 				b->yy_ch_buf = (char *)
 					/* Include room in for 2 EOB chars. */
-					yyrealloc((void *) b->yy_ch_buf,(yy_size_t) (b->yy_buf_size + 2)  );
+					yyrealloc( (void *) b->yy_ch_buf,
+							 (yy_size_t) (b->yy_buf_size + 2)  );
 				}
 			else
 				/* Can't grow it, we don't own it. */
@@ -1269,7 +1474,7 @@ static int yy_get_next_buffer (void)
 		if ( number_to_move == YY_MORE_ADJ )
 			{
 			ret_val = EOB_ACT_END_OF_FILE;
-			yyrestart(yyin  );
+			yyrestart( yyin  );
 			}
 
 		else
@@ -1285,10 +1490,13 @@ static int yy_get_next_buffer (void)
 
 	if (((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
-		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,(yy_size_t) new_size  );
+		yy_size_t new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
+			(void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf, (yy_size_t) new_size  );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
+		/* "- 2" to take care of EOB's */
+		YY_CURRENT_BUFFER_LVALUE->yy_buf_size = (int) (new_size - 2);
 	}
 
 	(yy_n_chars) += number_to_move;
@@ -1320,7 +1528,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 94 )
+			if ( yy_current_state >= 135 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1348,11 +1556,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 94 )
+		if ( yy_current_state >= 135 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 93);
+	yy_is_jam = (yy_current_state == 134);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1371,7 +1579,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		int number_to_move = (yy_n_chars) + 2;
+		yy_size_t number_to_move = (yy_n_chars) + 2;
 		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		char *source =
@@ -1422,7 +1630,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			int offset = (int) ((yy_c_buf_p) - (yytext_ptr));
+			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1439,13 +1647,13 @@ static int yy_get_next_buffer (void)
 					 */
 
 					/* Reset buffer status. */
-					yyrestart(yyin );
+					yyrestart( yyin );
 
 					/*FALLTHROUGH*/
 
 				case EOB_ACT_END_OF_FILE:
 					{
-					if ( yywrap( ) )
+					if ( yywrap(  ) )
 						return 0;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
@@ -1483,11 +1691,11 @@ static int yy_get_next_buffer (void)
 	if ( ! YY_CURRENT_BUFFER ){
         yyensure_buffer_stack ();
 		YY_CURRENT_BUFFER_LVALUE =
-            yy_create_buffer(yyin,YY_BUF_SIZE );
+            yy_create_buffer( yyin, YY_BUF_SIZE );
 	}
 
-	yy_init_buffer(YY_CURRENT_BUFFER,input_file );
-	yy_load_buffer_state( );
+	yy_init_buffer( YY_CURRENT_BUFFER, input_file );
+	yy_load_buffer_state(  );
 }
 
 /** Switch to a different input buffer.
@@ -1515,7 +1723,7 @@ static int yy_get_next_buffer (void)
 		}
 
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
-	yy_load_buffer_state( );
+	yy_load_buffer_state(  );
 
 	/* We don't actually know whether we did this switch during
 	 * EOF (yywrap()) processing, but the only time this flag
@@ -1543,7 +1751,7 @@ static void yy_load_buffer_state  (void)
 {
 	YY_BUFFER_STATE b;
     
-	b = (YY_BUFFER_STATE) yyalloc(sizeof( struct yy_buffer_state )  );
+	b = (YY_BUFFER_STATE) yyalloc( sizeof( struct yy_buffer_state )  );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
@@ -1552,13 +1760,13 @@ static void yy_load_buffer_state  (void)
 	/* yy_ch_buf has to be 2 characters longer than the size given because
 	 * we need to put in 2 end-of-buffer characters.
 	 */
-	b->yy_ch_buf = (char *) yyalloc((yy_size_t) (b->yy_buf_size + 2)  );
+	b->yy_ch_buf = (char *) yyalloc( (yy_size_t) (b->yy_buf_size + 2)  );
 	if ( ! b->yy_ch_buf )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
 
 	b->yy_is_our_buffer = 1;
 
-	yy_init_buffer(b,file );
+	yy_init_buffer( b, file );
 
 	return b;
 }
@@ -1577,9 +1785,9 @@ static void yy_load_buffer_state  (void)
 		YY_CURRENT_BUFFER_LVALUE = (YY_BUFFER_STATE) 0;
 
 	if ( b->yy_is_our_buffer )
-		yyfree((void *) b->yy_ch_buf  );
+		yyfree( (void *) b->yy_ch_buf  );
 
-	yyfree((void *) b  );
+	yyfree( (void *) b  );
 }
 
 /* Initializes or reinitializes a buffer.
@@ -1591,7 +1799,7 @@ static void yy_load_buffer_state  (void)
 {
 	int oerrno = errno;
     
-	yy_flush_buffer(b );
+	yy_flush_buffer( b );
 
 	b->yy_input_file = file;
 	b->yy_fill_buffer = 1;
@@ -1634,7 +1842,7 @@ static void yy_load_buffer_state  (void)
 	b->yy_buffer_status = YY_BUFFER_NEW;
 
 	if ( b == YY_CURRENT_BUFFER )
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 }
 
 /** Pushes the new state onto the stack. The new state becomes
@@ -1665,7 +1873,7 @@ void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
 	YY_CURRENT_BUFFER_LVALUE = new_buffer;
 
 	/* copied from yy_switch_to_buffer. */
-	yy_load_buffer_state( );
+	yy_load_buffer_state(  );
 	(yy_did_buffer_switch_on_eof) = 1;
 }
 
@@ -1684,7 +1892,7 @@ void yypop_buffer_state (void)
 		--(yy_buffer_stack_top);
 
 	if (YY_CURRENT_BUFFER) {
-		yy_load_buffer_state( );
+		yy_load_buffer_state(  );
 		(yy_did_buffer_switch_on_eof) = 1;
 	}
 }
@@ -1751,7 +1959,7 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 		/* They forgot to leave room for the EOB's. */
 		return NULL;
 
-	b = (YY_BUFFER_STATE) yyalloc(sizeof( struct yy_buffer_state )  );
+	b = (YY_BUFFER_STATE) yyalloc( sizeof( struct yy_buffer_state )  );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_buffer()" );
 
@@ -1765,7 +1973,7 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 	b->yy_fill_buffer = 0;
 	b->yy_buffer_status = YY_BUFFER_NEW;
 
-	yy_switch_to_buffer(b  );
+	yy_switch_to_buffer( b  );
 
 	return b;
 }
@@ -1781,7 +1989,7 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 YY_BUFFER_STATE yy_scan_string (const char * yystr )
 {
     
-	return yy_scan_bytes(yystr,(int) strlen(yystr) );
+	return yy_scan_bytes( yystr, (int) strlen(yystr) );
 }
 
 /** Setup the input buffer state to scan the given bytes. The next call to yylex() will
@@ -1791,16 +1999,16 @@ YY_BUFFER_STATE yy_scan_string (const char * yystr )
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
+YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, yy_size_t  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = (yy_size_t) (_yybytes_len + 2);
-	buf = (char *) yyalloc(n  );
+	buf = (char *) yyalloc( n  );
 	if ( ! buf )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_scan_bytes()" );
 
@@ -1809,7 +2017,7 @@ YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
 
 	buf[_yybytes_len] = buf[_yybytes_len+1] = YY_END_OF_BUFFER_CHAR;
 
-	b = yy_scan_buffer(buf,n );
+	b = yy_scan_buffer( buf, n );
 	if ( ! b )
 		YY_FATAL_ERROR( "bad buffer in yy_scan_bytes()" );
 
@@ -1827,7 +2035,7 @@ YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
 
 static void yynoreturn yy_fatal_error (const char* msg )
 {
-			(void) fprintf( stderr, "%s\n", msg );
+			fprintf( stderr, "%s\n", msg );
 	exit( YY_EXIT_FAILURE );
 }
 
@@ -1838,7 +2046,7 @@ static void yynoreturn yy_fatal_error (const char* msg )
 	do \
 		{ \
 		/* Undo effects of setting up yytext. */ \
-        int yyless_macro_arg = (n); \
+        yy_size_t yyless_macro_arg = (n); \
         YY_LESS_LINENO(yyless_macro_arg);\
 		yytext[yyleng] = (yy_hold_char); \
 		(yy_c_buf_p) = yytext + yyless_macro_arg; \
@@ -1878,7 +2086,7 @@ FILE *yyget_out  (void)
 /** Get the length of the current token.
  * 
  */
-int yyget_leng  (void)
+yy_size_t yyget_leng  (void)
 {
         return yyleng;
 }
@@ -1962,7 +2170,7 @@ int yylex_destroy  (void)
     
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
-		yy_delete_buffer(YY_CURRENT_BUFFER  );
+		yy_delete_buffer( YY_CURRENT_BUFFER  );
 		YY_CURRENT_BUFFER_LVALUE = NULL;
 		yypop_buffer_state();
 	}
@@ -2028,17 +2236,43 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 107 "scanner.l"
-
+#line 354 "scanner.l"
 
 int main() {
-    printf("Analizador Léxico iniciado. (Ctrl+D para terminar)\n");
+        /* Archivos de salida */
+
+    FILE *archivoTokens = fopen("tokens.txt", "w");
+    if (!archivoTokens) {
+        printf("No se pudo abrir tokens.txt\n");
+        return 1;
+    }
+
+    FILE *archivoSimbolos = fopen("simbolos.txt", "w");
+    if (!archivoSimbolos) {
+        printf("No se pudo abrir simbolos.txt\n");
+        return 1;
+    }
+
+    FILE *archivoLiterales = fopen("literales.txt", "w");
+    if (!archivoLiterales) {
+        printf("No se pudo abrir literales.txt\n");
+        return 1;
+    }
+
+    printf("Analizador Léxico iniciado...\n");
     yylex();
-    imprimir_tabla("TABLA DE PALABRAS RESERVADAS", tokens, token_count);
-    imprimir_tabla("TABLA DE SÍMBOLOS ESPECIALES", simbolos, simbolo_count);
-    imprimir_tabla("TABLA DE IDENTIFICADORES", identificadores, identificador_count);
-    imprimir_tabla("TABLA DE OPERADORES ARITMÉTICOS", operadores, operador_count);
-    imprimir_tabla("TABLA DE OPERADORES RELACIONALES", operadores_rela, operador_rela_count);
+
+    /* Imprimimos cada tabla en su respectivo archivo */
+    imprimir_tabla_tokens(archivoTokens);
+    imprimir_tabla_simbolos(archivoSimbolos);
+    imprimir_tabla_literales(archivoLiterales);
+    
+    /* Cerramos los archivos */
+
+    fclose(archivoTokens);
+    fclose(archivoSimbolos);
+    fclose(archivoLiterales);
+    printf("Tablas escritas en archivos tokens.txt, simbolos.txt y literales.txt\n");
     return 0;
 }
 

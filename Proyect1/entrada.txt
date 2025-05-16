@@ -1,0 +1,19 @@
+Global Ent   @i1_  | @i2_    *
+Global Flota @f1_  | @f2_    *
+Global Cade  @s1_  | @s2_    *
+Global Bool  @b1_  | @b2_    *
+
+Ent @main_ < > <<
+    @i1_ ->  +34p  *
+    Si < @i1_ h 10g > <<
+        Haz <<
+            @i2_ +-> 18g  *
+        >>  Mientras < @i2_ m 242’87 > <<
+            @i2_ *-> 23r  *
+        >>
+    >>
+    Para < @i2_ exp 2 > <<
+        Ver  *
+    >>
+    Devo @i2_  *
+>>
