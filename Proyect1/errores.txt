@@ -1,2 +1,2 @@
-[ Error Sintáctico] átomo '>' (índice 36): se esperaba 'opRel'
-[ Error Sintáctico] átomo '<' (índice 50): se esperaba 'opRel'
+[ Error Sintáctico] átomo '>' (índice 40): se esperaba 'opRel'
+[ Error Sintáctico] átomo 'w' (índice 52): se esperaba ']'

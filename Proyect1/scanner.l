@@ -564,7 +564,7 @@ fprintf(fp, "=======================\n");
     printf("[CLASE 1 - Símb.Esp]: °\n");
 }
 
-@([A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_ {
+@([A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_/[^A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9@] {
 agregar_token(yytext, 2, -1);
 printf("[CLASE 2 - Identif]: %s\n", yytext);
 }
