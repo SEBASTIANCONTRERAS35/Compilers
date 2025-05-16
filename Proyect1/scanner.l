@@ -211,7 +211,6 @@ FILE *archivo_cadenas = NULL;
 FILE *archivo_enteros = NULL;
 FILE *archivo_reales = NULL;
 FILE *archivo_errores = NULL;
-FILE *archivo_cs;
 
 /* 
 Tablas predefinidas con las palabras reservadas, símbolos especiales,
@@ -687,7 +686,6 @@ int main(int argc, char *argv[]) {
     archivo_enteros = fopen("enteros.txt", "w");
     archivo_reales = fopen("reales.txt", "w");
     archivo_errores = fopen("errores.txt", "w");
-    archivo_cs = fopen("conjuntos.txt", "w");
 
     if (!archivo_tokens || !archivo_simbolos || !archivo_literales || !archivo_cadenas || !archivo_enteros || !archivo_reales || !archivo_errores) {
         fprintf(stderr, "No se pudieron abrir archivos de salida\n");
@@ -716,9 +714,6 @@ int main(int argc, char *argv[]) {
     fclose(archivo_reales);
     fclose(entrada);
 
-    // --- SINTÁCTICO: Variables y funciones para analizar los átomos generados ---
-    // (Se insertan justo después de las funciones de Flex)
-
     // Ahora, cargar los átomos y ejecutar el "parser" embebido:
     printf("Tablas escritas en archivos tokens.txt, simbolos.txt, literales.txt, cadenas.txt, enteros.txt y reales.txt\n");
     printf("Errores (léxicos y sintácticos) en 'errores.txt'\n");
@@ -733,7 +728,6 @@ int main(int argc, char *argv[]) {
         printf("❌ Error: quedaron átomos sin procesar desde '%s'\n", atomos[indice_actual]);
     }
 
-    fclose(archivo_cs);
     fclose(archivo_errores);
 
     return 0;
@@ -819,26 +813,18 @@ int match(const char* esperado) {
 // void Arg() { ... }
 // void listArg() { ... }
 
-// <listaDec> → <Decl> <listaDec> | ε
 void listaDec() {
-    fprintf(archivo_cs, "listaDec: FIRST = {b, c, n, f, ε}\n");
-    // first(Decl) = { "b", "c", "n", "f" }
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
         if (strcmp(la, "b") == 0 || strcmp(la, "c") == 0 ||
             strcmp(la, "n") == 0 || strcmp(la, "f") == 0) {
-            Decl();      // parse one declaration
-            listaDec();  // parse the rest
+            Decl();
+            listaDec();
         }
-        // else ε: do nothing
     }
 }
 
-// === NUEVAS FUNCIONES DEL PARSER LL(1) ===
-
-// <Func> → <Tipo> a ( <Arg> ) [ <listaDec> <listaSent> ]
 void Func() {
-    fprintf(archivo_cs, "Func: FIRST = {b, c, n, f}\n");
     Tipo();
     match("a");
     match("(");
@@ -850,10 +836,7 @@ void Func() {
     match("]");
 }
 
-// <otraFunc> → <Func> <otraFunc> | ε
 void otraFunc() {
-    fprintf(archivo_cs, "otraFunc: FIRST = {b, c, n, f, ε}\n");
-    // Si el siguiente átomo puede iniciar 'Func' (clase Tipo: b, c, n, f)
     if (indice_actual < total_atomos && (
         strcmp(atomos[indice_actual], "b") == 0 ||
         strcmp(atomos[indice_actual], "c") == 0 ||
@@ -863,12 +846,9 @@ void otraFunc() {
         Func();
         otraFunc();
     }
-    // Si no, ε (no hacer nada)
 }
 
-// <Arg> → <Tipo> a <listArg> | ε
 void Arg() {
-    fprintf(archivo_cs, "Arg: FIRST = {b, c, n, f, ε}\n");
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "n") == 0 ||
          strcmp(atomos[indice_actual], "f") == 0 ||
@@ -878,12 +858,9 @@ void Arg() {
         match("a");
         listArg();
     }
-    // else ε: función sin argumentos
 }
 
-// <listArg> → , <Arg> | ε
 void listArg() {
-    fprintf(archivo_cs, "listArg: FIRST = {',', ε}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
         Arg();
@@ -893,7 +870,6 @@ void listArg() {
 /* === PARSER FUNCTIONS FOR NON-TERMINALS (Parte I) === */
 
 void Program() {
-    fprintf(archivo_cs, "Program: FIRST = {g}\n");
     // <Program> sólo inicia si el átomo actual es "g"
     printf("↪ Analizando &lt;Program&gt;, lookahead='%s' (índice %d)\n", atomos[indice_actual], indice_actual);
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "g") == 0) {
@@ -906,8 +882,6 @@ void Program() {
 }
 
 void ListDecGlob() {
-    fprintf(archivo_cs, "ListDecGlob -> DecGlob ListDecGlob: SELECT = {g}\n");
-    fprintf(archivo_cs, "ListDecGlob -> ε: SELECT = {b, c, n, f}\n");
     // 2–3: <ListDecGlob> → <DecGlob> <ListDecGlob> | ε
     if (indice_actual >= total_atomos) {
         printf("🛑 DEBUG: Fin de entrada alcanzado en ListDecGlob (índice %d)\n", indice_actual);
@@ -924,7 +898,6 @@ void ListDecGlob() {
 }
 
 void DecGlob() {
-    fprintf(archivo_cs, "DecGlob: FIRST = {g}\n");
     // 6: <DecGlob> → g <Decl>
     printf("↪ Analizando <DecGlob>, lookahead='%s'\n", atomos[indice_actual]);
     if (strcmp(atomos[indice_actual], "g") == 0) {
@@ -936,7 +909,6 @@ void DecGlob() {
 }
 
 void Decl() {
-    fprintf(archivo_cs, "Decl: FIRST = {b, c, n, f}\n");
     // 7: <Decl> → <Tipo> a <list> ;
         printf("🧠 DEBUG: Entrando a Decl()\n");
     printf("↪ Analizando <Decl>, lookahead='%s'\n", atomos[indice_actual]);
@@ -955,7 +927,6 @@ void Decl() {
 }
 
 void Tipo() {
-    fprintf(archivo_cs, "Tipo: FIRST = {b, c, n, f}\n");
     // 8–11: <Tipo> → b | c | n | f
     printf("↪ Analizando <Tipo>, lookahead='%s'\n", atomos[indice_actual]);
      if (indice_actual >= total_atomos) {
@@ -977,8 +948,6 @@ void Tipo() {
 }
 
 void list() {
-    fprintf(archivo_cs, "list: FIRST = {,}\n");
-    fprintf(archivo_cs, "list: FOLLOW = {;}\n");
     // 12–13: <list> → , a <list> | ε
     printf("↪ Analizando <list>, lookahead='%s'\n", atomos[indice_actual]);
     printf("🪛 DEBUG: Entering <list>\n");
@@ -1038,10 +1007,7 @@ void T();
 void Expr();
 void Cuerpo();
 void F();
-// <listaSent> → Sent listaSent | ε
 void listaSent() {
-    fprintf(archivo_cs, "listaSent -> Sent listaSent: SELECT = {a, h, i, o, d, t, p, m}\n");
-    fprintf(archivo_cs, "listaSent -> ε: SELECT = {]}\n");
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
         // todos los posibles primeros de Sent
@@ -1057,16 +1023,7 @@ void listaSent() {
 
 
 
-// <Sent> → <Asig> ; 
-//        | h [ <listaSent> ] w ( <expRel> ) [ <listaSent> ]
-//        | i ( <expRel> ) [ <listaSent> ] <Sino>
-//        | o ( <ExprGral> ) [ <listaSent> ]
-//        | d <valRet> ;
-//        | t ;
-//        | p ;
-//        | m ;
 void Sent() {
-    fprintf(archivo_cs, "Sent: FIRST = {a, h, i, o, d, t, p, m}\n");
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
 
@@ -1111,9 +1068,7 @@ void Sent() {
     }
 }
 
-// <Asig> → a <opAsig> <ExprGral>
 void Asig() {
-    fprintf(archivo_cs, "Asig: FIRST = {a}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "a") == 0) {
         match("a");
         opAsig();
@@ -1128,7 +1083,6 @@ void Asig() {
 
 
 
-// <opAsig> → = | # | ñ | $ | v | ? | : | " | ^ | &
 void opAsig() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1147,9 +1101,7 @@ void opAsig() {
     }
 }
 
-// <ExprGral> → E
 void ExprGral() {
-    fprintf(archivo_cs, "ExprGral: FIRST = {s, q, m, u, '('}\n");
     // FIRST(ExprGral) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
     if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
@@ -1161,7 +1113,6 @@ void ExprGral() {
         indice_actual++;
     }
 }
-// <T> → F Tp
 void T() {
     // FIRST(T) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
@@ -1176,7 +1127,6 @@ void T() {
     }
 }
 
-// <Tp> → * F Tp | / F Tp | % F Tp | ~ F Tp | k F Tp | ε
 void Tp() {
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "*") == 0 ||
@@ -1194,9 +1144,7 @@ void Tp() {
 
 
 
-// <E> → T Ep
 void E() {
-    fprintf(archivo_cs, "E: FIRST = {s, q, m, u, '('}\n");
     // FIRST(E) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
     if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
@@ -1210,17 +1158,8 @@ void E() {
     }
 }
 
-// <F> → F' a | ( E ) | { LlamaFunc } | m
 void F() {
     // <F> → a F' | e | r | s | ( E ) | { LlamaFunc } | m
-    fprintf(archivo_cs, "F -> a F': SELECT = {a}\n");
-    fprintf(archivo_cs, "F -> e:    SELECT = {e}\n");
-    fprintf(archivo_cs, "F -> r:    SELECT = {r}\n");
-    fprintf(archivo_cs, "F -> s:    SELECT = {s}\n");
-    fprintf(archivo_cs, "F -> (E):  SELECT = {(}\n");
-    fprintf(archivo_cs, "F -> {L}:  SELECT = {{\n");  // la { que inicia LlamaFunc
-    fprintf(archivo_cs, "F -> m:    SELECT = {m}\n");
-
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
         if (strcmp(la, "a")==0 || strcmp(la, "e")==0 ||
@@ -1246,7 +1185,6 @@ void F() {
 
 
 
-// <opRel> → h | m | ¡ | ! | x | y
 void opRel() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1264,9 +1202,6 @@ void opRel() {
 }
 
 void G() {
-    // <G> → z | j | ε
-    fprintf(archivo_cs, "G -> z: SELECT = {z}\n");
-    fprintf(archivo_cs, "G -> j: SELECT = {j}\n");
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
         if (strcmp(la, "z") == 0) {
@@ -1278,7 +1213,6 @@ void G() {
     }
 }
 
-// <F’> → j | z | ε
 void Fp() {
     if (indice_actual < total_atomos) {
         if (strcmp(atomos[indice_actual], "j") == 0 || strcmp(atomos[indice_actual], "z") == 0) {
@@ -1288,7 +1222,6 @@ void Fp() {
     }
 }
 
-// <expRel> → ExprGral opRel ExprGral
 void expRel() {
     // FIRST(expRel) = FIRST(ExprGral) = { a, e, r, s, ( }
     const char *la = atomos[indice_actual];
@@ -1303,7 +1236,6 @@ void expRel() {
     }
 }
 
-// <OpAsigComp> → # | ñ | $ | v | ? | : | " | ^ | &
 void OpAsigComp() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1321,7 +1253,6 @@ void OpAsigComp() {
     }
 }
 
-// <OpAsigSimple> → =
 void OpAsigSimple() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "=") == 0) {
         match("=");
@@ -1332,7 +1263,6 @@ void OpAsigSimple() {
 
 
 
-// <Param> → , ExprGral Param | ε
 void Param() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
@@ -1342,7 +1272,6 @@ void Param() {
 }
 
 
-// <listP> → ExprGral Param | ε
 void listP() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1359,7 +1288,6 @@ void listP() {
 
 
 
-// <Args> → <ExprGral> Param | ε
 void Args() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1382,20 +1310,7 @@ int yywrap(void) {
     return 1;
 }
 
-// <Ep> → + T Ep | - T Ep | ε
 void Ep() {
-    fprintf(archivo_cs, "Ep -> + T Ep | - T Ep: SELECT = {'+','-'}\n");
-    fprintf(archivo_cs, "Ep -> ε: SELECT = FOLLOW(E)\n");
-    fprintf(archivo_cs, "T: FIRST = {s, q, m, u, '('}\n");
-    fprintf(archivo_cs, "F: FIRST = {s, q, m, u, '(', '{'}\n");
-    fprintf(archivo_cs, "Fp: FIRST = {'j', 'z', ε}\n");
-    fprintf(archivo_cs, "G: FIRST = {s, q, m, u, '(', ε}\n");
-    fprintf(archivo_cs, "expRel: FIRST = {s, q, m, u, '(', ε}\n");
-    fprintf(archivo_cs, "opRel: FIRST = {h, m, ¡, !, x, y}\n");
-    fprintf(archivo_cs, "OpAsigComp: FIRST = {#, ñ, $, v, ?, :, \", ^, &}\n");
-    fprintf(archivo_cs, "OpAsigSimple: FIRST = {=}\n");
-    fprintf(archivo_cs, "Param: FIRST = {',', ε}\n");
-    fprintf(archivo_cs, "listP: FIRST = {s, q, m, u, '(', ε}\n");
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "+") == 0 ||
          strcmp(atomos[indice_actual], "-") == 0)) {
@@ -1404,7 +1319,6 @@ void Ep() {
         Ep();
     }
 }
-// <Cuerpo> → [ listaSent ]
 void Cuerpo() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "[") == 0) {
         match("[");
@@ -1415,7 +1329,6 @@ void Cuerpo() {
         indice_actual++;
     }
 }
-// <Expr> → E
 void Expr() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1436,10 +1349,7 @@ void Expr() {
 
 
 
-// <Sino> → l [ listaSent ] | ε
 void Sino() {
-    fprintf(archivo_cs, "Sino -> l [ listaSent ]: SELECT = {l}\n");
-    fprintf(archivo_cs, "Sino -> ε: SELECT = {a, h, i, o, d, t, p, ]}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "l") == 0) {
         match("l");
         match("[");
@@ -1447,9 +1357,7 @@ void Sino() {
         match("]");
     }
 }
-// <Dev> → d <valRet> ;
 void Dev() {
-    fprintf(archivo_cs, "Dev: FIRST = {d}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "d") == 0) {
         match("d");
         valRet();
@@ -1460,9 +1368,7 @@ void Dev() {
     }
 }
 
-// <valRet> → ExprGral
 void valRet() {
-    fprintf(archivo_cs, "valRet: FIRST = {s, q, m, u, '(', ε}\n");
     const char *la = atomos[indice_actual];
     if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
         strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
@@ -1473,9 +1379,7 @@ void valRet() {
         indice_actual++;
     }
 }
-// <Si> → i ( expRel ) [ listaSent ] Sino
 void Si() {
-    fprintf(archivo_cs, "Si: FIRST = {i}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "i") == 0) {
         match("i");
         match("(");
@@ -1491,9 +1395,7 @@ void Si() {
     }
 }
 
-// <Para> → o ( E ) [ listaSent ]
 void Para() {
-    fprintf(archivo_cs, "Para: FIRST = {o}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "o") == 0) {
         match("o");
         match("(");
@@ -1508,9 +1410,7 @@ void Para() {
     }
 }
 
-// <LlamaFunc> → { a ( listP ) }
 void LlamaFunc() {
-    fprintf(archivo_cs, "LlamaFunc: FIRST = {'{'}\n");
     match("{");
     match("a");
     match("(");
@@ -1520,9 +1420,7 @@ void LlamaFunc() {
 }
 
 
-// <HazM> → h [ listaSent ]
 void HazM() {
-    fprintf(archivo_cs, "HazM: FIRST = {h}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "h") == 0) {
         match("h");
         match("[");
