@@ -1,50 +1,19 @@
-Global Bool @flag_ | @continuar_ *
-Global Cade @saludo_ *
-Global Ent @año_ *
-Global Flota @delta_ | @Raíz_ *
-
-Ent @sum_ < Ent @x_ | Ent @y_ > <<
-    Ent @temp_ *
-    @temp_ -> @x_ sum @y_ °
-    Devo < @temp_ > °
->>
-
-Ent @factorial_ < Ent @n_ > <<
-    Ent @res_ *
-    @res_ -> 1 °
-    Haz <<
-        @res_ -> @res_ mult @n_ °
-        @n_ -> @n_ rest 1 °
-    >> Mientras < @n_ h 1 >
-    Devo < @res_ > °
->>
+Global Ent   @i1_  | @i2_    *
+Global Flota @f1_  | @f2_    *
+Global Cade  @s1_  | @s2_    *
+Global Bool  @b1_  | @b2_    *
 
 Ent @main_ < > <<
-   
-    @flag_ -> Fals °
-    @saludo_ -> --¡Hola, mundo!-- °
-    @año_ -> 2025 °
-    @delta_ -> 0'5 °
-    @Raíz_ -> 2r °
-  
-    @año_ -> # @sum_ < @año_ | 10 > #! °
-    @año_ -> # @factorial_ < @n_ | @año_ > #! °
-
-    Si < @año_ m 100 > <<
-        Ver °
-    >> Sino <<
-        Ver °
+    @i1_ ->  +34p  *
+    Si < @i1_ h 10g > <<
+        Haz <<
+            @i2_ +-> 18g  *
+        >>  Mientras < @i2_ m 242’87 > <<
+            @i2_ *-> 23r  *
+        >>
     >>
-  
-    Para < 3 > <<
-        @saludo_ -> --Repetición-- °
-        Continuar °
-        Parar °
+    Para < @i2_ exp 2 > <<
+        Ver  *
     >>
-  
-    Haz <<
-        @delta_ -> @delta_ sum 0'1 °
-    >> Mientras < @delta_ h 1 >
-    
-    Devo < @año_ > °
+    Devo @i2_  *
 >>

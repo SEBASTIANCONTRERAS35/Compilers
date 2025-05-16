@@ -121,10 +121,10 @@ switch (clase) {
             case 2: return "*"; // mult
             case 3: return "/"; // div
             case 4: return "%"; // mod
-            case 5: return "~"; // inc
-            case 6: return "k"; // dec
-            case 7: return "^"; // exp
-            case 8: return "&"; // dive
+            case 5: return "z"; // inc
+            case 6: return "j"; // dec
+            case 7: return "k"; // exp
+            case 8: return "~"; // dive (changed from '&' to '~')
             default: return "?";
         }
     }
@@ -132,7 +132,7 @@ switch (clase) {
         switch (posicion) {
             case 0: return ">"; // h
             case 1: return "<"; // m
-            case 2: return "i"; // e
+            case 2: return "¡"; // e
             case 3: return "!"; // c
             case 4: return "x"; // he
             case 5: return "y"; // me
@@ -141,16 +141,16 @@ switch (clase) {
     }
     case 5: {
         switch (posicion) {
-            case 0: return "="; // ->
-            case 1: return "#"; // +->
-            case 2: return "ñ"; // -->
-            case 3: return "$"; // *->
-            case 4: return "v"; // /->
-            case 5: return "?"; // %->
-            case 6: return ":"; // >>->
-            case 7: return "\""; // <<->
-            case 8: return "^"; // ^->
-            case 9: return "&"; // &->
+            case 0: return "=";   // ->
+            case 1: return "#";   // +->
+            case 2: return "ñ";   // -->
+            case 3: return "$";   // *->
+            case 4: return "v";   // /->
+            case 5: return "?";   // %->
+            case 6: return ":";   // >>->
+            case 7: return "\"";  // <<->
+            case 8: return "^";   // ^->
+            case 9: return "&";   // &->
             default: return "?";
         }
     }
@@ -210,6 +210,8 @@ FILE *archivo_literales = NULL;
 FILE *archivo_cadenas = NULL;
 FILE *archivo_enteros = NULL;
 FILE *archivo_reales = NULL;
+FILE *archivo_errores = NULL;
+FILE *archivo_cs;
 
 /* 
 Tablas predefinidas con las palabras reservadas, símbolos especiales,
@@ -513,9 +515,54 @@ fprintf(fp, "=======================\n");
     printf("[CLASE 0 - Pal.Res]: %s (pos: %d)\n", yytext, pos);
 }
 
- "<"|"<<"|">"|">>"|"#"|"#!"|"*"|"|"|"°" {
-agregar_token(yytext, 1, -1);
-printf("[CLASE 1 - Símb.Esp]: %s\n", yytext);
+
+
+"->"    { agregar_token(yytext, 5, 0); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"+->"   { agregar_token(yytext, 5, 1); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"-->"   { agregar_token(yytext, 5, 2); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"*->"   { agregar_token(yytext, 5, 3); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"/->"   { agregar_token(yytext, 5, 4); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"%->"   { agregar_token(yytext, 5, 5); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+">>->"  { agregar_token(yytext, 5, 6); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"<<->"  { agregar_token(yytext, 5, 7); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"^->"   { agregar_token(yytext, 5, 8); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+"&->"   { agregar_token(yytext, 5, 9); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+
+"<<" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: <<\n");
+}
+">>" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: >>\n");
+}
+"<" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: <\n");
+}
+">" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: >\n");
+}
+"#!" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: #!\n");
+}
+"#" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: #\n");
+}
+"\*" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: *\n");
+}
+"\|" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: |\n");
+}
+"°" {
+    agregar_token(yytext, 1, -1);
+    printf("[CLASE 1 - Símb.Esp]: °\n");
 }
 
 @([A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_ {
@@ -533,19 +580,25 @@ agregar_token(yytext, 4, -1);
 printf("[CLASE 4 - Op.Relac]: %s\n", yytext);
 }
 
-"->"|"+->"|"-->"|"*->"|"/->"|"%->"|"<<->"|">>->"|"\^->"|"&->" {
-agregar_token(yytext, 5, -1);
-printf("[CLASE 5 - Op.Asig]: %s\n", yytext);
-}
+
 
 --([^-\n]*)-- {
 agregar_token(yytext, 6, -1);
 printf("[CLASE 6 - Cadena]: %s\n", yytext);
 }
 
-([+-]?[0-9]*\x27[0-9]+)|([+-]?[0-9]+[rR]) {
-agregar_token(yytext, 8, -1);
-printf("[CLASE 8 - Real]: %s\n", yytext);
+
+[+-]?[0-9]+'[0-9]+ {
+    agregar_token(yytext, 8, -1);
+    printf("[CLASE 8 - Real]: %s\n", yytext);
+}
+[+-]?[0-9]+’[0-9]+ {
+    agregar_token(yytext, 8, -1);
+    printf("[CLASE 8 - Real]: %s\n", yytext);
+}
+[+-]?[0-9]+[rR] {
+    agregar_token(yytext, 8, -1);
+    printf("[CLASE 8 - Real]: %s\n", yytext);
 }
 
 [+-]?([1-9][0-9]*|0)[pPgG]? {
@@ -558,7 +611,8 @@ printf("[Comentario] %s\n", yytext);
 }
 
 [^ \t\n]+ {
-printf("[ Error Lexico]: %s\n", yytext);
+    fprintf(archivo_errores, "[ Error Léxico] '%s' en línea %d\n", yytext, yylineno);
+    printf("[ Error Lexico]: %s\n", yytext);
 }
 
 %%
@@ -571,71 +625,116 @@ extern int indice_actual;
 
 void cargar_atomos(const char* archivo);
 void Program();
+void ListDecGlob();
+void DecGlob();
+void Decl();
+void Tipo();
+void list();
+void Func();
+void otraFunc();
+void Arg();
+void listArg();
+void listaDec();
+void listaSent();
+void Sent();
+void Asig();
+void ExprGral();
+void E();
+void Ep();
+void Tp();
+void G();
+void expRel();
+void Sino();
+void Param();
+void listP();
+void LlamaFunc();
+void opRel();
+void opAsig();
+void OpAsigSimple();
+void OpAsigComp();
+void Fp();
+void valRet();
+// Prototipos de funciones agregadas
+void HazM();
+
+
+// === Helper para errores sintácticos ===
+void errorSintactico(const char *esperado) {
+    fprintf(archivo_errores, "[ Error Sintáctico] átomo '%s' (índice %d): se esperaba '%s'\n",
+        (indice_actual < total_atomos ? atomos[indice_actual] : "EOF"),
+        indice_actual,
+        esperado);
+}
 /* === PUNTO DE ENTRADA: INVOCACIÓN DEL ANALIZADOR LÉXICO Y PARSER SINTÁCTICO === */
 int main(int argc, char *argv[]) {
-if (argc != 2) {
-    fprintf(stderr, "Uso: %s archivo_entrada\n", argv[0]);
-    return 1;
-}
+    if (argc != 2) {
+        fprintf(stderr, "Uso: %s archivo_entrada\n", argv[0]);
+        return 1;
+    }
 
-FILE *entrada = fopen(argv[1], "r");
-if (!entrada) {
-    perror("No se pudo abrir el archivo de entrada");
-    return 1;
-}
+    FILE *entrada = fopen(argv[1], "r");
+    if (!entrada) {
+        perror("No se pudo abrir el archivo de entrada");
+        return 1;
+    }
 
-yyin = entrada;
+    yyin = entrada;
 
-archivo_tokens = fopen("tokens.txt", "w");
-archivo_simbolos = fopen("simbolos.txt", "w");
-archivo_literales = fopen("literales.txt", "w");
-archivo_cadenas = fopen("cadenas.txt", "w");
-archivo_enteros = fopen("enteros.txt", "w");
-archivo_reales = fopen("reales.txt", "w");
+    archivo_tokens = fopen("tokens.txt", "w");
+    archivo_simbolos = fopen("simbolos.txt", "w");
+    archivo_literales = fopen("literales.txt", "w");
+    archivo_cadenas = fopen("cadenas.txt", "w");
+    archivo_enteros = fopen("enteros.txt", "w");
+    archivo_reales = fopen("reales.txt", "w");
+    archivo_errores = fopen("errores.txt", "w");
+    archivo_cs = fopen("conjuntos.txt", "w");
 
-if (!archivo_tokens || !archivo_simbolos || !archivo_literales || !archivo_cadenas || !archivo_enteros || !archivo_reales) {
-    fprintf(stderr, "No se pudieron abrir archivos de salida\n");
-    return 1;
-}
+    if (!archivo_tokens || !archivo_simbolos || !archivo_literales || !archivo_cadenas || !archivo_enteros || !archivo_reales || !archivo_errores) {
+        fprintf(stderr, "No se pudieron abrir archivos de salida\n");
+        return 1;
+    }
 
-printf("Analizador Léxico iniciado...\n");
-printf("🪛 DEBUG: Iniciando análisis léxico...\n");
-printf("🪛 DEBUG: Ejecutando yylex()...\n");
-fclose(fopen("atomos.txt", "w"));  // Limpia atomos.txt
-yylex();
-printf("🪛 DEBUG: Finalizó yylex(). Tokens generados: %d\n", token_count);
+    printf("Analizador Léxico iniciado...\n");
+    printf("🪛 DEBUG: Iniciando análisis léxico...\n");
+    printf("🪛 DEBUG: Ejecutando yylex()...\n");
+    fclose(fopen("atomos.txt", "w"));  // Limpia atomos.txt
+    yylex();
+    printf("🪛 DEBUG: Finalizó yylex(). Tokens generados: %d\n", token_count);
 
-imprimir_tabla_tokens(archivo_tokens);
-imprimir_tabla_simbolos(archivo_simbolos);
-imprimir_tabla_literales(archivo_literales);
-imprimir_tabla_cadenas(archivo_cadenas);
-imprimir_tabla_enteros(archivo_enteros);
-imprimir_tabla_reales(archivo_reales);
+    imprimir_tabla_tokens(archivo_tokens);
+    imprimir_tabla_simbolos(archivo_simbolos);
+    imprimir_tabla_literales(archivo_literales);
+    imprimir_tabla_cadenas(archivo_cadenas);
+    imprimir_tabla_enteros(archivo_enteros);
+    imprimir_tabla_reales(archivo_reales);
 
-fclose(archivo_tokens);
-fclose(archivo_simbolos);
-fclose(archivo_literales);
-fclose(archivo_cadenas);
-fclose(archivo_enteros);
-fclose(archivo_reales);
-fclose(entrada);
+    fclose(archivo_tokens);
+    fclose(archivo_simbolos);
+    fclose(archivo_literales);
+    fclose(archivo_cadenas);
+    fclose(archivo_enteros);
+    fclose(archivo_reales);
+    fclose(entrada);
 
-// --- SINTÁCTICO: Variables y funciones para analizar los átomos generados ---
-// (Se insertan justo después de las funciones de Flex)
+    // --- SINTÁCTICO: Variables y funciones para analizar los átomos generados ---
+    // (Se insertan justo después de las funciones de Flex)
 
-printf("Tablas escritas en archivos tokens.txt, simbolos.txt, literales.txt, cadenas.txt, enteros.txt y reales.txt\n");
-
-// Ahora, cargar los átomos y ejecutar el "parser" embebido:
-printf("🪛 DEBUG: Cargando átomos desde atomos.txt...\n");
+    // Ahora, cargar los átomos y ejecutar el "parser" embebido:
+    printf("Tablas escritas en archivos tokens.txt, simbolos.txt, literales.txt, cadenas.txt, enteros.txt y reales.txt\n");
+    printf("Errores (léxicos y sintácticos) en 'errores.txt'\n");
+    printf("🪛 DEBUG: Cargando átomos desde atomos.txt...\n");
     cargar_atomos("atomos.txt");
-printf("🪛 DEBUG: Iniciando análisis sintáctico con Program()\n");
+    printf("🪛 DEBUG: Iniciando análisis sintáctico con Program()\n");
     Program();
-printf("🪛 DEBUG: Terminó Program(). Atomos consumidos: %d de %d\n", indice_actual, total_atomos);
+    printf("🪛 DEBUG: Terminó Program(). Atomos consumidos: %d de %d\n", indice_actual, total_atomos);
     if (indice_actual == total_atomos) {
         printf("✅ Análisis sintáctico exitoso. Todos los átomos fueron consumidos.\n");
     } else {
         printf("❌ Error: quedaron átomos sin procesar desde '%s'\n", atomos[indice_actual]);
     }
+
+    fclose(archivo_cs);
+    fclose(archivo_errores);
 
     return 0;
 }
@@ -658,586 +757,769 @@ void cargar_atomos(const char* archivo) {
 }
 
 int match(const char* esperado) {
+    printf("🪛 DEBUG: match(): esperando '%s', actual='%s' (índice %d)\n", esperado, atomos[indice_actual], indice_actual);
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], esperado) == 0) {
         printf("✔️ Match: %s\n", esperado);
         indice_actual++;
         return 1;
     } else {
-        printf("❌ Error: se esperaba '%s' pero se encontró '%s'\n",
+        errorSintactico(esperado);
+        printf("⚠️ Error sintáctico: se esperaba '%s' pero se encontró '%s'\n",
                esperado,
                (indice_actual < total_atomos ? atomos[indice_actual] : "EOF"));
-        exit(1);
+        indice_actual++;
+        return 0;
     }
 }
 
 
 
 // --- INICIO: Gramática para <Arg>, <listArg> y <listaDec> ---
-int Tipo();
-int Decl();
-int Arg();
-int listArg();
-int listaDec();
-/* === PARSER: Arg === */
-int Arg() {
-    printf("↪ Analizando <Arg>\n");
-    // <Arg> → <Tipo> a <listArg>
-    if (indice_actual < total_atomos &&
-       (strcmp(atomos[indice_actual], "b") == 0 ||
+
+
+
+
+// --- FIN: Gramática para <Arg>, <listArg> y <listaDec> ---
+
+
+
+
+
+
+
+/* === PARSER: Decl === */
+
+
+
+
+// --- INICIO: Gramática para listaSent y Sent ---
+
+
+
+
+
+
+
+
+
+
+
+
+/* === PARSER: Program === */
+
+// --- Fin sintáctico ---
+
+
+
+// === STUBS DEL PARSER LL(1) ===
+// Aquí se colocan las funciones para cada no-terminal de la gramática.
+// Ejemplo de stubs previos:
+// void Func() { ... }
+// void otraFunc() { ... }
+// void Arg() { ... }
+// void listArg() { ... }
+
+// <listaDec> → <Decl> <listaDec> | ε
+void listaDec() {
+    fprintf(archivo_cs, "listaDec: FIRST = {b, c, n, f, ε}\n");
+    // first(Decl) = { "b", "c", "n", "f" }
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (strcmp(la, "b") == 0 || strcmp(la, "c") == 0 ||
+            strcmp(la, "n") == 0 || strcmp(la, "f") == 0) {
+            Decl();      // parse one declaration
+            listaDec();  // parse the rest
+        }
+        // else ε: do nothing
+    }
+}
+
+// === NUEVAS FUNCIONES DEL PARSER LL(1) ===
+
+// <Func> → <Tipo> a ( <Arg> ) [ <listaDec> <listaSent> ]
+void Func() {
+    fprintf(archivo_cs, "Func: FIRST = {b, c, n, f}\n");
+    Tipo();
+    match("a");
+    match("(");
+    Arg();
+    match(")");
+    match("[");
+    listaDec();
+    listaSent();
+    match("]");
+}
+
+// <otraFunc> → <Func> <otraFunc> | ε
+void otraFunc() {
+    fprintf(archivo_cs, "otraFunc: FIRST = {b, c, n, f, ε}\n");
+    // Si el siguiente átomo puede iniciar 'Func' (clase Tipo: b, c, n, f)
+    if (indice_actual < total_atomos && (
+        strcmp(atomos[indice_actual], "b") == 0 ||
         strcmp(atomos[indice_actual], "c") == 0 ||
         strcmp(atomos[indice_actual], "n") == 0 ||
-        strcmp(atomos[indice_actual], "f") == 0)) {
+        strcmp(atomos[indice_actual], "f") == 0
+    )) {
+        Func();
+        otraFunc();
+    }
+    // Si no, ε (no hacer nada)
+}
+
+// <Arg> → <Tipo> a <listArg> | ε
+void Arg() {
+    fprintf(archivo_cs, "Arg: FIRST = {b, c, n, f, ε}\n");
+    if (indice_actual < total_atomos &&
+        (strcmp(atomos[indice_actual], "n") == 0 ||
+         strcmp(atomos[indice_actual], "f") == 0 ||
+         strcmp(atomos[indice_actual], "c") == 0 ||
+         strcmp(atomos[indice_actual], "b") == 0)) {
         Tipo();
         match("a");
         listArg();
-    } else {
-        // ε
-        printf("ε (vacío) en <Arg>\n");
     }
-    printf("🪛 DEBUG: Fin análisis <Arg>\n");
-    return 1;
+    // else ε: función sin argumentos
 }
 
-/* === PARSER: listArg === */
-int listArg() {
-    printf("↪ Analizando <listArg>\n");
-    // <listArg> → , <Arg> | ε
+// <listArg> → , <Arg> | ε
+void listArg() {
+    fprintf(archivo_cs, "listArg: FIRST = {',', ε}\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
         Arg();
-    } else {
-        printf("ε (vacío) en <listArg>\n");
     }
-    printf("🪛 DEBUG: Fin análisis <listArg>\n");
-    return 1;
 }
 
-/* === PARSER: listaDec === */
-int listaDec() {
-    printf("↪ Analizando <listaDec>\n");
-    // <listaDec> → <Decl> <listaDec> | ε
-    if (indice_actual < total_atomos &&
-       (strcmp(atomos[indice_actual], "b") == 0 ||
-        strcmp(atomos[indice_actual], "c") == 0 ||
-        strcmp(atomos[indice_actual], "n") == 0 ||
-        strcmp(atomos[indice_actual], "f") == 0)) {
-        Decl();
-        listaDec();
-    } else {
-        printf("ε (vacío) en <listaDec>\n");
-    }
-    printf("🪛 DEBUG: Fin análisis <listaDec>\n");
-    return 1;
-}
-// --- FIN: Gramática para <Arg>, <listArg> y <listaDec> ---
+/* === PARSER FUNCTIONS FOR NON-TERMINALS (Parte I) === */
 
-int DecGlob();
-
-/* === PARSER: ListDecGlob === */
-int ListDecGlob() {
-    printf("↪ Analizando <ListDecGlob>\n");
+void Program() {
+    fprintf(archivo_cs, "Program: FIRST = {g}\n");
+    // <Program> sólo inicia si el átomo actual es "g"
+    printf("↪ Analizando &lt;Program&gt;, lookahead='%s' (índice %d)\n", atomos[indice_actual], indice_actual);
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "g") == 0) {
+        ListDecGlob();
+        Func();
+        otraFunc();
+    } else {
+        errorSintactico("Program (esperado: g)");
+    }
+}
+
+void ListDecGlob() {
+    fprintf(archivo_cs, "ListDecGlob -> DecGlob ListDecGlob: SELECT = {g}\n");
+    fprintf(archivo_cs, "ListDecGlob -> ε: SELECT = {b, c, n, f}\n");
+    // 2–3: <ListDecGlob> → <DecGlob> <ListDecGlob> | ε
+    if (indice_actual >= total_atomos) {
+        printf("🛑 DEBUG: Fin de entrada alcanzado en ListDecGlob (índice %d)\n", indice_actual);
+        return;
+    }
+
+    printf("↪ Analizando <ListDecGlob>, lookahead='%s' (índice %d)\n", atomos[indice_actual], indice_actual);
+    if (strcmp(atomos[indice_actual], "g") == 0) {
         DecGlob();
         ListDecGlob();
     } else {
-        printf("ε (vacío) en <ListDecGlob>\n");
+        printf("ℹ️ DEBUG: <ListDecGlob> termina (no hay 'g') en índice %d\n", indice_actual);
     }
-    printf("🪛 DEBUG: Fin análisis <ListDecGlob>\n");
-    return 1;
 }
 
-/* === PARSER: Tipo === */
-int Tipo() {
-    printf("↪ Analizando <Tipo>\n");
-    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "b") == 0) {
+void DecGlob() {
+    fprintf(archivo_cs, "DecGlob: FIRST = {g}\n");
+    // 6: <DecGlob> → g <Decl>
+    printf("↪ Analizando <DecGlob>, lookahead='%s'\n", atomos[indice_actual]);
+    if (strcmp(atomos[indice_actual], "g") == 0) {
+        match("g");
+        Decl();
+    } else {
+        errorSintactico("g");
+    }
+}
+
+void Decl() {
+    fprintf(archivo_cs, "Decl: FIRST = {b, c, n, f}\n");
+    // 7: <Decl> → <Tipo> a <list> ;
+        printf("🧠 DEBUG: Entrando a Decl()\n");
+    printf("↪ Analizando <Decl>, lookahead='%s'\n", atomos[indice_actual]);
+    // FIRST(Decl) = b, c, n, f
+    if (!(strcmp(atomos[indice_actual], "b") == 0 ||
+          strcmp(atomos[indice_actual], "c") == 0 ||
+          strcmp(atomos[indice_actual], "n") == 0 ||
+          strcmp(atomos[indice_actual], "f") == 0)) {
+        errorSintactico("Tipo esperado en Decl");
+        return;
+    }
+    Tipo();
+    match("a");
+    list();
+    match(";");
+}
+
+void Tipo() {
+    fprintf(archivo_cs, "Tipo: FIRST = {b, c, n, f}\n");
+    // 8–11: <Tipo> → b | c | n | f
+    printf("↪ Analizando <Tipo>, lookahead='%s'\n", atomos[indice_actual]);
+     if (indice_actual >= total_atomos) {
+        printf("🛑 DEBUG: Fin de entrada alcanzado en Tipo (índice %d)\n", indice_actual);
+        return;
+    }
+    if (strcmp(atomos[indice_actual], "b") == 0) {
         match("b");
-    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "c") == 0) {
+    } else if (strcmp(atomos[indice_actual], "c") == 0) {
         match("c");
-    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "n") == 0) {
+    } else if (strcmp(atomos[indice_actual], "n") == 0) {
         match("n");
-    } else if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "f") == 0) {
+    } else if (strcmp(atomos[indice_actual], "f") == 0) {
         match("f");
     } else {
-        printf("❌ Error: Se esperaba un tipo (b|c|n|f) y se encontró '%s'\n", 
-               (indice_actual < total_atomos ? atomos[indice_actual] : "EOF"));
-        exit(1);
+        errorSintactico("Tipo");
+        indice_actual++;
     }
-    printf("🪛 DEBUG: Fin análisis <Tipo>\n");
-    return 1;
 }
 
-/* === PARSER: list === */
-int list() {
-    printf("↪ Analizando <list>\n");
+void list() {
+    fprintf(archivo_cs, "list: FIRST = {,}\n");
+    fprintf(archivo_cs, "list: FOLLOW = {;}\n");
+    // 12–13: <list> → , a <list> | ε
+    printf("↪ Analizando <list>, lookahead='%s'\n", atomos[indice_actual]);
+    printf("🪛 DEBUG: Entering <list>\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
+        printf("🪛 DEBUG: <list> comma branch taken\n");
         match(",");
         match("a");
         list();
     } else {
-        printf("ε (vacío) en <list>\n");
+        printf("🪛 DEBUG: <list> epsilon branch taken (no comma)\n");
     }
-    printf("🪛 DEBUG: Fin análisis <list>\n");
-    return 1;
 }
 
-/* === PARSER: Decl === */
-int Decl() {
-    printf("↪ Analizando <Decl>\n");
-    Tipo();
-    match("a");
-    list();
-    match(";");  // changed to expect the terminator atom ';'
-    printf("🪛 DEBUG: Fin análisis <Decl>\n");
-    return 1;
+/* — Próximas funciones a implementar:
+   Func, otraFunc, Arg, listArg, listaDec, Sent, Asig, opAsig,
+   ExprGral, E, T, F, etc.
+*/
+
+/* === NUEVO PARSER RECURSIVO DESCENDENTE CON getchar() === */
+char c;
+
+// Manejadores de aceptación y rechazo
+void aceptar() {
+    printf("✅ Cadena aceptada\n");
+    exit(0);
+}
+void rechazar() {
+    printf("❌ Error sintáctico en caracter '%c'\n", c);
+    exit(1);
 }
 
-/* === PARSER: DecGlob === */
-int DecGlob() {
-    printf("↪ Analizando <DecGlob>\n");
-    match("g");
-    Decl();
-    printf("🪛 DEBUG: Fin análisis <DecGlob>\n");
-    return 1;
+// Avanza al siguiente caracter
+void avanzar() {
+    c = getchar();
 }
 
-// --- INICIO: Gramática para listaSent y Sent ---
+// Declaración de las funciones para cada no-terminal de tu gramática
 
-int Sent();
 
-/* === PARSER: listaSent === */
-int listaSent() {
-    printf("↪ Analizando <listaSent>\n");
-    if (indice_actual < total_atomos &&
-       (strcmp(atomos[indice_actual], "a") == 0 ||  // <Asig>
-        strcmp(atomos[indice_actual], "h") == 0 ||  // <HazM>
-        strcmp(atomos[indice_actual], "i") == 0 ||  // <Si>
-        strcmp(atomos[indice_actual], "o") == 0 ||  // <Para>
-        strcmp(atomos[indice_actual], "d") == 0 ||  // <Dev>
-        strcmp(atomos[indice_actual], "t") == 0 ||  // Continuar
-        strcmp(atomos[indice_actual], "p") == 0 ||  // Parar
-        strcmp(atomos[indice_actual], "m") == 0)) { // Ver
-        Sent();
-        listaSent();
-    } else {
-        printf("ε (vacío) en <listaSent>\n");
+void DecGlob();
+void Decl();
+void Para();
+void list();
+void Func();
+void otraFunc();
+void Arg();
+void listArg();
+void listaDec();
+void listaSent();
+void Sent();
+void Asig();
+void Si(void);
+void Dev(void);
+void ExprGral();
+void E();
+void T();
+void Expr();
+void Cuerpo();
+void F();
+// <listaSent> → Sent listaSent | ε
+void listaSent() {
+    fprintf(archivo_cs, "listaSent: FIRST = {a, h, i, o, d, t, p, ε}\n");
+    if (indice_actual < total_atomos) {
+        const char *la = atomos[indice_actual];
+       if (strcmp(la, "a") == 0 || strcmp(la, "h") == 0 || strcmp(la, "i") == 0 ||
+    strcmp(la, "o") == 0 || strcmp(la, "d") == 0 || strcmp(la, "t") == 0 ||
+    strcmp(la, "p") == 0 || strcmp(la, "m") == 0) { 
+            Sent();
+            listaSent();
+        }
+        // else: ε (no hacer nada)
     }
-    printf("🪛 DEBUG: Fin análisis <listaSent>\n");
-    return 1;
 }
 
-int Asig();
 
-// Reemplazo: Sent reconoce múltiples tipos de sentencia según la gramática
-int HazM();
-int Si();
-int Para();
-int Dev();
 
-/* === PARSER: Sent === */
-int Sent() {
-    printf("↪ Analizando <Sent>\n");
-    if (strcmp(atomos[indice_actual], "a") == 0) {
-        Asig();
-    } else if (strcmp(atomos[indice_actual], "h") == 0) {
-        HazM();
-    } else if (strcmp(atomos[indice_actual], "i") == 0) {
-        Si();
-    } else if (strcmp(atomos[indice_actual], "o") == 0) {
-        Para();
-    } else if (strcmp(atomos[indice_actual], "d") == 0) {
-        Dev();
-    } else if (strcmp(atomos[indice_actual], "t") == 0 || strcmp(atomos[indice_actual], "p") == 0) {
-        match(atomos[indice_actual]); // Continuar o Parar
-        match(".");
-    } else if (strcmp(atomos[indice_actual], "m") == 0) {
-        // Ver statement
-        match("m");
-        match(".");
-    } else {
-        printf("❌ Error: sentencia no reconocida en <Sent>\n");
-        exit(1);
-    }
-    printf("🪛 DEBUG: Fin análisis <Sent>\n");
-    return 1;
-}
+// <Sent> → <Asig> ; 
+//        | h [ <listaSent> ] w ( <expRel> ) [ <listaSent> ]
+//        | i ( <expRel> ) [ <listaSent> ] <Sino>
+//        | o ( <ExprGral> ) [ <listaSent> ]
+//        | d <valRet> ;
+//        | t ;
+//        | p ;
+//        | m ;
+void Sent() {
+    fprintf(archivo_cs, "Sent: FIRST = {a, h, i, o, d, t, p, m}\n");
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
 
-int ExprGral();
-int E();
-
-/* === PARSER: Asig === */
-int Asig() {
-    printf("↪ Analizando <Asig>\n");
-    match("a"); // Identificador
-    if (strcmp(atomos[indice_actual], "=") == 0) {
-        match("=");       // Asignación simple
-        ExprGral();       // Valor a asignar
-    } else {
-        // Asignación compuesta
-        // Puede ser #, ñ, $ ... (10 posibles símbolos)
-        if (strcmp(atomos[indice_actual], "#") == 0 || strcmp(atomos[indice_actual], "ñ") == 0 ||
-            strcmp(atomos[indice_actual], "$") == 0 || strcmp(atomos[indice_actual], "v") == 0 ||
-            strcmp(atomos[indice_actual], "?") == 0 || strcmp(atomos[indice_actual], ":") == 0 ||
-            strcmp(atomos[indice_actual], "\"") == 0 || strcmp(atomos[indice_actual], "^") == 0 ||
-            strcmp(atomos[indice_actual], "&") == 0) {
-            match(atomos[indice_actual]); // operador compuesto
-            E(); // expresión aritmética
+        if (strcmp(la, "a") == 0) {
+            Asig();
+            match(";");
+        } else if (strcmp(la, "h") == 0) {
+            // h [ <listaSent> ] w ( <expRel> ) [ <listaSent> ]
+            match("h");
+            match("[");
+            listaSent();
+            match("]");
+            match("w");
+            match("(");
+            expRel();
+            match(")");
+            match("[");
+            listaSent();
+            match("]");
+        } else if (strcmp(la, "i") == 0) {
+            // i ( <expRel> ) [ <listaSent> ] <Sino>
+            Si();
+        } else if (strcmp(la, "o") == 0) {
+            // o ( <ExprGral> ) [ <listaSent> ]
+            Para();
+        } else if (strcmp(la, "d") == 0) {
+            // d <valRet> ;
+            Dev();
+        } else if (strcmp(la, "t") == 0) {
+            match("t");
+            match(";");
+        } else if (strcmp(la, "p") == 0) {
+            match("p");
+            match(";");
+        } else if (strcmp(la, "m") == 0) {
+            match("m");
+            match(";");
         } else {
-            printf("❌ Error: operador de asignación inválido\n");
-            exit(1);
+            errorSintactico("Sent");
+            indice_actual++; // skip erroneous token to avoid infinite loop
         }
     }
-    match("."); // Fin de la sentencia
-    printf("🪛 DEBUG: Fin análisis <Asig>\n");
-    return 1;
 }
 
-// --- FIN: Gramática para listaSent y Sent ---
-
-/* === PARSER: Func === */
-int Func() {
-    printf("↪ Analizando <Func>\n");
-    if (indice_actual >= total_atomos) {
-        printf("❌ Error: no hay más átomos para analizar <Func>\n");
-        exit(1);
-    }
-
-    // Tipo de retorno
-    Tipo();
-
-    // Identificador del nombre de la función
-    match("a");
-
-    // Paréntesis de parámetros
-    match("(");
-    Arg();      // Parse <Arg> and <listArg>
-    match(")");
-
-    // Inicio del bloque de instrucciones
-    match("[");
-    
-    // Declaraciones locales antes de sentencias
-    listaDec();
-
-    // Lista de sentencias dentro de la función
-    listaSent();
-
-    // Fin del bloque
-    match("]");
-
-    printf("🪛 DEBUG: Fin análisis <Func>\n");
-    return 1;
-}
-
-/* === PARSER: otraFunc === */
-int otraFunc() {
-    printf("↪ Analizando <otraFunc>\n");
-    if (indice_actual < total_atomos &&
-        (strcmp(atomos[indice_actual], "b") == 0 ||
-         strcmp(atomos[indice_actual], "c") == 0 ||
-         strcmp(atomos[indice_actual], "n") == 0 ||
-         strcmp(atomos[indice_actual], "f") == 0)) {
-        Func();
-        otraFunc();
-    } else {
-        printf("ε (vacío) en <otraFunc>\n");
-    }
-    printf("🪛 DEBUG: Fin análisis <otraFunc>\n");
-    return 1;
-}
-
-/* === PARSER: Program === */
-void Program() {
-    printf("↪ Analizando <Program>\n");
-    ListDecGlob();
-    Func();
-    otraFunc();
-    printf("🪛 DEBUG: Fin análisis <Program>\n");
-}
-
-// --- Fin sintáctico ---
-
-int yywrap() {
-    return 1;
-}
-
-/* === PARSER: EXPRESIONES ARITMÉTICAS (E, T, F) === */
-
-int E();
-int T();
-int F();
-int Eprima();
-int Tprima();
-
-int ExprGral() {
-    printf("↪ Analizando <ExprGral>\n");
-    if (strcmp(atomos[indice_actual], "s") == 0 ||
-        strcmp(atomos[indice_actual], "q") == 0 ||
-        strcmp(atomos[indice_actual], "m") == 0 ||
-        strcmp(atomos[indice_actual], "u") == 0) {
-        match(atomos[indice_actual]);
-    } else {
-        E(); // expresión aritmética
-    }
-    printf("🪛 DEBUG: Fin análisis <ExprGral>\n");
-    return 1;
-}
-
-int E() {
-    printf("↪ Analizando E → T E'\n");
-    T();
-    Eprima();
-    printf("🪛 DEBUG: Fin análisis <E>\n");
-    return 1;
-}
-
-int Eprima() {
-    printf("↪ Analizando E'\n");
-    if (strcmp(atomos[indice_actual], "+") == 0) {
-        match("+");
-        T();
-        Eprima();
-    } else if (strcmp(atomos[indice_actual], "-") == 0) {
-        match("-");
-        T();
-        Eprima();
-    } else {
-        printf("ε (vacío) en E'\n");
-    }
-    printf("🪛 DEBUG: Fin análisis <E'>\n");
-    return 1;
-}
-
-int T() {
-    printf("↪ Analizando T → F T'\n");
-    F();
-    Tprima();
-    printf("🪛 DEBUG: Fin análisis <T>\n");
-    return 1;
-}
-
-int Tprima() {
-    printf("↪ Analizando T'\n");
-    if (strcmp(atomos[indice_actual], "*") == 0) {
-        match("*");
-        F();
-        Tprima();
-    } else if (strcmp(atomos[indice_actual], "/") == 0) {
-        match("/");
-        F();
-        Tprima();
-    } else if (strcmp(atomos[indice_actual], "%") == 0) {
-        match("%");
-        F();
-        Tprima();
-    } else if (strcmp(atomos[indice_actual], "~") == 0) {
-        match("~");
-        F();
-        Tprima();
-    } else if (strcmp(atomos[indice_actual], "k") == 0) {
-        match("k");
-        F();
-        Tprima();
-    } else {
-        printf("ε (vacío) en T'\n");
-    }
-    printf("🪛 DEBUG: Fin análisis <T'>\n");
-    return 1;
-}
-
-// Forward declarations for new parser functions for <LlamaFunc>, <listP>, <Param>
-int LlamaFunc();
-int listP();
-int Param();
-
-int F() {
-    printf("↪ Analizando F\n");
-    if (strcmp(atomos[indice_actual], "(") == 0) {
-        match("(");
-        E();
-        match(")");
-    } else if (strcmp(atomos[indice_actual], "a") == 0) {
+// <Asig> → a <opAsig> <ExprGral>
+void Asig() {
+    fprintf(archivo_cs, "Asig: FIRST = {a}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "a") == 0) {
         match("a");
-    } else if (strcmp(atomos[indice_actual], "n") == 0) {
-        match("n");
-    } else if (strcmp(atomos[indice_actual], "r") == 0) {
-        match("r");
-    } else if (strcmp(atomos[indice_actual], "e") == 0) {
-        match("e");
-    } else if (strcmp(atomos[indice_actual], "{") == 0) {
-        LlamaFunc();
-    } else {
-        printf("❌ Error: no se reconoce F\n");
-        exit(1);
-    }
-    printf("🪛 DEBUG: Fin análisis <F>\n");
-    return 1;
-}
-
-// --- FIN: Gramática para ExprGral y expresiones aritméticas ---
-
-/* === PARSER: LlamaFunc, listP, Param === */
-
-int LlamaFunc() {
-    printf("↪ Analizando <LlamaFunc>\n");
-    match("{");        // '{'  (lexema '#')
-    match("a");        // identificador de la función
-    match("(");        // '(' (lexema '<')
-    listP();           // lista de parámetros
-    match(")");        // ')' (lexema '>')
-    match("}");        // '}' (lexema '#!')
-    printf("🪛 DEBUG: Fin análisis <LlamaFunc>\n");
-    return 1;
-}
-
-int listP() {
-    printf("↪ Analizando <listP>\n");
-    // <listP> → ExprGral <Param> | ε
-    if (indice_actual < total_atomos &&
-       (strcmp(atomos[indice_actual], "s") == 0 ||
-        strcmp(atomos[indice_actual], "q") == 0 ||
-        strcmp(atomos[indice_actual], "m") == 0 ||
-        strcmp(atomos[indice_actual], "u") == 0 ||
-        strcmp(atomos[indice_actual], "(") == 0 ||
-        strcmp(atomos[indice_actual], "a") == 0 ||
-        strcmp(atomos[indice_actual], "n") == 0 ||
-        strcmp(atomos[indice_actual], "r") == 0)) {
+        opAsig();
         ExprGral();
-        Param();
     } else {
-        printf("ε (vacío) en <listP>\n");
+        errorSintactico("a");
+        indice_actual++;
     }
-    printf("🪛 DEBUG: Fin análisis <listP>\n");
-    return 1;
 }
 
-int Param() {
-    printf("↪ Analizando <Param>\n");
-    // <Param> → , ExprGral <Param> | ε
+
+
+
+
+// <opAsig> → = | # | ñ | $ | v | ? | : | " | ^ | &
+void opAsig() {
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (strcmp(la, "=") == 0) {
+            OpAsigSimple();
+        } else if (
+            strcmp(la, "#") == 0 || strcmp(la, "ñ") == 0 || strcmp(la, "$") == 0 ||
+            strcmp(la, "v") == 0 || strcmp(la, "?") == 0 || strcmp(la, ":") == 0 ||
+            strcmp(la, "\"") == 0 || strcmp(la, "^") == 0 || strcmp(la, "&") == 0
+        ) {
+            OpAsigComp();
+        } else {
+            errorSintactico("opAsig");
+            indice_actual++;
+        }
+    }
+}
+
+// <ExprGral> → E
+void ExprGral() {
+    fprintf(archivo_cs, "ExprGral: FIRST = {s, q, m, u, '('}\n");
+    // FIRST(ExprGral) = { "a", "e", "r", "s", "(" }
+    char *la = atomos[indice_actual];
+    if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+        strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+        strcmp(la, "(") == 0) {
+        E();
+    } else {
+        errorSintactico("ExprGral");
+        indice_actual++;
+    }
+}
+// <T> → F Tp
+void T() {
+    // FIRST(T) = { "a", "e", "r", "s", "(" }
+    char *la = atomos[indice_actual];
+    if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+        strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+        strcmp(la, "(") == 0) {
+        F();
+        Tp();
+    } else {
+        errorSintactico("T");
+        indice_actual++;
+    }
+}
+
+// <Tp> → * F Tp | / F Tp | % F Tp | ~ F Tp | k F Tp | ε
+void Tp() {
+    if (indice_actual < total_atomos &&
+        (strcmp(atomos[indice_actual], "*") == 0 ||
+         strcmp(atomos[indice_actual], "/") == 0 ||
+         strcmp(atomos[indice_actual], "%") == 0 ||
+         strcmp(atomos[indice_actual], "~") == 0 || // dive
+         strcmp(atomos[indice_actual], "k") == 0)) { // exp
+        match(atomos[indice_actual]);
+        F();
+        Tp();
+    }
+}
+
+
+
+
+
+// <E> → T Ep
+void E() {
+    fprintf(archivo_cs, "E: FIRST = {s, q, m, u, '('}\n");
+    // FIRST(E) = { "a", "e", "r", "s", "(" }
+    char *la = atomos[indice_actual];
+    if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+        strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+        strcmp(la, "(") == 0) {
+        T();
+        Ep();
+    } else {
+        errorSintactico("E");
+        indice_actual++;
+    }
+}
+
+// <F> → F' a | ( E ) | { LlamaFunc } | m
+void F() {
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+            strcmp(la, "r") == 0 || strcmp(la, "s") == 0) {
+            match(la);
+            Fp(); // posible j o z
+        } else if (strcmp(la, "(") == 0) {
+            match("(");
+            E();
+            match(")");
+        } else if (strcmp(la, "{") == 0) {
+            LlamaFunc(); // llamada a función
+        } else if (strcmp(la, "m") == 0) {
+            match("m");
+        } else {
+            errorSintactico("F (a|e|r|s|m|(E)|{a(...)} )");
+            indice_actual++;
+        }
+    }
+}
+
+
+
+// <opRel> → h | m | ¡ | ! | x | y
+void opRel() {
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (
+            strcmp(la, "h") == 0 || strcmp(la, "m") == 0 ||
+            strcmp(la, "¡") == 0 || strcmp(la, "!") == 0 ||
+            strcmp(la, "x") == 0 || strcmp(la, "y") == 0
+        ) {
+            match(la);
+        } else {
+            errorSintactico("opRel");
+            indice_actual++;
+        }
+    }
+}
+
+// <G> → ( <E> ) | a | e | r | s | z | j | ε
+void G() {
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (strcmp(la, "(") == 0) {
+            match("(");
+            E();
+            match(")");
+        } else if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+                   strcmp(la, "r") == 0 || strcmp(la, "s") == 0) {
+            match(la);
+        } else if (strcmp(la, "z") == 0 || strcmp(la, "j") == 0) {
+            match(la); // z o j
+        }
+        // else ε (no hacer nada)
+    }
+}
+
+// <F’> → j | z | ε
+void Fp() {
+    if (indice_actual < total_atomos) {
+        if (strcmp(atomos[indice_actual], "j") == 0 || strcmp(atomos[indice_actual], "z") == 0) {
+            match(atomos[indice_actual]); // j o z
+        }
+        // Si no es j o z, entonces es ε (no hacer nada)
+    }
+}
+
+// <expRel> → ExprGral opRel ExprGral
+void expRel() {
+    // FIRST(expRel) = FIRST(ExprGral) = { a, e, r, s, ( }
+    const char *la = atomos[indice_actual];
+    if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+        strcmp(la, "r") == 0 || strcmp(la, "s") == 0 || strcmp(la, "(") == 0) {
+        ExprGral();
+        opRel();
+        ExprGral();
+    } else {
+        errorSintactico("expRel");
+        indice_actual++;
+    }
+}
+
+// <OpAsigComp> → # | ñ | $ | v | ? | : | " | ^ | &
+void OpAsigComp() {
+    if (indice_actual < total_atomos) {
+        char *la = atomos[indice_actual];
+        if (
+            strcmp(la, "#") == 0 || strcmp(la, "ñ") == 0 ||
+            strcmp(la, "$") == 0 || strcmp(la, "v") == 0 ||
+            strcmp(la, "?") == 0 || strcmp(la, ":") == 0 ||
+            strcmp(la, "\"") == 0 || strcmp(la, "^") == 0 ||
+            strcmp(la, "&") == 0
+        ) {
+            match(la);
+        } else {
+            errorSintactico("OpAsigComp");
+        }
+    }
+}
+
+// <OpAsigSimple> → =
+void OpAsigSimple() {
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "=") == 0) {
+        match("=");
+    } else {
+        errorSintactico("OpAsigSimple");
+    }
+}
+
+
+
+// <Param> → , ExprGral Param | ε
+void Param() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
         ExprGral();
         Param();
-    } else {
-        printf("ε (vacío) en <Param>\n");
     }
-    printf("🪛 DEBUG: Fin análisis <Param>\n");
-    return 1;
-}
-// --- FIN: Gramática para <LlamaFunc>, <listP>, <Param> ---
-/* === PARSER: STRUCTURAS DE CONTROL (HazM, expRel, opRel, Si, Sino, Para, Dev, valRet) === */
-
-int expRel();
-int opRel();
-
-int HazM() {
-    printf("↪ Analizando <HazM>\n");
-    match("h");          // 'Haz'
-    match("[");
-    listaSent();         // lista de sentencias
-    match("]");
-    match("w");          // 'Mientras'
-    match("(");
-    expRel();            // condición relacional
-    match(")");
-    printf("🪛 DEBUG: Fin análisis <HazM>\n");
-    return 1;
 }
 
-int expRel() {
-    printf("↪ Analizando <expRel>\n");
-    E();
-    opRel();
-    E();
-    printf("🪛 DEBUG: Fin análisis <expRel>\n");
+
+// <listP> → ExprGral Param | ε
+void listP() {
+    if (indice_actual < total_atomos) {
+        const char *la = atomos[indice_actual];
+        // first(ExprGral) = {"s","q","m","u","(","a","n","r"}
+        if (strcmp(la, "s") == 0 || strcmp(la, "q") == 0 ||
+            strcmp(la, "m") == 0 || strcmp(la, "u") == 0 ||
+            strcmp(la, "(") == 0 || strcmp(la, "a") == 0 ||
+            strcmp(la, "n") == 0 || strcmp(la, "r") == 0) {
+            ExprGral();
+            Param();
+        }
+    }
+}
+
+
+
+// <Args> → <ExprGral> Param | ε
+void Args() {
+    if (indice_actual < total_atomos) {
+        const char *la = atomos[indice_actual];
+        // FIRST(ExprGral) = { a, e, r, s, ( }
+        if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+            strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+            strcmp(la, "(") == 0) {
+            ExprGral();
+            Param();
+        }
+        // else: ε
+    }
+}
+
+
+
+
+// Definition for yywrap to allow Flex lexer to link
+int yywrap(void) {
     return 1;
 }
 
-int opRel() {
-    printf("↪ Analizando <opRel>\n");
-    if (strcmp(atomos[indice_actual], ">") == 0 ||
-        strcmp(atomos[indice_actual], "<") == 0 ||
-        strcmp(atomos[indice_actual], "¡") == 0 ||
-        strcmp(atomos[indice_actual], "!") == 0 ||
-        strcmp(atomos[indice_actual], "x") == 0 ||
-        strcmp(atomos[indice_actual], "y") == 0) {
+// <Ep> → + T Ep | - T Ep | ε
+void Ep() {
+    fprintf(archivo_cs, "Ep: FIRST = {'+', '-', ε}\n");
+    fprintf(archivo_cs, "T: FIRST = {s, q, m, u, '('}\n");
+    fprintf(archivo_cs, "F: FIRST = {s, q, m, u, '(', '{'}\n");
+    fprintf(archivo_cs, "Fp: FIRST = {'j', 'z', ε}\n");
+    fprintf(archivo_cs, "G: FIRST = {s, q, m, u, '(', ε}\n");
+    fprintf(archivo_cs, "expRel: FIRST = {s, q, m, u, '(', ε}\n");
+    fprintf(archivo_cs, "opRel: FIRST = {h, m, ¡, !, x, y}\n");
+    fprintf(archivo_cs, "OpAsigComp: FIRST = {#, ñ, $, v, ?, :, \", ^, &}\n");
+    fprintf(archivo_cs, "OpAsigSimple: FIRST = {=}\n");
+    fprintf(archivo_cs, "Param: FIRST = {',', ε}\n");
+    fprintf(archivo_cs, "listP: FIRST = {s, q, m, u, '(', ε}\n");
+    if (indice_actual < total_atomos &&
+        (strcmp(atomos[indice_actual], "+") == 0 ||
+         strcmp(atomos[indice_actual], "-") == 0)) {
         match(atomos[indice_actual]);
-    } else {
-        printf("❌ Error: operador relacional inválido\n");
-        exit(1);
+        T();
+        Ep();
     }
-    printf("🪛 DEBUG: Fin análisis <opRel>\n");
-    return 1;
 }
-
-int Sino();
-
-int Si() {
-    printf("↪ Analizando <Si>\n");
-    match("i");        // 'Si'
-    match("(");
-    expRel();          // <expRel>
-    match(")");
-    match("[");
-    listaSent();       // <listaSent>
-    match("]");
-    Sino();            // <Sino>
-    printf("🪛 DEBUG: Fin análisis <Si>\n");
-    return 1;
-}
-
-int Sino() {
-    printf("↪ Analizando <Sino>\n");
-    if (strcmp(atomos[indice_actual], "l") == 0) {
-        match("l");    // 'Sino'
+// <Cuerpo> → [ listaSent ]
+void Cuerpo() {
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "[") == 0) {
         match("[");
         listaSent();
         match("]");
     } else {
-        printf("ε (vacío) en <Sino>\n");
+        errorSintactico("Cuerpo (esperado: [)");
+        indice_actual++;
     }
-    printf("🪛 DEBUG: Fin análisis <Sino>\n");
-    return 1;
 }
-int valRet();
-
-int Para() {
-    printf("↪ Analizando <Para>\n");
-    match("o");        // 'Para'
-    match("(");
-    E();               // expresión aritmética
-    match(")");
-    match("[");
-    listaSent();       // cuerpo del bucle
-    match("]");
-    printf("🪛 DEBUG: Fin análisis <Para>\n");
-    return 1;
-}
-
-int Dev() {
-    printf("↪ Analizando <Dev>\n");
-    match("d");        // 'Devo'
-    match("(");
-    valRet();          // valor de retorno o vacío
-    match(")");
-    match(".");
-    printf("🪛 DEBUG: Fin análisis <Dev>\n");
-    return 1;
+// <Expr> → E
+void Expr() {
+    if (indice_actual < total_atomos) {
+        const char *la = atomos[indice_actual];
+        // FIRST(E) = { a, e, r, s, ( }
+        if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+            strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+            strcmp(la, "(") == 0) {
+            E();
+        } else {
+            errorSintactico("Expr (esperado: a, e, r, s, ()");
+            indice_actual++;
+        }
+    }
 }
 
-int valRet() {
-    printf("↪ Analizando <valRet>\n");
-    if (strcmp(atomos[indice_actual], "s") == 0 ||
-        strcmp(atomos[indice_actual], "q") == 0 ||
-        strcmp(atomos[indice_actual], "m") == 0 ||
-        strcmp(atomos[indice_actual], "u") == 0 ||
-        strcmp(atomos[indice_actual], "(") == 0 ||
-        strcmp(atomos[indice_actual], "a") == 0 ||
-        strcmp(atomos[indice_actual], "n") == 0 ||
-        strcmp(atomos[indice_actual], "r") == 0) {
-        ExprGral();    // valor de retorno
+
+
+
+
+
+// <Sino> → l [ listaSent ] | ε
+void Sino() {
+    fprintf(archivo_cs, "Sino: FIRST = {l, ε}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "l") == 0) {
+        match("l");
+        match("[");
+        listaSent();
+        match("]");
+    }
+}
+// <Dev> → d <valRet> ;
+void Dev() {
+    fprintf(archivo_cs, "Dev: FIRST = {d}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "d") == 0) {
+        match("d");
+        valRet();
+        match(";");
     } else {
-        printf("ε (vacío) en <valRet>\n");
+        errorSintactico("Dev (esperado: d)");
+        indice_actual++;
     }
-    printf("🪛 DEBUG: Fin análisis <valRet>\n");
-    return 1;
 }
+
+// <valRet> → ExprGral
+void valRet() {
+    fprintf(archivo_cs, "valRet: FIRST = {s, q, m, u, '(', ε}\n");
+    const char *la = atomos[indice_actual];
+    if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
+        strcmp(la, "r") == 0 || strcmp(la, "s") == 0 ||
+        strcmp(la, "(") == 0) {
+        ExprGral();
+    } else {
+        errorSintactico("valRet (esperado: a, e, r, s, ()");
+        indice_actual++;
+    }
+}
+// <Si> → i ( expRel ) [ listaSent ] Sino
+void Si() {
+    fprintf(archivo_cs, "Si: FIRST = {i}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "i") == 0) {
+        match("i");
+        match("(");
+        expRel();
+        match(")");
+        match("[");
+        listaSent();
+        match("]");
+        Sino();
+    } else {
+        errorSintactico("Si (esperado: i)");
+        indice_actual++;
+    }
+}
+
+// <Para> → o ( E ) [ listaSent ]
+void Para() {
+    fprintf(archivo_cs, "Para: FIRST = {o}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "o") == 0) {
+        match("o");
+        match("(");
+        E(); // o(E)
+        match(")");
+        match("[");
+            listaSent();
+        match("]");
+    } else {
+        errorSintactico("Para (esperado: o)");
+        indice_actual++;
+    }
+}
+
+// <LlamaFunc> → { a ( listP ) }
+void LlamaFunc() {
+    fprintf(archivo_cs, "LlamaFunc: FIRST = {'{'}\n");
+    match("{");
+    match("a");
+    match("(");
+    listP();
+    match(")");
+    match("}");
+}
+
+
+// <HazM> → h [ listaSent ]
+void HazM() {
+    fprintf(archivo_cs, "HazM: FIRST = {h}\n");
+    if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "h") == 0) {
+        match("h");
+        match("[");
+        listaSent();
+        match("]");
+    } else {
+        errorSintactico("HazM (esperado: h)");
+        indice_actual++;
+    }
+}
+
+
