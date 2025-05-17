@@ -13,6 +13,13 @@ The analyzer produces three output files in Markdown format for easy viewing:
 - **simbolos.txt**: Lists identifiers (symbols) detected, their positions, and assigned types (default type is -1).
 - **literales.txt**: Contains literals found (strings and numeric literals), along with their positions.
 
+Additionally, the following files are generated:
+
+- **enteros.txt**: Integer literals table
+- **reales.txt**: Real literals table
+- **cadenas.txt**: String literals table
+- **errores.txt**: Syntax errors table
+
 ## 📋 Usage
 
 1. **Compile** the lexical analyzer:
@@ -22,17 +29,21 @@ flex scanner.l
 cc lex.yy.c -o scanner
 ```
 
-2. Run the generated executable:
+2. Run the generated executable named `scanner`:
 
 ```bash
-./a.out < input.txt
+./scanner input.txt
 ```
 
-3. After running, you will find three Markdown files generated:
+3. After running, you will find the following Markdown files generated:
 
 - `tokens.txt`
 - `simbolos.txt`
 - `literales.txt`
+- `enteros.txt`
+- `reales.txt`
+- `cadenas.txt`
+- `errores.txt`
 
 ## ✅ Supported Tokens
 
@@ -50,6 +61,10 @@ The analyzer recognizes the following token classes:
 | 7     | Integer literals      |
 | 8     | Real literals         |
 | 9     | Lexical errors        |
+| 10    | Integer values table     |
+| 11    | Real values table        |
+| 12    | String values table      |
+| 13    | Syntax errors            |
 
 ## ⚙️ How to Compile
 
@@ -64,7 +79,7 @@ gcc lex.yy.c -o scanner
 
 - `scanner.l`: Main Flex file containing the lexical rules and token definitions.
 - `input.txt`: Example input file.
-- Output Markdown files (`tokens.txt`, `simbolos.txt`, `literales.txt`) after execution.
+- Output Markdown files (`tokens.txt`, `simbolos.txt`, `literales.txt`, `enteros.txt`, `reales.txt`, `cadenas.txt`, `errores.txt`) after execution.
 
 ## 🔗 Requirements
 

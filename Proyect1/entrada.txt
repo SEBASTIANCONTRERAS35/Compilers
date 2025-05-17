@@ -1,37 +1,10 @@
-Global Bool  @x_   | @Uno_   | @Dos_   *
-Global Cade  @y_   | @s_     *
-Global Ent   @z_   | @e_     | @a_     *
-Global Flota @f_   | @r_     *
+Global Cade @s_ * 
+Global Ent @e_ *
+Global Flota @r_ *
+
 
 Ent @main_ < > <<  
-    Continuar *
-    Parar *
-    Si < @x_ h 4 > << Parar * >>
-    Sino << Ver * >>
-    Mientras < @z_ m 10 > << Ver * >>
-    Haz << Ver * >> Mientras < @z_ m 10 >
-    Para < 3 sum 2 > << Ver * >>
-    Devo < @x_ >  
-
-    @s_ -> --Hola mundo-- *
-    @e_ -> +23p *
-    @r_ -> 12’5 *
-
-    Devo < @a_ >  
-
-    Ent < 5 | --hola-- > #  
-
-    @Uno_ -> Fals *
-    @a_   -> 3 sum 4 mult 2 inc *
-
-    Si < @a_ h 5 > << Ver * >>
-    Si < @a_ e 3 > << Ver * >>
-
-    @x_ +-> 4 *
-    @x_ --> 7 *
-
-    @s_ -> --Hola mundo-- *
-    @e_ -> +23p *
-    @r_ -> 12’5 *
-    #!
->>
+@s_ -> --Hola mundo-- *
+@e_ -> +23p *
+@r_ -> 12’5 *
+>> 

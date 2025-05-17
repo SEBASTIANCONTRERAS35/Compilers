@@ -6,7 +6,6 @@ Asigna un símbolo terminal (átomo) a cada tipo de token.
 Útil para alimentar el análisis sintáctico posteriormente.
 */
 
-
 /*
  * scanner.l – Analizador Léxico y Sintáctico Descendente Recursivo
  * 
@@ -39,25 +38,27 @@ El presente programa es un Analizador Léxico desarrollado utilizando la herrami
 El analizador reconoce diferentes categorías de tokens como palabras reservadas, identificadores, símbolos especiales, operadores aritméticos, relacionales y de asignación, así como constantes numéricas (enteras y reales) y cadenas literales. Además, ignora comentarios y maneja errores léxicos, mostrando información útil sobre estos últimos en la salida estándar.
 
 El programa estructura la información obtenida en tres tablas:
-•	Tabla de Tokens: Contiene los tokens reconocidos con su clasificación y posición respectiva.
-•	Tabla de Símbolos: Almacena los identificadores encontrados en el código.
-•	Tabla de Literales: Guarda cadenas y constantes numéricas detectadas.
+• Tabla de Tokens: Contiene los tokens reconocidos con su clasificación y posición respectiva.
+• Tabla de Símbolos: Almacena los identificadores encontrados en el código.
+• Tabla de Literales: Guarda cadenas y constantes numéricas detectadas.
 
 Cada una de estas tablas se exporta en archivos separados (tokens.txt, simbolos.txt y literales.txt) para facilitar posteriores etapas de análisis sintáctico y semántico.
 
 ⸻
 
 Autores del Programa:
-•	Yaretzi Calzontzi Hernández
-•	Emilio Sebastián Contreras Colmenero
+• Yaretzi Calzontzi Hernández
+• Emilio Sebastián Contreras Colmenero
 
-Fecha de elaboracion: 15/03/25
+Fecha de elaboración:
+• Parte Léxica: 12/03/25
+• Parte Sintáctica: 16/05/25
 -----------------------------------------------------------------------
 INSTRUCCIONES DE CABECERA
 -----------------------------------------------------------------------
 Este bloque se utiliza para incluir bibliotecas de C y declaraciones 
 globales. También definimos estructuras para la tabla de símbolos, 
-tabla de literales y la tabla de tokens. 
+tabla de literales y la tabla de tokens.
 */
 
 #include <stdio.h>
@@ -504,15 +505,22 @@ fprintf(fp, "=======================\n");
 
 
 
+
 [ \t\n]+  {  }
 
-
-
-"Bool"|"Cade"|"Continuar"|"Devo"|"Ent"|"Fals"|"Flota"|"Global"|"Haz"|"Mientras"|"Nulo"|"Para"|"Parar"|"Si"|"Sino"|"Ver" {
-    int pos = buscar_posicion(yytext, palabras_reservadas, total_palabras_reservadas);
-    agregar_token(yytext, 0, pos);
-    printf("[CLASE 0 - Pal.Res]: %s (pos: %d)\n", yytext, pos);
+("Bool"|"Cade"|"Continuar"|"Devo"|"Ent"|"Fals"|"Flota"|"Global"|"Haz"|"Mientras"|"Nulo"|"Para"|"Parar"|"Si"|"Sino"|"Ver")([^A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9_]) {
+    char palabra[100];
+    strncpy(palabra, yytext, yyleng-1);
+    palabra[yyleng-1] = '\0';
+    int pos = buscar_posicion(palabra, palabras_reservadas, total_palabras_reservadas);
+    agregar_token(palabra, 0, pos);
+    printf("[CLASE 0 - Pal.Res]: %s (pos: %d)\n", palabra, pos);
+    unput(yytext[yyleng-1]);
 }
+
+
+
+
 
 
 
@@ -526,6 +534,12 @@ fprintf(fp, "=======================\n");
 "<<->"  { agregar_token(yytext, 5, 7); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
 "^->"   { agregar_token(yytext, 5, 8); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
 "&->"   { agregar_token(yytext, 5, 9); printf("[CLASE 5 - Op.Asig]: %s\n", yytext); }
+
+
+@([A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_ {
+    agregar_token(yytext, 2, -1);
+    printf("[CLASE 2 - Identif]: %s\n", yytext);
+}
 
 "<<" {
     agregar_token(yytext, 1, -1);
@@ -564,10 +578,6 @@ fprintf(fp, "=======================\n");
     printf("[CLASE 1 - Símb.Esp]: °\n");
 }
 
-@([A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9]*)_/[^A-Za-zÑñÁÉÍÓÚÜáéíóúü0-9@] {
-agregar_token(yytext, 2, -1);
-printf("[CLASE 2 - Identif]: %s\n", yytext);
-}
 
 "sum"|"rest"|"mult"|"div"|"mod"|"inc"|"dec"|"exp"|"dive" {
 agregar_token(yytext, 3, -1);
@@ -609,7 +619,8 @@ printf("[CLASE 7 - Entera]: %s\n", yytext);
 printf("[Comentario] %s\n", yytext);
 }
 
-[^ \t\n]+ {
+
+. {
     fprintf(archivo_errores, "[ Error Léxico] '%s' en línea %d\n", yytext, yylineno);
     printf("[ Error Lexico]: %s\n", yytext);
 }
@@ -693,11 +704,11 @@ int main(int argc, char *argv[]) {
     }
 
     printf("Analizador Léxico iniciado...\n");
-    printf("🪛 DEBUG: Iniciando análisis léxico...\n");
-    printf("🪛 DEBUG: Ejecutando yylex()...\n");
+    printf(" DEBUG: Iniciando análisis léxico...\n");
+    printf(" DEBUG: Ejecutando yylex()...\n");
     fclose(fopen("atomos.txt", "w"));  // Limpia atomos.txt
     yylex();
-    printf("🪛 DEBUG: Finalizó yylex(). Tokens generados: %d\n", token_count);
+    printf(" DEBUG: Finalizó yylex(). Tokens generados: %d\n", token_count);
 
     imprimir_tabla_tokens(archivo_tokens);
     imprimir_tabla_simbolos(archivo_simbolos);
@@ -717,15 +728,15 @@ int main(int argc, char *argv[]) {
     // Ahora, cargar los átomos y ejecutar el "parser" embebido:
     printf("Tablas escritas en archivos tokens.txt, simbolos.txt, literales.txt, cadenas.txt, enteros.txt y reales.txt\n");
     printf("Errores (léxicos y sintácticos) en 'errores.txt'\n");
-    printf("🪛 DEBUG: Cargando átomos desde atomos.txt...\n");
+    printf(" DEBUG: Cargando átomos desde atomos.txt...\n");
     cargar_atomos("atomos.txt");
-    printf("🪛 DEBUG: Iniciando análisis sintáctico con Program()\n");
+    printf("DEBUG: Iniciando análisis sintáctico con Program()\n");
     Program();
-    printf("🪛 DEBUG: Terminó Program(). Atomos consumidos: %d de %d\n", indice_actual, total_atomos);
+    printf("DEBUG: Terminó Program(). Atomos consumidos: %d de %d\n", indice_actual, total_atomos);
     if (indice_actual == total_atomos) {
-        printf("✅ Análisis sintáctico exitoso. Todos los átomos fueron consumidos.\n");
+        printf(" Análisis sintáctico exitoso. Todos los átomos fueron consumidos.\n");
     } else {
-        printf("❌ Error: quedaron átomos sin procesar desde '%s'\n", atomos[indice_actual]);
+        printf(" Error: quedaron átomos sin procesar desde '%s'\n", atomos[indice_actual]);
     }
 
     fclose(archivo_errores);
@@ -735,6 +746,7 @@ int main(int argc, char *argv[]) {
 
 // --- SINTÁCTICO: Variables y funciones para analizar los átomos generados ---
 // (Colocados después de las reglas de Flex, en ámbito global)
+
 
 char* atomos[MAX_TOKENS];
 int total_atomos = 0;
@@ -750,69 +762,49 @@ void cargar_atomos(const char* archivo) {
     fclose(f);
 }
 
+/*
+-----------------------------------------------------------------------
+match:
+Función clave en el parser descendente recursivo.
+
+Recibe un átomo esperado y lo compara con el átomo actual en la entrada
+(usando el índice `indice_actual` sobre el arreglo global `atomos[]`).
+  
+- Si coincide: avanza al siguiente átomo (incrementa `indice_actual`) y retorna 1.
+- Si no coincide: reporta un error sintáctico indicando qué se esperaba
+  y qué se encontró, luego también avanza para evitar bucles infinitos.
+  
+Esta función es usada por todas las reglas del parser para confirmar
+si el átomo actual es el que dicta la gramática.
+-----------------------------------------------------------------------
+*/
 int match(const char* esperado) {
-    printf("🪛 DEBUG: match(): esperando '%s', actual='%s' (índice %d)\n", esperado, atomos[indice_actual], indice_actual);
+    printf(" DEBUG: match(): esperando '%s', actual='%s' (índice %d)\n", esperado, atomos[indice_actual], indice_actual);
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], esperado) == 0) {
-        printf("✔️ Match: %s\n", esperado);
+        printf(" Match: %s\n", esperado);
         indice_actual++;
         return 1;
     } else {
         errorSintactico(esperado);
-        printf("⚠️ Error sintáctico: se esperaba '%s' pero se encontró '%s'\n",
+        printf(" Error sintáctico: se esperaba '%s' pero se encontró '%s'\n",
                esperado,
                (indice_actual < total_atomos ? atomos[indice_actual] : "EOF"));
+        // Avanza al siguiente átomo incluso si hay error, para evitar ciclos infinitos.
         indice_actual++;
         return 0;
     }
 }
 
 
-
-// --- INICIO: Gramática para <Arg>, <listArg> y <listaDec> ---
-
-
-
-
-// --- FIN: Gramática para <Arg>, <listArg> y <listaDec> ---
-
-
-
-
-
-
-
-/* === PARSER: Decl === */
-
-
-
-
-// --- INICIO: Gramática para listaSent y Sent ---
-
-
-
-
-
-
-
-
-
-
-
-
-/* === PARSER: Program === */
-
-// --- Fin sintáctico ---
-
-
-
-// === STUBS DEL PARSER LL(1) ===
-// Aquí se colocan las funciones para cada no-terminal de la gramática.
-// Ejemplo de stubs previos:
-// void Func() { ... }
-// void otraFunc() { ... }
-// void Arg() { ... }
-// void listArg() { ... }
-
+/*
+-----------------------------------------------------------------------
+listaDec:
+Esta función analiza una lista de declaraciones locales dentro de un
+bloque de función. Cada declaración debe iniciar con un tipo válido:
+b (Bool), c (Cade), n (Ent) o f (Flota). La función es recursiva, 
+consumiendo múltiples declaraciones si están presentes una tras otra.
+-----------------------------------------------------------------------
+*/
 void listaDec() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -824,6 +816,19 @@ void listaDec() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Func:
+Representa la producción de una función completa.
+Espera una estructura con el siguiente patrón:
+<Tipo> a ( <Arg> ) [ <listaDec> <listaSent> ]
+
+- Primero analiza el tipo de retorno.
+- Luego espera un identificador (a).
+- Después, los argumentos de la función entre paréntesis.
+- Dentro de corchetes, analiza las declaraciones locales y sentencias.
+-----------------------------------------------------------------------
+*/
 void Func() {
     Tipo();
     match("a");
@@ -836,6 +841,17 @@ void Func() {
     match("]");
 }
 
+/*
+-----------------------------------------------------------------------
+otraFunc:
+Esta función permite definir múltiples funciones seguidas.
+Si el lookahead es un tipo (b, c, n, f), interpreta que inicia otra función
+y llama recursivamente a Func y otraFunc.
+
+Esto implementa la regla:
+<otraFunc> → <Func> <otraFunc> | ε
+-----------------------------------------------------------------------
+*/
 void otraFunc() {
     if (indice_actual < total_atomos && (
         strcmp(atomos[indice_actual], "b") == 0 ||
@@ -848,6 +864,17 @@ void otraFunc() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Arg:
+Analiza la producción de argumentos de funciones. La regla a seguir es:
+<Arg> → <Tipo> a <listArg>
+
+- Espera un tipo válido (b, c, n, f).
+- Luego un identificador (a).
+- Después, una posible lista de argumentos adicionales (<listArg>).
+-----------------------------------------------------------------------
+*/
 void Arg() {
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "n") == 0 ||
@@ -860,6 +887,15 @@ void Arg() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+listArg:
+Analiza argumentos adicionales en una función, separados por coma.
+La regla que sigue es:
+<listArg> → , <Arg> | ε
+Es recursiva solo si encuentra una coma.
+-----------------------------------------------------------------------
+*/
 void listArg() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
@@ -869,8 +905,19 @@ void listArg() {
 
 /* === PARSER FUNCTIONS FOR NON-TERMINALS (Parte I) === */
 
+/*
+-----------------------------------------------------------------------
+Program:
+Es el punto de entrada del parser sintáctico.
+La regla principal que implementa es:
+<Program> → g <ListDecGlob> <Func> <otraFunc>
+
+- Solo inicia si el primer átomo es 'g' (Global).
+- Llama secuencialmente a la lista de declaraciones globales,
+  una función principal, y otras funciones adicionales si existen.
+-----------------------------------------------------------------------
+*/
 void Program() {
-    // <Program> sólo inicia si el átomo actual es "g"
     printf("↪ Analizando &lt;Program&gt;, lookahead='%s' (índice %d)\n", atomos[indice_actual], indice_actual);
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "g") == 0) {
         ListDecGlob();
@@ -881,10 +928,21 @@ void Program() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+ListDecGlob:
+Analiza múltiples declaraciones globales al inicio del programa.
+
+Sigue la producción:
+<ListDecGlob> → <DecGlob> <ListDecGlob> | ε
+
+- Si encuentra el átomo "g", llama a DecGlob() y se llama recursivamente.
+- Si no encuentra "g", concluye la lista (producción vacía).
+-----------------------------------------------------------------------
+*/
 void ListDecGlob() {
-    // 2–3: <ListDecGlob> → <DecGlob> <ListDecGlob> | ε
     if (indice_actual >= total_atomos) {
-        printf("🛑 DEBUG: Fin de entrada alcanzado en ListDecGlob (índice %d)\n", indice_actual);
+        printf(" DEBUG: Fin de entrada alcanzado en ListDecGlob (índice %d)\n", indice_actual);
         return;
     }
 
@@ -893,12 +951,22 @@ void ListDecGlob() {
         DecGlob();
         ListDecGlob();
     } else {
-        printf("ℹ️ DEBUG: <ListDecGlob> termina (no hay 'g') en índice %d\n", indice_actual);
+        printf(" DEBUG: <ListDecGlob> termina (no hay 'g') en índice %d\n", indice_actual);
     }
 }
 
+/*
+-----------------------------------------------------------------------
+DecGlob:
+Implementa la producción:
+<DecGlob> → g <Decl>
+
+- Verifica que el átomo actual sea "g".
+- Si es así, consume "g" y llama a Decl().
+- En otro caso, reporta un error sintáctico.
+-----------------------------------------------------------------------
+*/
 void DecGlob() {
-    // 6: <DecGlob> → g <Decl>
     printf("↪ Analizando <DecGlob>, lookahead='%s'\n", atomos[indice_actual]);
     if (strcmp(atomos[indice_actual], "g") == 0) {
         match("g");
@@ -908,9 +976,21 @@ void DecGlob() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Decl:
+Reconoce una declaración de variable(s) global(es) o local(es).
+Regla gramatical:
+<Decl> → <Tipo> a <list> ;
+
+- Espera un tipo válido (b, c, n, f).
+- Luego, un identificador.
+- Después, una posible lista de identificadores separados por comas.
+- Termina con punto y coma (;)
+-----------------------------------------------------------------------
+*/
 void Decl() {
-    // 7: <Decl> → <Tipo> a <list> ;
-        printf("🧠 DEBUG: Entrando a Decl()\n");
+    printf(" DEBUG: Entrando a Decl()\n");
     printf("↪ Analizando <Decl>, lookahead='%s'\n", atomos[indice_actual]);
     // FIRST(Decl) = b, c, n, f
     if (!(strcmp(atomos[indice_actual], "b") == 0 ||
@@ -926,11 +1006,23 @@ void Decl() {
     match(";");
 }
 
+/*
+-----------------------------------------------------------------------
+Tipo:
+Reconoce un tipo de dato válido para declaraciones o funciones.
+Producción:
+<Tipo> → b | c | n | f
+
+- 'b' para Bool
+- 'c' para Cade
+- 'n' para Ent
+- 'f' para Flota
+-----------------------------------------------------------------------
+*/
 void Tipo() {
-    // 8–11: <Tipo> → b | c | n | f
     printf("↪ Analizando <Tipo>, lookahead='%s'\n", atomos[indice_actual]);
      if (indice_actual >= total_atomos) {
-        printf("🛑 DEBUG: Fin de entrada alcanzado en Tipo (índice %d)\n", indice_actual);
+        printf("DEBUG: Fin de entrada alcanzado en Tipo (índice %d)\n", indice_actual);
         return;
     }
     if (strcmp(atomos[indice_actual], "b") == 0) {
@@ -947,41 +1039,34 @@ void Tipo() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+list:
+Esta función representa la producción recursiva para una lista de
+identificadores separados por coma en una declaración.
+
+Regla gramatical:
+<list> → , a <list> | ε
+
+- Si detecta una coma (',') como lookahead, consume la coma, luego un
+  identificador ('a') y llama de nuevo a sí misma (recursión).
+- Si no hay coma, se interpreta como producción vacía (ε).
+
+Se utiliza en declaraciones como: Ent a, b, c;
+-----------------------------------------------------------------------
+*/
 void list() {
     // 12–13: <list> → , a <list> | ε
     printf("↪ Analizando <list>, lookahead='%s'\n", atomos[indice_actual]);
-    printf("🪛 DEBUG: Entering <list>\n");
+    printf(" DEBUG: Entering <list>\n");
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
-        printf("🪛 DEBUG: <list> comma branch taken\n");
+        printf(" DEBUG: <list> comma branch taken\n");
         match(",");
         match("a");
         list();
     } else {
-        printf("🪛 DEBUG: <list> epsilon branch taken (no comma)\n");
+        printf(" DEBUG: <list> epsilon branch taken (no comma)\n");
     }
-}
-
-/* — Próximas funciones a implementar:
-   Func, otraFunc, Arg, listArg, listaDec, Sent, Asig, opAsig,
-   ExprGral, E, T, F, etc.
-*/
-
-/* === NUEVO PARSER RECURSIVO DESCENDENTE CON getchar() === */
-char c;
-
-// Manejadores de aceptación y rechazo
-void aceptar() {
-    printf("✅ Cadena aceptada\n");
-    exit(0);
-}
-void rechazar() {
-    printf("❌ Error sintáctico en caracter '%c'\n", c);
-    exit(1);
-}
-
-// Avanza al siguiente caracter
-void avanzar() {
-    c = getchar();
 }
 
 // Declaración de las funciones para cada no-terminal de tu gramática
@@ -1007,6 +1092,19 @@ void T();
 void Expr();
 void Cuerpo();
 void F();
+
+/*
+-----------------------------------------------------------------------
+listaSent:
+Esta función representa la producción recursiva para una lista de sentencias.
+Regla:
+<listaSent> → <Sent> <listaSent> | ε
+
+- Evalúa el lookahead para saber si se puede iniciar una sentencia válida.
+- Si es así, llama a Sent() y luego se llama recursivamente.
+- Si no hay coincidencia con el FIRST de Sent, se considera ε (vacío).
+-----------------------------------------------------------------------
+*/
 void listaSent() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1021,8 +1119,17 @@ void listaSent() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Sent:
+Representa las distintas sentencias del lenguaje, tales como:
+- Asignaciones: a opAsig ExprGral ;
+- Estructuras de control: if, while, for, else, return, etc.
+- Sentencias simples como t;, p;, m; (Continuar, Parar, Ver).
 
-
+El selector se basa en el valor del lookahead actual.
+-----------------------------------------------------------------------
+*/
 void Sent() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1068,6 +1175,18 @@ void Sent() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Asig:
+Analiza una sentencia de asignación.
+Regla:
+<Asig> → a opAsig ExprGral
+
+- Inicia con identificador (a).
+- Luego un operador de asignación (simple o compuesto).
+- Finalmente una expresión general.
+-----------------------------------------------------------------------
+*/
 void Asig() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "a") == 0) {
         match("a");
@@ -1079,10 +1198,17 @@ void Asig() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+opAsig:
+Determina si el operador de asignación es simple (=) o compuesto (#, ñ, $, etc.).
+Dependiendo del símbolo detectado en el lookahead, llama a la función
+correspondiente para consumir el token.
 
-
-
-
+Implementa:
+<opAsig> → = | <OpAsigComp>
+-----------------------------------------------------------------------
+*/
 void opAsig() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1101,6 +1227,20 @@ void opAsig() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+ExprGral:
+Representa el punto de entrada para una expresión general.
+
+Regla:
+<ExprGral> → E
+
+- Esta función valida que el lookahead sea válido para comenzar una expresión.
+- FIRST(ExprGral) = { "a", "e", "r", "s", "(" }
+- Si es válido, llama a E(), que representa la expresión completa.
+- Si no es válido, lanza un error sintáctico.
+-----------------------------------------------------------------------
+*/
 void ExprGral() {
     // FIRST(ExprGral) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
@@ -1113,6 +1253,19 @@ void ExprGral() {
         indice_actual++;
     }
 }
+/*
+-----------------------------------------------------------------------
+T:
+Analiza términos dentro de una expresión.
+
+Regla:
+<T> → F Tp
+
+- FIRST(T) = { "a", "e", "r", "s", "(" }
+- Llama a F() para analizar un factor.
+- Luego llama a Tp() para manejar operadores multiplicativos (*, /, %, etc.)
+-----------------------------------------------------------------------
+*/
 void T() {
     // FIRST(T) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
@@ -1127,6 +1280,20 @@ void T() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Tp:
+Esta función analiza operadores de multiplicación/división/modulo y
+su secuencia en la expresión.
+
+Regla:
+<Tp> → op_mul F Tp | ε
+
+- Detecta si el lookahead es un operador multiplicativo: *, /, %, ~, k.
+- Si es así, consume el operador y el siguiente factor.
+- Se llama recursivamente para manejar expresiones con múltiples operadores.
+-----------------------------------------------------------------------
+*/
 void Tp() {
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "*") == 0 ||
@@ -1139,11 +1306,19 @@ void Tp() {
         Tp();
     }
 }
+/*
+-----------------------------------------------------------------------
+E:
+Esta función analiza expresiones aritméticas completas.
 
+Regla:
+<E> → T Ep
 
-
-
-
+- FIRST(E) = { "a", "e", "r", "s", "(" }
+- Llama a T() para procesar el primer término.
+- Luego Ep() para manejar operadores aditivos (+, -).
+-----------------------------------------------------------------------
+*/
 void E() {
     // FIRST(E) = { "a", "e", "r", "s", "(" }
     char *la = atomos[indice_actual];
@@ -1158,6 +1333,18 @@ void E() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+F:
+Analiza factores en una expresión. Sigue la regla:
+<F> → a Fp | e | r | s | ( E ) | { LlamaFunc } | m
+
+- Si el lookahead es a, e, r o s: se hace match y luego se evalúa Fp (j o z opcional).
+- Si es "(", se espera una subexpresión entre paréntesis.
+- Si es "{", se espera una llamada a función.
+- Si es "m", se considera como una expresión válida (como Ver).
+-----------------------------------------------------------------------
+*/
 void F() {
     // <F> → a F' | e | r | s | ( E ) | { LlamaFunc } | m
     if (indice_actual < total_atomos) {
@@ -1185,6 +1372,18 @@ void F() {
 
 
 
+/*
+-----------------------------------------------------------------------
+opRel:
+Analiza operadores relacionales.
+
+Regla:
+<opRel> → h | m | ¡ | ! | x | y
+
+- Evalúa si el lookahead es uno de los operadores relacionales válidos.
+- Si lo es, hace match; de lo contrario, lanza error sintáctico.
+-----------------------------------------------------------------------
+*/
 void opRel() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1201,6 +1400,18 @@ void opRel() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+G:
+Reconoce los operadores postfijo opcionales j o z (incremento/decremento).
+
+Regla:
+<G> → j | z | ε
+
+- Si el lookahead es j o z, los consume.
+- Si no, no hace nada (ε).
+-----------------------------------------------------------------------
+*/
 void G() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1213,6 +1424,19 @@ void G() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Fp:
+Implementa la producción para operadores postfijo j o z después de un
+identificador o literal.
+
+Regla:
+<Fp> → j | z | ε
+
+- Si encuentra j o z en el lookahead, los consume.
+- En otro caso, representa epsilon (vacío).
+-----------------------------------------------------------------------
+*/
 void Fp() {
     if (indice_actual < total_atomos) {
         if (strcmp(atomos[indice_actual], "j") == 0 || strcmp(atomos[indice_actual], "z") == 0) {
@@ -1222,6 +1446,18 @@ void Fp() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+expRel:
+Analiza expresiones relacionales.
+
+Regla:
+<expRel> → ExprGral opRel ExprGral
+
+- Evalúa una expresión, luego un operador relacional y luego otra expresión.
+- Utiliza las funciones ya definidas: ExprGral y opRel.
+-----------------------------------------------------------------------
+*/
 void expRel() {
     // FIRST(expRel) = FIRST(ExprGral) = { a, e, r, s, ( }
     const char *la = atomos[indice_actual];
@@ -1236,6 +1472,18 @@ void expRel() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+OpAsigComp:
+Reconoce operadores de asignación compuesta.
+
+Regla:
+<OpAsigComp> → # | ñ | $ | v | ? | : | " | ^ | &
+
+- Consume el operador correspondiente si es válido.
+- Si no lo es, lanza error sintáctico.
+-----------------------------------------------------------------------
+*/
 void OpAsigComp() {
     if (indice_actual < total_atomos) {
         char *la = atomos[indice_actual];
@@ -1253,6 +1501,17 @@ void OpAsigComp() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+OpAsigSimple:
+Reconoce el operador de asignación simple.
+
+Regla:
+<OpAsigSimple> → =
+
+- Solo hace match si el lookahead es "=".
+-----------------------------------------------------------------------
+*/
 void OpAsigSimple() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "=") == 0) {
         match("=");
@@ -1263,6 +1522,19 @@ void OpAsigSimple() {
 
 
 
+/*
+-----------------------------------------------------------------------
+Param:
+Esta función analiza parámetros adicionales en una lista de argumentos
+de llamada a función.
+
+Regla:
+<Param> → , ExprGral <Param> | ε
+
+- Si detecta una coma, consume el símbolo y una nueva expresión como
+  argumento, luego se llama recursivamente.
+-----------------------------------------------------------------------
+*/
 void Param() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], ",") == 0) {
         match(",");
@@ -1272,6 +1544,19 @@ void Param() {
 }
 
 
+/*
+-----------------------------------------------------------------------
+listP:
+Esta función analiza la lista completa de parámetros que recibe una
+llamada a función.
+
+Regla:
+<listP> → ExprGral <Param> | ε
+
+- Evalúa si el token actual pertenece al conjunto FIRST(ExprGral).
+- Si es así, analiza una expresión y luego parámetros adicionales.
+-----------------------------------------------------------------------
+*/
 void listP() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1287,7 +1572,18 @@ void listP() {
 }
 
 
+/*
+-----------------------------------------------------------------------
+Args:
+Función auxiliar que permite analizar argumentos generales en llamadas
+a funciones. Se comporta como listP pero con un conjunto más reducido.
 
+Regla:
+<Args> → ExprGral <Param> | ε
+
+- Evalúa si el token es válido para una expresión.
+-----------------------------------------------------------------------
+*/
 void Args() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1303,13 +1599,30 @@ void Args() {
 }
 
 
+/*
+-----------------------------------------------------------------------
+yywrap:
+Función obligatoria para Flex que indica fin del archivo.
 
-
-// Definition for yywrap to allow Flex lexer to link
+Siempre retorna 1 para que Flex sepa que no hay más entradas.
+-----------------------------------------------------------------------
+*/
 int yywrap(void) {
     return 1;
 }
 
+/*
+-----------------------------------------------------------------------
+Ep:
+Extiende la expresión E para incluir operadores aditivos (suma/resta).
+
+Regla:
+<Ep> → + T Ep | - T Ep | ε
+
+- Si encuentra un "+" o "-", lo consume y analiza el siguiente término.
+- Se llama recursivamente para múltiples sumas/restas.
+-----------------------------------------------------------------------
+*/
 void Ep() {
     if (indice_actual < total_atomos &&
         (strcmp(atomos[indice_actual], "+") == 0 ||
@@ -1319,6 +1632,19 @@ void Ep() {
         Ep();
     }
 }
+
+/*
+-----------------------------------------------------------------------
+Cuerpo:
+Analiza el cuerpo de una función o estructura entre corchetes.
+
+Regla:
+<Cuerpo> → [ listaSent ]
+
+- Verifica la apertura con "[" y el cierre con "]".
+- Dentro del bloque, analiza una lista de sentencias válidas.
+-----------------------------------------------------------------------
+*/
 void Cuerpo() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "[") == 0) {
         match("[");
@@ -1329,6 +1655,20 @@ void Cuerpo() {
         indice_actual++;
     }
 }
+
+/*
+-----------------------------------------------------------------------
+Expr:
+Punto de entrada alternativo para una expresión.
+
+Regla:
+<Expr> → E
+
+- Evalúa si el lookahead pertenece al conjunto FIRST(E).
+- Si lo es, invoca la función E() que maneja la estructura general
+  de expresiones aritméticas.
+-----------------------------------------------------------------------
+*/
 void Expr() {
     if (indice_actual < total_atomos) {
         const char *la = atomos[indice_actual];
@@ -1348,7 +1688,18 @@ void Expr() {
 
 
 
+/*
+-----------------------------------------------------------------------
+Sino:
+Representa la cláusula "Sino" de una sentencia condicional.
 
+Regla:
+<Sino> → l [ <listaSent> ]
+
+- Solo se ejecuta si el lookahead es 'l' (Sino).
+- Luego analiza una lista de sentencias encerradas entre corchetes.
+-----------------------------------------------------------------------
+*/
 void Sino() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "l") == 0) {
         match("l");
@@ -1357,6 +1708,20 @@ void Sino() {
         match("]");
     }
 }
+
+/*
+-----------------------------------------------------------------------
+Dev:
+Representa una sentencia de retorno.
+
+Regla:
+<Dev> → d <valRet> ;
+
+- Se inicia con 'd' (Devo).
+- Luego espera una expresión de retorno (valRet).
+- Termina con punto y coma.
+-----------------------------------------------------------------------
+*/
 void Dev() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "d") == 0) {
         match("d");
@@ -1368,6 +1733,18 @@ void Dev() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+valRet:
+Evalúa el valor de retorno para una sentencia Devo.
+
+Regla:
+<valRet> → ExprGral
+
+- Llama a ExprGral si el lookahead es válido.
+- En otro caso, lanza un error sintáctico.
+-----------------------------------------------------------------------
+*/
 void valRet() {
     const char *la = atomos[indice_actual];
     if (strcmp(la, "a") == 0 || strcmp(la, "e") == 0 ||
@@ -1379,6 +1756,20 @@ void valRet() {
         indice_actual++;
     }
 }
+
+/*
+-----------------------------------------------------------------------
+Si:
+Analiza la estructura condicional if.
+
+Regla:
+<Si> → i ( expRel ) [ listaSent ] <Sino>
+
+- Verifica la condición entre paréntesis.
+- Ejecuta el bloque verdadero.
+- Luego intenta procesar la rama opcional Sino().
+-----------------------------------------------------------------------
+*/
 void Si() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "i") == 0) {
         match("i");
@@ -1395,6 +1786,18 @@ void Si() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+Para:
+Analiza la estructura "Para".
+
+Regla:
+<Para> → o ( E ) [ listaSent ]
+
+- El token 'o' inicia el bloque (equivalente a "for").
+- Luego espera una expresión y un bloque de sentencias.
+-----------------------------------------------------------------------
+*/
 void Para() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "o") == 0) {
         match("o");
@@ -1402,7 +1805,7 @@ void Para() {
         E(); // o(E)
         match(")");
         match("[");
-            listaSent();
+        listaSent();
         match("]");
     } else {
         errorSintactico("Para (esperado: o)");
@@ -1410,6 +1813,18 @@ void Para() {
     }
 }
 
+/*
+-----------------------------------------------------------------------
+LlamaFunc:
+Llama a una función usando la siguiente producción:
+
+Regla:
+<LlamaFunc> → { a ( listP ) }
+
+- Espera el inicio con llave, identificador y parámetros.
+- Termina con cierre de llave.
+-----------------------------------------------------------------------
+*/
 void LlamaFunc() {
     match("{");
     match("a");
@@ -1419,7 +1834,18 @@ void LlamaFunc() {
     match("}");
 }
 
+/*
+-----------------------------------------------------------------------
+HazM:
+Analiza bloques del tipo "Haz [...]".
 
+Regla:
+<HazM> → h [ listaSent ]
+
+- Requiere que el lookahead sea 'h'.
+- Luego consume y analiza una lista de sentencias entre corchetes.
+-----------------------------------------------------------------------
+*/
 void HazM() {
     if (indice_actual < total_atomos && strcmp(atomos[indice_actual], "h") == 0) {
         match("h");
